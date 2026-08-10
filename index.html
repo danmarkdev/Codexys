@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Codexys — Website Development, UI/UX Design, and Web Systems & Dashboards.">
-  <title>Codexys</title>
+  <meta name="description" content="Codexys — Web development agency specializing in website development, UI/UX design, and web systems & dashboards.">
+  <title>Codexys — Web Development Agency</title>
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 
 <body>
@@ -14,7 +15,7 @@
   <div class="preloader" id="preloader">
     <div class="preloader-box">
       <img src="logo.png" alt="Codexys logo">
-      <p id="preloaderTyped"></p>
+      <p id="preloaderTyped">Accessing Codexys</p>
       <span class="loader-line"></span>
     </div>
   </div>
@@ -28,7 +29,7 @@
         <span>Codexys</span>
       </a>
 
-      <nav class="desktop-nav">
+      <nav class="desktop-nav" aria-label="Main navigation">
         <a href="#home">Home</a>
         <a href="#about">About</a>
         <a href="#services">Services</a>
@@ -43,15 +44,17 @@
           ◐
         </button>
 
-        <button class="hamburger" id="hamburgerBtn" type="button" aria-label="Open menu" aria-expanded="false">
+        <button class="hamburger" id="hamburgerBtn" type="button"
+                aria-label="Open menu" aria-expanded="false">
           <span></span>
           <span></span>
           <span></span>
         </button>
       </div>
+
     </div>
 
-    <nav class="mobile-menu" id="mobileMenu">
+    <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
       <a href="#home">Home</a>
       <a href="#about">About</a>
       <a href="#services">Services</a>
@@ -75,7 +78,7 @@
           <img src="logo.png" alt="Codexys">
         </div>
 
-        <p class="eyebrow">TECHNOLOGY SOLUTIONS</p>
+        <p class="eyebrow">WEB DEVELOPMENT AGENCY</p>
 
         <h1>
           Welcome to <span>Codexys!</span>
@@ -86,13 +89,16 @@
         </div>
 
         <p class="hero-description">
-          We design and develop modern websites, intuitive interfaces, and practical web systems & dashboards that help businesses build a stronger digital presence.
+          We design and develop modern websites, intuitive interfaces, and
+          practical web systems &amp; dashboards that help businesses build
+          a stronger digital presence.
         </p>
 
         <div class="hero-buttons">
           <a class="btn btn-primary" href="#contact">
             Get Started <span>→</span>
           </a>
+
           <a class="btn btn-outline" href="#about">
             Learn More <span>↗</span>
           </a>
@@ -111,7 +117,7 @@
       <div class="container">
 
         <div class="section-top reveal">
-                    <div>
+          <div>
             <p class="eyebrow">ABOUT CODEXYS</p>
             <h2>About Codexys</h2>
           </div>
@@ -119,38 +125,47 @@
 
         <div class="about-intro reveal">
           <p>
-            Codexys is a web development agency based in the Philippines. We help businesses turn ideas into modern digital experiences through website development, UI/UX design, and custom web systems & dashboards.
+            Codexys is a web development agency based in the Philippines.
+            We help businesses turn ideas into modern digital experiences
+            through website development, UI/UX design, and custom web systems
+            &amp; dashboards.
           </p>
         </div>
 
         <div class="about-grid">
+
           <article class="info-card reveal">
-                        <h3>Our Mission</h3>
+            <h3>Our Mission</h3>
             <p>
-              To help businesses create a strong digital presence through reliable, modern, and user-focused web solutions.
+              To help businesses create a strong digital presence through
+              reliable, modern, and user-focused web solutions.
             </p>
           </article>
 
           <article class="info-card reveal">
-                        <h3>Small Team</h3>
+            <h3>Small Team</h3>
             <p>
-              Our team combines web development, UI/UX design, and system-building skills to deliver complete digital solutions.
+              Our team combines web development, UI/UX design, and system-building
+              skills to deliver complete digital solutions.
             </p>
           </article>
 
           <article class="info-card reveal">
-                        <h3>Built With Current Tools</h3>
+            <h3>Built With Current Tools</h3>
             <p>
-              We use modern web technologies and practical development practices to create fast, responsive, and maintainable solutions.
+              We use modern web technologies and practical development practices
+              to create fast, responsive, and maintainable solutions.
             </p>
           </article>
 
           <article class="info-card reveal">
-                        <h3>Quality Assured</h3>
+            <h3>Quality Assured</h3>
             <p>
-              We focus on clean interfaces, responsive experiences, reliable functionality, and quality testing before delivery.
+              We focus on clean interfaces, responsive experiences, reliable
+              functionality, and quality testing before delivery.
             </p>
           </article>
+
         </div>
       </div>
     </section>
@@ -160,15 +175,15 @@
       <div class="container">
 
         <div class="section-top reveal">
-                    <div>
+          <div>
             <p class="eyebrow">WHAT WE OFFER</p>
             <h2>Our Services</h2>
           </div>
         </div>
 
         <p class="section-description reveal">
-          We offer a focused set of technology services to help your business
-          launch, look sharp, and run smoothly.
+          We provide focused web development services to help businesses
+          launch, look professional, and operate more efficiently.
         </p>
 
         <div class="service-grid">
@@ -178,10 +193,15 @@
               <span>CODEXYS</span>
               <span>↗</span>
             </div>
+
             <div class="service-icon">&lt;/&gt;</div>
+
             <h3>Website Development</h3>
+
             <p>
-              Responsive business websites, landing pages, company websites, and custom web experiences built to look professional and perform well across devices.
+              Responsive business websites, landing pages, company websites,
+              and custom web experiences built to look professional and
+              perform well across devices.
             </p>
           </article>
 
@@ -190,10 +210,14 @@
               <span>CODEXYS</span>
               <span>↗</span>
             </div>
+
             <div class="service-icon">◇</div>
+
             <h3>UI/UX Design</h3>
+
             <p>
-              Clean and user-centered interfaces designed around usability, visual consistency, accessibility, and a smooth user experience.
+              Clean and user-centered interfaces designed around usability,
+              visual consistency, accessibility, and a smooth user experience.
             </p>
           </article>
 
@@ -202,10 +226,15 @@
               <span>CODEXYS</span>
               <span>↗</span>
             </div>
+
             <div class="service-icon">▣</div>
+
             <h3>Web Systems &amp; Dashboards</h3>
+
             <p>
-              Custom web systems and dashboards that organize business workflows, manage information, and turn everyday processes into efficient digital tools.
+              Custom web systems and dashboards that organize business workflows,
+              manage information, and turn everyday processes into efficient
+              digital tools.
             </p>
           </article>
 
@@ -218,14 +247,15 @@
       <div class="container">
 
         <div class="section-top reveal">
-                    <div>
+          <div>
             <p class="eyebrow">MEET THE TEAM</p>
             <h2>Our Team</h2>
           </div>
         </div>
 
         <p class="section-description reveal">
-          Meet the team behind Codexys, a web development agency focused on building useful and modern digital solutions.
+          Meet the team behind Codexys, a web development agency focused on
+          building useful and modern digital solutions.
         </p>
 
         <div class="team-grid">
@@ -235,12 +265,20 @@
             <p class="member-role">Founder</p>
             <h3>Danmark S. Rosalejos</h3>
             <p>Leads our development team in full-stack technologies.</p>
+
             <div class="member-tags">
-              <span>HTML</span><span>CSS</span><span>JavaScript</span>
+              <span>HTML</span>
+              <span>CSS</span>
+              <span>JavaScript</span>
             </div>
+
             <div class="member-links">
-              <a href="#" target="_blank" rel="noopener">Personal Portfolio ↗</a>
-              <a href="#" target="_blank" rel="noopener">GitHub ↗</a>
+              <a href="https://danmark.vercel.app/" target="_blank" rel="noopener">
+                Personal Portfolio ↗
+              </a>
+              <a href="https://github.com/danmarkdev" target="_blank" rel="noopener">
+                GitHub ↗
+              </a>
             </div>
           </article>
 
@@ -249,9 +287,13 @@
             <p class="member-role">Frontend Developer</p>
             <h3>Jedrick C. Miclat</h3>
             <p>Turns designs into fast, accessible, production-ready interfaces.</p>
+
             <div class="member-tags">
-              <span>HTML</span><span>CSS</span><span>JavaScript</span>
+              <span>HTML</span>
+              <span>CSS</span>
+              <span>JavaScript</span>
             </div>
+
             <div class="member-links">
               <a href="#" target="_blank" rel="noopener">Personal Portfolio ↗</a>
               <a href="#" target="_blank" rel="noopener">GitHub ↗</a>
@@ -263,9 +305,13 @@
             <p class="member-role">Backend Developer</p>
             <h3>Benedict Lamoglia</h3>
             <p>Builds the systems, APIs, and data layer everything runs on.</p>
+
             <div class="member-tags">
-              <span>PHP</span><span>MySQL</span><span>JavaScript</span>
+              <span>PHP</span>
+              <span>MySQL</span>
+              <span>JavaScript</span>
             </div>
+
             <div class="member-links">
               <a href="#" target="_blank" rel="noopener">Personal Portfolio ↗</a>
               <a href="#" target="_blank" rel="noopener">GitHub ↗</a>
@@ -277,9 +323,13 @@
             <p class="member-role">Frontend / UI Designer</p>
             <h3>John Leonard Anadia</h3>
             <p>Shapes layout, visual language, and the details users notice.</p>
+
             <div class="member-tags">
-              <span>UI/UX</span><span>CSS</span><span>Design</span>
+              <span>UI/UX</span>
+              <span>CSS</span>
+              <span>Design</span>
             </div>
+
             <div class="member-links">
               <a href="#" target="_blank" rel="noopener">Personal Portfolio ↗</a>
               <a href="#" target="_blank" rel="noopener">GitHub ↗</a>
@@ -295,7 +345,7 @@
       <div class="container">
 
         <div class="section-top reveal">
-                    <div>
+          <div>
             <p class="eyebrow">LET'S CONNECT</p>
             <h2>Here's how you can connect with us!</h2>
           </div>
@@ -308,6 +358,7 @@
         <div class="contact-grid">
 
           <form class="contact-form reveal" id="contactForm">
+
             <label>
               <span>Name</span>
               <input type="text" name="name" placeholder="Enter your name" required>
@@ -325,29 +376,35 @@
 
             <label>
               <span>Message</span>
-              <textarea name="message" rows="6" placeholder="Tell us about your project..." required></textarea>
+              <textarea name="message" rows="6"
+                        placeholder="Tell us about your project..." required></textarea>
             </label>
 
             <button type="submit" class="btn btn-primary">
               Send Message <span>→</span>
             </button>
 
-            <p class="form-status" id="formStatus"></p>
+            <p class="form-status" id="formStatus" aria-live="polite"></p>
           </form>
 
           <aside class="contact-info reveal">
             <p class="eyebrow">CUSTOMER SUPPORT</p>
 
             <div class="support-item">
-              <span>Call us!</span>
-              <p>We're available to help and answer questions about your project.</p>
-              <a href="tel:+639694891753">+63 969 489 1753</a>
+              <span>Let's work together!</span>
+              <p>
+                Tell us about your project, website, interface, or web system
+                and we'll be happy to hear your ideas.
+              </p>
+              <a href="mailto:support@codexys.tech">support@codexys.tech</a>
             </div>
 
             <div class="support-item">
               <span>Chat with us!</span>
-              <p>Get quick answers straight from the team.</p>
-              <a href="#">Message us ↗</a>
+              <p>
+                Get in touch with the Codexys team about your next digital project.
+              </p>
+              <a href="mailto:support@codexys.tech">Message us ↗</a>
             </div>
           </aside>
 
@@ -368,24 +425,23 @@
         </a>
 
         <p class="footer-description">
-          Codexys is a web development agency focused on website development, UI/UX design, and web systems & dashboards.
+          Codexys is a web development agency focused on website development,
+          UI/UX design, and web systems &amp; dashboards.
         </p>
       </div>
 
       <div class="footer-contact">
         <p class="eyebrow">CONTACT US</p>
         <a href="mailto:support@codexys.tech">support@codexys.tech</a>
-        <a href="tel:+639694891753">+63 969 489 1753</a>
         <span>Philippines</span>
       </div>
 
     </div>
 
     <div class="container footer-bottom">
-      <span>© 2026 CODEXYS. ALL RIGHTS RESERVED.</span>
+      <span>© <span data-current-year></span> CODEXYS. ALL RIGHTS RESERVED.</span>
     </div>
   </footer>
 
-  <script src="script.js"></script>
 </body>
 </html>
