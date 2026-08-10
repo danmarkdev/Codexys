@@ -1,5 +1,4 @@
-<script>
-  (function preloader(){
+ (function preloader(){
     const el = document.getElementById('preloader');
     const typed = document.getElementById('preloaderTyped');
     if (!el) return;
@@ -118,4 +117,3 @@
       }
     });
   })();
-</script>
