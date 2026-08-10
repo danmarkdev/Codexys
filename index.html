@@ -3,72 +3,126 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Codexys — Web development, UI/UX design, and web systems & dashboards.">
+  <meta name="description" content="Codexys — Web Development, UI/UX Design, and Web Systems & Dashboards.">
   <title>Codexys</title>
+
+  <!-- Separate CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <!-- Header -->
+  <!-- ================= PRELOADER ================= -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-logo">CODEXYS</div>
+      <div class="preloader-line"></div>
+      <div class="preloader-text" id="preloaderTyped"></div>
+    </div>
+  </div>
+
+  <!-- ================= HEADER ================= -->
   <header class="site-header">
     <div class="container nav-wrap">
+
       <a href="#home" class="brand">
-        <img src="logo.png" alt="Codexys logo" class="brand-logo">
+        <span class="brand-mark">&lt;/&gt;</span>
         <span>Codexys</span>
       </a>
 
-      <button class="menu-toggle" type="button" aria-label="Open navigation">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-
-      <nav class="main-nav" aria-label="Main navigation">
+      <nav class="desktop-nav" aria-label="Main navigation">
         <a href="#about">About</a>
         <a href="#services">Services</a>
         <a href="#team">Team</a>
         <a href="#contact">Contact</a>
       </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
+          <span class="theme-icon">☼</span>
+        </button>
+
+        <button
+          class="hamburger"
+          id="hamburgerBtn"
+          type="button"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="mobileMenu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
     </div>
+
+    <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#team">Team</a>
+      <a href="#contact">Contact</a>
+    </nav>
   </header>
 
+  <!-- ================= MAIN ================= -->
   <main>
 
-    <!-- Hero -->
+    <!-- HERO -->
     <section class="hero" id="home">
+      <div class="hero-orb hero-orb-one"></div>
+      <div class="hero-orb hero-orb-two"></div>
       <div class="hero-grid"></div>
 
-      <div class="container hero-content">
-        <div class="eyebrow">CODEXYS</div>
+      <div class="container hero-content reveal">
+        <p class="eyebrow">WEB DEVELOPMENT AGENCY</p>
 
-        <h1>Welcome to <span>Codexys</span></h1>
+        <h1>
+          Welcome to
+          <span>Codexys</span>
+        </h1>
 
-        <p class="hero-text">
+        <div class="hero-subline">
+          <span id="typedSub"></span><span class="cursor">|</span>
+        </div>
+
+        <p class="hero-description">
           To designing and building websites, interfaces and internal systems
           for businesses who'd rather ship something sharp than something safe.
         </p>
 
-        <div class="hero-actions">
-          <a href="#contact" class="btn btn-primary">Get Started <span>→</span></a>
-          <a href="#services" class="btn btn-secondary">Learn More</a>
+        <div class="hero-buttons">
+          <a class="btn btn-primary" href="#contact">
+            Get Started <span>→</span>
+          </a>
+
+          <a class="btn btn-outline" href="#services">
+            Learn More
+          </a>
         </div>
       </div>
 
-      <div class="hero-scroll">SCROLL TO EXPLORE <span>↓</span></div>
+      <div class="hero-bottom">
+        <span>SCROLL TO EXPLORE</span>
+        <span>↓</span>
+      </div>
     </section>
 
-    <!-- About -->
+    <!-- ABOUT -->
     <section class="section about-section" id="about">
       <div class="container">
-        <div class="section-heading">
-          <div class="section-number">01</div>
+
+        <div class="section-heading reveal">
+          <span class="section-number">01</span>
+
           <div>
-            <p class="section-kicker">ABOUT CODEXYS</p>
+            <p class="section-label">ABOUT CODEXYS</p>
             <h2>About Codexys</h2>
           </div>
         </div>
 
-        <div class="about-intro">
+        <div class="about-intro reveal">
           <p>
             We are Web Development Agency a small team based in the Philippines
             dedicated to helping businesses launch and run on the web, through
@@ -77,9 +131,10 @@
           </p>
         </div>
 
-        <div class="about-cards">
-          <article class="info-card">
-            <span class="card-index">01</span>
+        <div class="about-grid">
+
+          <article class="about-card reveal">
+            <span class="card-number">01</span>
             <h3>Our Mission</h3>
             <p>
               To give businesses a web presence that actually does its job fast,
@@ -87,8 +142,8 @@
             </p>
           </article>
 
-          <article class="info-card">
-            <span class="card-index">02</span>
+          <article class="about-card reveal">
+            <span class="card-number">02</span>
             <h3>Small Team</h3>
             <p>
               A founder, two developers, and designer each hands on with every
@@ -96,8 +151,8 @@
             </p>
           </article>
 
-          <article class="info-card">
-            <span class="card-index">03</span>
+          <article class="about-card reveal">
+            <span class="card-number">03</span>
             <h3>Built With Current Tools</h3>
             <p>
               Modern frameworks and practices nothing bolted on just because
@@ -105,143 +160,175 @@
             </p>
           </article>
 
-          <article class="info-card">
-            <span class="card-index">04</span>
+          <article class="about-card reveal">
+            <span class="card-number">04</span>
             <h3>Quality Assured</h3>
             <p>
               Every site, interface, and system is reviewed and tested before
               it reaches your users.
             </p>
           </article>
+
         </div>
       </div>
     </section>
 
-    <!-- Services -->
+    <!-- SERVICES -->
     <section class="section services-section" id="services">
       <div class="container">
-        <div class="section-heading">
-          <div class="section-number">02</div>
+
+        <div class="section-heading reveal">
+          <span class="section-number">02</span>
+
           <div>
-            <p class="section-kicker">WHAT WE OFFER</p>
+            <p class="section-label">WHAT WE OFFER</p>
             <h2>Our Services</h2>
           </div>
         </div>
 
-        <p class="section-description">
+        <p class="section-description reveal">
           We offer a focused set of web services to help your business launch,
           look sharp, and run smoothly.
         </p>
 
-        <div class="service-list">
-          <article class="service-card">
-            <div class="service-top">
-              <span class="service-number">01</span>
+        <div class="services-grid">
+
+          <article class="service-card reveal">
+            <div class="service-header">
+              <span>01</span>
               <span class="service-arrow">↗</span>
             </div>
+
             <div class="service-icon">&lt;/&gt;</div>
+
             <h3>Website Development</h3>
+
             <p>
               Marketing sites, product sites, and storefronts built to load
               fast, hold up under traffic, and stay easy to update.
             </p>
           </article>
 
-          <article class="service-card">
-            <div class="service-top">
-              <span class="service-number">02</span>
+          <article class="service-card reveal">
+            <div class="service-header">
+              <span>02</span>
               <span class="service-arrow">↗</span>
             </div>
+
             <div class="service-icon">◈</div>
+
             <h3>UI/UX Design</h3>
+
             <p>
               Interfaces designed around how people actually move through a
               task, not how a template happens to be laid out.
             </p>
           </article>
 
-          <article class="service-card">
-            <div class="service-top">
-              <span class="service-number">03</span>
+          <article class="service-card reveal">
+            <div class="service-header">
+              <span>03</span>
               <span class="service-arrow">↗</span>
             </div>
+
             <div class="service-icon">▣</div>
+
             <h3>Web Systems &amp; Dashboards</h3>
+
             <p>
               Internal tools and dashboards that replace spreadsheets and manual
               steps with something your team actually opens.
             </p>
           </article>
+
         </div>
       </div>
     </section>
 
-    <!-- Team -->
+    <!-- TEAM -->
     <section class="section team-section" id="team">
       <div class="container">
-        <div class="section-heading">
-          <div class="section-number">03</div>
+
+        <div class="section-heading reveal">
+          <span class="section-number">03</span>
+
           <div>
-            <p class="section-kicker">MEET THE TEAM</p>
+            <p class="section-label">MEET THE TEAM</p>
             <h2>Our Team</h2>
           </div>
         </div>
 
-        <p class="section-description">
+        <p class="section-description reveal">
           Meet the four people the developers and designer
         </p>
 
         <div class="team-grid">
 
-          <article class="team-card">
-            <div class="member-visual">
-              <span>F</span>
+          <article class="team-card reveal">
+            <div class="member-photo">
+              <span>DR</span>
             </div>
-            <div class="member-role">Founder</div>
+
+            <p class="member-role">Founder</p>
             <h3>Danmark S. Rosalejos</h3>
-            <p>Leads in development team in full-stack technologies</p>
+            <p class="member-description">
+              Leads in development team in full-stack technologies
+            </p>
+
             <div class="member-links">
-              <a href="#" aria-label="Personal Portfolio">Personal Portfolio</a>
-              <a href="#" aria-label="GitHub Profile">GitHub Profile</a>
+              <a href="#" aria-label="Danmark personal portfolio">Personal Portfolio</a>
+              <a href="#" aria-label="Danmark GitHub profile">GitHub Profile</a>
             </div>
           </article>
 
-          <article class="team-card">
-            <div class="member-visual">
-              <span>FD</span>
+          <article class="team-card reveal">
+            <div class="member-photo">
+              <span>JM</span>
             </div>
-            <div class="member-role">Frontend Developer</div>
+
+            <p class="member-role">Frontend Developer</p>
             <h3>Jedrick C. Miclat</h3>
-            <p>Turns designs into fast, accessible, production-ready interfaces.</p>
+            <p class="member-description">
+              Turns designs into fast, accessible, production-ready interfaces.
+            </p>
+
             <div class="member-links">
-              <a href="#" aria-label="Personal Portfolio">Personal Portfolio</a>
-              <a href="#" aria-label="GitHub Profile">GitHub Profile</a>
+              <a href="#" aria-label="Jedrick personal portfolio">Personal Portfolio</a>
+              <a href="#" aria-label="Jedrick GitHub profile">GitHub Profile</a>
             </div>
           </article>
 
-          <article class="team-card">
-            <div class="member-visual">
-              <span>BD</span>
+          <article class="team-card reveal">
+            <div class="member-photo">
+              <span>BL</span>
             </div>
-            <div class="member-role">Backend Developer</div>
+
+            <p class="member-role">Backend Developer</p>
             <h3>Benedict Lamoglia</h3>
-            <p>Builds the systems, APIs, and data layer everything runs on.</p>
+            <p class="member-description">
+              Builds the systems, APIs, and data layer everything runs on.
+            </p>
+
             <div class="member-links">
-              <a href="#" aria-label="Personal Portfolio">Personal Portfolio</a>
-              <a href="#" aria-label="GitHub Profile">GitHub Profile</a>
+              <a href="#" aria-label="Benedict personal portfolio">Personal Portfolio</a>
+              <a href="#" aria-label="Benedict GitHub profile">GitHub Profile</a>
             </div>
           </article>
 
-          <article class="team-card">
-            <div class="member-visual">
-              <span>UI</span>
+          <article class="team-card reveal">
+            <div class="member-photo">
+              <span>JA</span>
             </div>
-            <div class="member-role">Frontend / UI Designer</div>
+
+            <p class="member-role">Frontend / UI Designer</p>
             <h3>John Leonard Anadia</h3>
-            <p>Shapes layout, visual language, and the details users notice.</p>
+            <p class="member-description">
+              Shapes layout, visual language, and the details users notice.
+            </p>
+
             <div class="member-links">
-              <a href="#" aria-label="Personal Portfolio">Personal Portfolio</a>
-              <a href="#" aria-label="GitHub Profile">GitHub Profile</a>
+              <a href="#" aria-label="John personal portfolio">Personal Portfolio</a>
+              <a href="#" aria-label="John GitHub profile">GitHub Profile</a>
             </div>
           </article>
 
@@ -249,89 +336,106 @@
       </div>
     </section>
 
-    <!-- Contact -->
+    <!-- CONTACT -->
     <section class="section contact-section" id="contact">
       <div class="container">
-        <div class="section-heading">
-          <div class="section-number">04</div>
+
+        <div class="section-heading reveal">
+          <span class="section-number">04</span>
+
           <div>
-            <p class="section-kicker">LET'S CONNECT</p>
+            <p class="section-label">LET'S CONNECT</p>
             <h2>Here's how you can contact with us!</h2>
           </div>
         </div>
 
-        <p class="section-description">
+        <p class="section-description reveal">
           We are here to help you with your projects or ideas!
         </p>
 
         <div class="contact-layout">
-          <form class="contact-form">
+
+          <form class="contact-form reveal" id="contactForm">
+
             <label>
               <span>Name</span>
-              <input type="text" name="name" placeholder="Enter your name">
+              <input type="text" name="name" placeholder="Enter your name" required>
             </label>
 
             <label>
               <span>Email</span>
-              <input type="email" name="email" placeholder="Enter your email">
+              <input type="email" name="email" placeholder="Enter your email" required>
             </label>
 
             <label>
               <span>Subject</span>
-              <input type="text" name="subject" placeholder="What's this about?">
+              <input type="text" name="subject" placeholder="What's this about?" required>
             </label>
 
             <label>
               <span>Project details</span>
-              <textarea name="message" rows="6"></textarea>
+              <textarea name="message" rows="6" placeholder="Tell us about your project..." required></textarea>
             </label>
 
             <button type="submit" class="btn btn-primary">
-              Send message <span>→</span>
+              Send Message <span>→</span>
             </button>
+
+            <p class="form-status" id="formStatus" aria-live="polite"></p>
+
           </form>
 
-          <aside class="contact-direct">
-            <p class="section-kicker">TALK TO US DIRECTLY</p>
+          <aside class="contact-direct reveal">
+
+            <p class="section-label">TALK TO US DIRECTLY</p>
 
             <div class="direct-item">
-              <span class="direct-label">Call us</span>
-              <p>We're available to help and answer about your project.</p>
+              <span class="direct-title">Call us</span>
+              <p>
+                We're available to help and answer about your project.
+              </p>
               <a href="tel:+639694891753">+63 969 489 1753</a>
             </div>
 
             <div class="direct-item">
-              <span class="direct-label">Chat with us</span>
-              <p>Get quick answers straight from the team.</p>
+              <span class="direct-title">Chat with us</span>
+              <p>
+                Get quick answers straight from the team.
+              </p>
               <a href="#">Message us</a>
             </div>
+
           </aside>
+
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- Footer -->
+  <!-- ================= FOOTER ================= -->
   <footer class="site-footer">
     <div class="container footer-grid">
-      <div class="footer-brand">
+
+      <div>
         <a href="#home" class="brand">
-          <img src="logo.png" alt="Codexys logo" class="brand-logo">
+          <span class="brand-mark">&lt;/&gt;</span>
           <span>Codexys</span>
         </a>
-        <p>
+
+        <p class="footer-text">
           Your partner for thoughtful web development, design, and internal
           systems that help businesses run better.
         </p>
       </div>
 
       <div class="footer-contact">
-        <p class="section-kicker">CONTACT US</p>
+        <p class="section-label">CONTACT US</p>
         <a href="mailto:support@codexys.tech">support@codexys.tech</a>
         <a href="tel:+639694891753">+63 969 489 1753</a>
         <span>Bacoor, Cavite, Philippines</span>
       </div>
+
     </div>
 
     <div class="container footer-bottom">
@@ -339,22 +443,7 @@
     </div>
   </footer>
 
-  <script>
-    const menuToggle = document.querySelector(".menu-toggle");
-    const mainNav = document.querySelector(".main-nav");
-
-    menuToggle.addEventListener("click", () => {
-      mainNav.classList.toggle("is-open");
-      menuToggle.classList.toggle("is-open");
-    });
-
-    document.querySelectorAll(".main-nav a").forEach(link => {
-      link.addEventListener("click", () => {
-        mainNav.classList.remove("is-open");
-        menuToggle.classList.remove("is-open");
-      });
-    });
-  </script>
-
+  <!-- Separate JavaScript -->
+  <script src="script.js"></script>
 </body>
 </html>
