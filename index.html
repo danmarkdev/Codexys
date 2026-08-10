@@ -3,241 +3,209 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Codexys — Web Development, UI/UX Design, and Web Systems & Dashboards.">
-  <title>Codexys</title>
-
-  <!-- Separate CSS -->
+  <meta name="description" content="Codexys — Website Development, UI/UX Design, and Web Systems & Dashboards.">
+  <title>Codexys | Technology Solutions</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- ================= PRELOADER ================= -->
+  <!-- PRELOADER -->
   <div class="preloader" id="preloader">
-    <div class="preloader-inner">
-      <div class="preloader-logo">CODEXYS</div>
-      <div class="preloader-line"></div>
-      <div class="preloader-text" id="preloaderTyped"></div>
+    <div class="preloader-box">
+      <img src="logo.png" alt="Codexys logo">
+      <p id="preloaderTyped"></p>
+      <span class="loader-line"></span>
     </div>
   </div>
 
-  <!-- ================= HEADER ================= -->
-  <header class="site-header">
-    <div class="container nav-wrap">
+  <!-- HEADER -->
+  <header class="header">
+    <div class="container nav">
 
       <a href="#home" class="brand">
-        <span class="brand-mark">&lt;/&gt;</span>
+        <img src="logo.png" alt="Codexys logo">
         <span>Codexys</span>
       </a>
 
-      <nav class="desktop-nav" aria-label="Main navigation">
+      <nav class="desktop-nav">
+        <a href="#home">Home</a>
         <a href="#about">About</a>
         <a href="#services">Services</a>
         <a href="#team">Team</a>
         <a href="#contact">Contact</a>
       </nav>
 
-      <div class="nav-actions">
+      <div class="nav-right">
+        <a class="nav-connect" href="#contact">Connect <span>↗</span></a>
+
         <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
-          <span class="theme-icon">☼</span>
+          ◐
         </button>
 
-        <button
-          class="hamburger"
-          id="hamburgerBtn"
-          type="button"
-          aria-label="Open menu"
-          aria-expanded="false"
-          aria-controls="mobileMenu"
-        >
+        <button class="hamburger" id="hamburgerBtn" type="button" aria-label="Open menu" aria-expanded="false">
           <span></span>
           <span></span>
           <span></span>
         </button>
       </div>
-
     </div>
 
-    <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+    <nav class="mobile-menu" id="mobileMenu">
+      <a href="#home">Home</a>
       <a href="#about">About</a>
       <a href="#services">Services</a>
       <a href="#team">Team</a>
       <a href="#contact">Contact</a>
+      <a href="#contact" class="mobile-connect">Connect ↗</a>
     </nav>
   </header>
 
-  <!-- ================= MAIN ================= -->
   <main>
 
     <!-- HERO -->
     <section class="hero" id="home">
-      <div class="hero-orb hero-orb-one"></div>
-      <div class="hero-orb hero-orb-two"></div>
+      <div class="hero-glow glow-one"></div>
+      <div class="hero-glow glow-two"></div>
       <div class="hero-grid"></div>
 
       <div class="container hero-content reveal">
-        <p class="eyebrow">WEB DEVELOPMENT AGENCY</p>
+
+        <div class="hero-logo">
+          <img src="logo.png" alt="Codexys">
+        </div>
+
+        <p class="eyebrow">TECHNOLOGY SOLUTIONS</p>
 
         <h1>
-          Welcome to
-          <span>Codexys</span>
+          Welcome to <span>Codexys!</span>
         </h1>
 
-        <div class="hero-subline">
+        <div class="typed-line">
           <span id="typedSub"></span><span class="cursor">|</span>
         </div>
 
         <p class="hero-description">
-          To designing and building websites, interfaces and internal systems
-          for businesses who'd rather ship something sharp than something safe.
+          We design and develop modern websites, intuitive interfaces, and practical web systems & dashboards that help businesses build a stronger digital presence.
         </p>
 
         <div class="hero-buttons">
           <a class="btn btn-primary" href="#contact">
             Get Started <span>→</span>
           </a>
-
-          <a class="btn btn-outline" href="#services">
-            Learn More
+          <a class="btn btn-outline" href="#about">
+            Learn More <span>↗</span>
           </a>
         </div>
+
       </div>
 
-      <div class="hero-bottom">
+      <div class="hero-scroll">
         <span>SCROLL TO EXPLORE</span>
-        <span>↓</span>
+        <b>↓</b>
       </div>
     </section>
 
     <!-- ABOUT -->
-    <section class="section about-section" id="about">
+    <section class="section about" id="about">
       <div class="container">
 
-        <div class="section-heading reveal">
-          <span class="section-number">01</span>
-
-          <div>
-            <p class="section-label">ABOUT CODEXYS</p>
+        <div class="section-top reveal">
+                    <div>
+            <p class="eyebrow">ABOUT CODEXYS</p>
             <h2>About Codexys</h2>
           </div>
         </div>
 
         <div class="about-intro reveal">
           <p>
-            We are Web Development Agency a small team based in the Philippines
-            dedicated to helping businesses launch and run on the web, through
-            website development, UI/UX design and the systems that keep their
-            operations running.
+            Codexys is a web development agency based in the Philippines. We help businesses turn ideas into modern digital experiences through website development, UI/UX design, and custom web systems & dashboards.
           </p>
         </div>
 
         <div class="about-grid">
-
-          <article class="about-card reveal">
-            <span class="card-number">01</span>
-            <h3>Our Mission</h3>
+          <article class="info-card reveal">
+                        <h3>Our Mission</h3>
             <p>
-              To give businesses a web presence that actually does its job fast,
-              clear, and built to grow with them.
+              To help businesses create a strong digital presence through reliable, modern, and user-focused web solutions.
             </p>
           </article>
 
-          <article class="about-card reveal">
-            <span class="card-number">02</span>
-            <h3>Small Team</h3>
+          <article class="info-card reveal">
+                        <h3>Small Team</h3>
             <p>
-              A founder, two developers, and designer each hands on with every
-              project we take.
+              Our team combines web development, UI/UX design, and system-building skills to deliver complete digital solutions.
             </p>
           </article>
 
-          <article class="about-card reveal">
-            <span class="card-number">03</span>
-            <h3>Built With Current Tools</h3>
+          <article class="info-card reveal">
+                        <h3>Built With Current Tools</h3>
             <p>
-              Modern frameworks and practices nothing bolted on just because
-              it's trendy.
+              We use modern web technologies and practical development practices to create fast, responsive, and maintainable solutions.
             </p>
           </article>
 
-          <article class="about-card reveal">
-            <span class="card-number">04</span>
-            <h3>Quality Assured</h3>
+          <article class="info-card reveal">
+                        <h3>Quality Assured</h3>
             <p>
-              Every site, interface, and system is reviewed and tested before
-              it reaches your users.
+              We focus on clean interfaces, responsive experiences, reliable functionality, and quality testing before delivery.
             </p>
           </article>
-
         </div>
       </div>
     </section>
 
     <!-- SERVICES -->
-    <section class="section services-section" id="services">
+    <section class="section services" id="services">
       <div class="container">
 
-        <div class="section-heading reveal">
-          <span class="section-number">02</span>
-
-          <div>
-            <p class="section-label">WHAT WE OFFER</p>
+        <div class="section-top reveal">
+                    <div>
+            <p class="eyebrow">WHAT WE OFFER</p>
             <h2>Our Services</h2>
           </div>
         </div>
 
         <p class="section-description reveal">
-          We offer a focused set of web services to help your business launch,
-          look sharp, and run smoothly.
+          We offer a focused set of technology services to help your business
+          launch, look sharp, and run smoothly.
         </p>
 
-        <div class="services-grid">
+        <div class="service-grid">
 
           <article class="service-card reveal">
-            <div class="service-header">
-              <span>01</span>
-              <span class="service-arrow">↗</span>
+            <div class="service-top">
+              <span>CODEXYS</span>
+              <span>↗</span>
             </div>
-
             <div class="service-icon">&lt;/&gt;</div>
-
             <h3>Website Development</h3>
-
             <p>
-              Marketing sites, product sites, and storefronts built to load
-              fast, hold up under traffic, and stay easy to update.
+              Responsive business websites, landing pages, company websites, and custom web experiences built to look professional and perform well across devices.
             </p>
           </article>
 
           <article class="service-card reveal">
-            <div class="service-header">
-              <span>02</span>
-              <span class="service-arrow">↗</span>
+            <div class="service-top">
+              <span>CODEXYS</span>
+              <span>↗</span>
             </div>
-
-            <div class="service-icon">◈</div>
-
+            <div class="service-icon">◇</div>
             <h3>UI/UX Design</h3>
-
             <p>
-              Interfaces designed around how people actually move through a
-              task, not how a template happens to be laid out.
+              Clean and user-centered interfaces designed around usability, visual consistency, accessibility, and a smooth user experience.
             </p>
           </article>
 
           <article class="service-card reveal">
-            <div class="service-header">
-              <span>03</span>
-              <span class="service-arrow">↗</span>
+            <div class="service-top">
+              <span>CODEXYS</span>
+              <span>↗</span>
             </div>
-
             <div class="service-icon">▣</div>
-
             <h3>Web Systems &amp; Dashboards</h3>
-
             <p>
-              Internal tools and dashboards that replace spreadsheets and manual
-              steps with something your team actually opens.
+              Custom web systems and dashboards that organize business workflows, manage information, and turn everyday processes into efficient digital tools.
             </p>
           </article>
 
@@ -246,89 +214,75 @@
     </section>
 
     <!-- TEAM -->
-    <section class="section team-section" id="team">
+    <section class="section team" id="team">
       <div class="container">
 
-        <div class="section-heading reveal">
-          <span class="section-number">03</span>
-
-          <div>
-            <p class="section-label">MEET THE TEAM</p>
+        <div class="section-top reveal">
+                    <div>
+            <p class="eyebrow">MEET THE TEAM</p>
             <h2>Our Team</h2>
           </div>
         </div>
 
         <p class="section-description reveal">
-          Meet the four people the developers and designer
+          Meet the team behind Codexys, a web development agency focused on building useful and modern digital solutions.
         </p>
 
         <div class="team-grid">
 
           <article class="team-card reveal">
-            <div class="member-photo">
-              <span>DR</span>
-            </div>
-
+            <div class="member-photo"><span>DR</span></div>
             <p class="member-role">Founder</p>
             <h3>Danmark S. Rosalejos</h3>
-            <p class="member-description">
-              Leads in development team in full-stack technologies
-            </p>
-
+            <p>Leads our development team in full-stack technologies.</p>
+            <div class="member-tags">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span>
+            </div>
             <div class="member-links">
-              <a href="#" aria-label="Danmark personal portfolio">Personal Portfolio</a>
-              <a href="#" aria-label="Danmark GitHub profile">GitHub Profile</a>
+              <a href="#" target="_blank" rel="noopener">Personal Portfolio ↗</a>
+              <a href="#" target="_blank" rel="noopener">GitHub ↗</a>
             </div>
           </article>
 
           <article class="team-card reveal">
-            <div class="member-photo">
-              <span>JM</span>
-            </div>
-
+            <div class="member-photo"><span>JM</span></div>
             <p class="member-role">Frontend Developer</p>
             <h3>Jedrick C. Miclat</h3>
-            <p class="member-description">
-              Turns designs into fast, accessible, production-ready interfaces.
-            </p>
-
+            <p>Turns designs into fast, accessible, production-ready interfaces.</p>
+            <div class="member-tags">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span>
+            </div>
             <div class="member-links">
-              <a href="#" aria-label="Jedrick personal portfolio">Personal Portfolio</a>
-              <a href="#" aria-label="Jedrick GitHub profile">GitHub Profile</a>
+              <a href="#" target="_blank" rel="noopener">Personal Portfolio ↗</a>
+              <a href="#" target="_blank" rel="noopener">GitHub ↗</a>
             </div>
           </article>
 
           <article class="team-card reveal">
-            <div class="member-photo">
-              <span>BL</span>
-            </div>
-
+            <div class="member-photo"><span>BL</span></div>
             <p class="member-role">Backend Developer</p>
             <h3>Benedict Lamoglia</h3>
-            <p class="member-description">
-              Builds the systems, APIs, and data layer everything runs on.
-            </p>
-
+            <p>Builds the systems, APIs, and data layer everything runs on.</p>
+            <div class="member-tags">
+              <span>PHP</span><span>MySQL</span><span>JavaScript</span>
+            </div>
             <div class="member-links">
-              <a href="#" aria-label="Benedict personal portfolio">Personal Portfolio</a>
-              <a href="#" aria-label="Benedict GitHub profile">GitHub Profile</a>
+              <a href="#" target="_blank" rel="noopener">Personal Portfolio ↗</a>
+              <a href="#" target="_blank" rel="noopener">GitHub ↗</a>
             </div>
           </article>
 
           <article class="team-card reveal">
-            <div class="member-photo">
-              <span>JA</span>
-            </div>
-
+            <div class="member-photo"><span>JA</span></div>
             <p class="member-role">Frontend / UI Designer</p>
             <h3>John Leonard Anadia</h3>
-            <p class="member-description">
-              Shapes layout, visual language, and the details users notice.
-            </p>
-
+            <p>Shapes layout, visual language, and the details users notice.</p>
+            <div class="member-tags">
+              <span>UI/UX</span><span>CSS</span><span>Design</span>
+            </div>
             <div class="member-links">
-              <a href="#" aria-label="John personal portfolio">Personal Portfolio</a>
-              <a href="#" aria-label="John GitHub profile">GitHub Profile</a>
+              <a href="#" target="_blank" rel="noopener">Personal Portfolio ↗</a>
+              <a href="#" target="_blank" rel="noopener">GitHub ↗</a>
             </div>
           </article>
 
@@ -337,15 +291,13 @@
     </section>
 
     <!-- CONTACT -->
-    <section class="section contact-section" id="contact">
+    <section class="section contact" id="contact">
       <div class="container">
 
-        <div class="section-heading reveal">
-          <span class="section-number">04</span>
-
-          <div>
-            <p class="section-label">LET'S CONNECT</p>
-            <h2>Here's how you can contact with us!</h2>
+        <div class="section-top reveal">
+                    <div>
+            <p class="eyebrow">LET'S CONNECT</p>
+            <h2>Here's how you can connect with us!</h2>
           </div>
         </div>
 
@@ -353,10 +305,9 @@
           We are here to help you with your projects or ideas!
         </p>
 
-        <div class="contact-layout">
+        <div class="contact-grid">
 
           <form class="contact-form reveal" id="contactForm">
-
             <label>
               <span>Name</span>
               <input type="text" name="name" placeholder="Enter your name" required>
@@ -373,7 +324,7 @@
             </label>
 
             <label>
-              <span>Project details</span>
+              <span>Message</span>
               <textarea name="message" rows="6" placeholder="Tell us about your project..." required></textarea>
             </label>
 
@@ -381,30 +332,23 @@
               Send Message <span>→</span>
             </button>
 
-            <p class="form-status" id="formStatus" aria-live="polite"></p>
-
+            <p class="form-status" id="formStatus"></p>
           </form>
 
-          <aside class="contact-direct reveal">
+          <aside class="contact-info reveal">
+            <p class="eyebrow">CUSTOMER SUPPORT</p>
 
-            <p class="section-label">TALK TO US DIRECTLY</p>
-
-            <div class="direct-item">
-              <span class="direct-title">Call us</span>
-              <p>
-                We're available to help and answer about your project.
-              </p>
+            <div class="support-item">
+              <span>Call us!</span>
+              <p>We're available to help and answer questions about your project.</p>
               <a href="tel:+639694891753">+63 969 489 1753</a>
             </div>
 
-            <div class="direct-item">
-              <span class="direct-title">Chat with us</span>
-              <p>
-                Get quick answers straight from the team.
-              </p>
-              <a href="#">Message us</a>
+            <div class="support-item">
+              <span>Chat with us!</span>
+              <p>Get quick answers straight from the team.</p>
+              <a href="#">Message us ↗</a>
             </div>
-
           </aside>
 
         </div>
@@ -413,27 +357,26 @@
 
   </main>
 
-  <!-- ================= FOOTER ================= -->
-  <footer class="site-footer">
+  <!-- FOOTER -->
+  <footer class="footer">
     <div class="container footer-grid">
 
       <div>
         <a href="#home" class="brand">
-          <span class="brand-mark">&lt;/&gt;</span>
+          <img src="logo.png" alt="Codexys logo">
           <span>Codexys</span>
         </a>
 
-        <p class="footer-text">
-          Your partner for thoughtful web development, design, and internal
-          systems that help businesses run better.
+        <p class="footer-description">
+          Codexys is a web development agency focused on website development, UI/UX design, and web systems & dashboards.
         </p>
       </div>
 
       <div class="footer-contact">
-        <p class="section-label">CONTACT US</p>
+        <p class="eyebrow">CONTACT US</p>
         <a href="mailto:support@codexys.tech">support@codexys.tech</a>
         <a href="tel:+639694891753">+63 969 489 1753</a>
-        <span>Bacoor, Cavite, Philippines</span>
+        <span>Philippines</span>
       </div>
 
     </div>
@@ -443,7 +386,6 @@
     </div>
   </footer>
 
-  <!-- Separate JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>
