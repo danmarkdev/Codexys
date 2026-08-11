@@ -583,6 +583,15 @@ p{ margin: 0; }
 .team-card{
   display: flex;
   flex-direction: column;
+  width: 100%;
+  /* FIX: caps how wide (and, via the photo's aspect-ratio, how tall) each
+     card can get. Without this, a card stretches to fill its full grid
+     column on desktop or the full screen width on mobile, which made the
+     photo — and the whole card — much bigger than intended. Centered with
+     margin-inline: auto inside whatever space it's given (a grid column
+     on desktop, a full-width snap "page" on mobile). */
+  max-width: 380px;
+  margin-inline: auto;
   height: 100%;
   overflow: hidden;
   background: var(--surface);
