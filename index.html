@@ -69,14 +69,6 @@
 
       <div class="container hero-content reveal">
 
-   <!--     tanggalin na lang siguro to ?? 
-        
-   <div class="hero-logo">
-          <img src="codexys logo/codexys.jpg" alt="Codexys">
-        </div>
-
-        -->
-
         <p class="eyebrow">WEB DEVELOPMENT AGENCY</p>
 
         <h1>
@@ -125,9 +117,7 @@
           </p>
         </div>
 
-        <div class="carousel-wrap">
-        <button class="carousel-arrow arrow-prev" type="button" data-target="aboutGrid" aria-label="Previous">‹</button>
-        <div class="about-grid" id="aboutGrid">
+        <div class="about-grid">
 
           <article class="info-card reveal">
             <div class="info-icon" aria-hidden="true">
@@ -188,8 +178,6 @@
           </article>
 
         </div>
-        <button class="carousel-arrow arrow-next" type="button" data-target="aboutGrid" aria-label="Next">›</button>
-        </div>
       </div>
     </section>
 
@@ -209,9 +197,7 @@
           launch, look professional, and operate more efficiently.
         </p>
 
-        <div class="carousel-wrap">
-        <button class="carousel-arrow arrow-prev" type="button" data-target="servicesGrid" aria-label="Previous">‹</button>
-        <div class="service-grid" id="servicesGrid">
+        <div class="service-grid">
 
           <article class="service-card reveal">
 
@@ -252,8 +238,6 @@
           </article>
 
         </div>
-        <button class="carousel-arrow arrow-next" type="button" data-target="servicesGrid" aria-label="Next">›</button>
-        </div>
       </div>
     </section>
 
@@ -273,166 +257,168 @@
           building useful and modern digital solutions.
         </p>
 
-        <div class="carousel-wrap">
-        <button class="carousel-arrow arrow-prev" type="button" data-target="teamGrid" aria-label="Previous">‹</button>
-        <div class="team-grid" id="teamGrid">
+        <div class="carousel-wrap" id="teamCarouselWrap">
 
-          <article class="team-card reveal">
-            <div class="member-photo">
-              <img src="Developers/danmark.jpg" alt="Danmark S. Rosalejos" style="object-position: center 20%;">
-            </div>
+          <button type="button" class="carousel-arrow arrow-prev" data-target="teamGrid" aria-label="Previous team member">&#8249;</button>
+          <button type="button" class="carousel-arrow arrow-next" data-target="teamGrid" aria-label="Next team member">&#8250;</button>
 
-            <div class="team-card-body">
-              <p class="member-role">Founder</p>
-              <h3>Danmark S. Rosalejos</h3>
-              <p class="member-desc">Leads our development team in full-stack technologies.</p>
+          <div class="team-grid" id="teamGrid">
 
-              <div class="member-tags">
-                <span>Laravel</span>
-                <span>Sql</span>
-                <span>Node.js</span>
+            <article class="team-card reveal">
+              <div class="member-photo">
+                <img src="Developers/danmark.jpg" alt="Danmark S. Rosalejos" style="object-position: center 20%;">
               </div>
 
-              <div class="member-links">
-                <a class="member-btn member-btn-primary" href="https://danmark.vercel.app/" target="_blank" rel="noopener">
-                  <span class="btn-icon">&lt;/&gt;</span> Portfolio
-                </a>
-                <a class="member-btn member-btn-secondary" href="https://github.com/danmarkdev" target="_blank" rel="noopener">
-                  <span class="btn-icon">
-                    <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true">
-                      <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38
-                               0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
-                               -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
-                               .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
-                               0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12
-                               0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82
-                               .44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
-                               0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
-                               0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-                    </svg>
-                  </span>
-                  GitHub
-                </a>
+              <div class="team-card-body">
+                <p class="member-role">Founder</p>
+                <h3>Danmark S. Rosalejos</h3>
+                <p class="member-desc">Leads our development team in full-stack technologies.</p>
+
+                <div class="member-tags">
+                  <span>Laravel</span>
+                  <span>Sql</span>
+                  <span>Node.js</span>
+                </div>
+
+                <div class="member-links">
+                  <a class="member-btn member-btn-primary" href="https://danmark.vercel.app/" target="_blank" rel="noopener">
+                    <span class="btn-icon">&lt;/&gt;</span> Portfolio
+                  </a>
+                  <a class="member-btn member-btn-secondary" href="https://github.com/danmarkdev" target="_blank" rel="noopener">
+                    <span class="btn-icon">
+                      <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true">
+                        <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38
+                                 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+                                 -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+                                 .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
+                                 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12
+                                 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82
+                                 .44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
+                                 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
+                                 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                      </svg>
+                    </span>
+                    GitHub
+                  </a>
+                </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <article class="team-card reveal">
-            <div class="member-photo"><span>JM</span></div>
+            <article class="team-card reveal">
+              <div class="member-photo"><span>JM</span></div>
 
-            <div class="team-card-body">
-              <p class="member-role">Frontend Developer</p>
-              <h3>Jedrick C. Miclat</h3>
-              <p class="member-desc">Turns designs into fast, accessible, production-ready interfaces.</p>
+              <div class="team-card-body">
+                <p class="member-role">Frontend Developer</p>
+                <h3>Jedrick C. Miclat</h3>
+                <p class="member-desc">Turns designs into fast, accessible, production-ready interfaces.</p>
 
-              <div class="member-tags">
-                <span>HTML</span>
-                <span>CSS</span>
-                <span>JavaScript</span>
+                <div class="member-tags">
+                  <span>HTML</span>
+                  <span>CSS</span>
+                  <span>JavaScript</span>
+                </div>
+
+                <div class="member-links">
+                  <a class="member-btn member-btn-primary" href="#" target="_blank" rel="noopener">
+                    <span class="btn-icon">&lt;/&gt;</span> Portfolio
+                  </a>
+                  <a class="member-btn member-btn-secondary" href="#" target="_blank" rel="noopener">
+                    <span class="btn-icon">
+                      <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true">
+                        <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38
+                                 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+                                 -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+                                 .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
+                                 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12
+                                 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82
+                                 .44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
+                                 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
+                                 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                      </svg>
+                    </span>
+                    GitHub
+                  </a>
+                </div>
               </div>
+            </article>
 
-              <div class="member-links">
-                <a class="member-btn member-btn-primary" href="#" target="_blank" rel="noopener">
-                  <span class="btn-icon">&lt;/&gt;</span> Portfolio
-                </a>
-                <a class="member-btn member-btn-secondary" href="#" target="_blank" rel="noopener">
-                  <span class="btn-icon">
-                    <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true">
-                      <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38
-                               0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
-                               -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
-                               .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
-                               0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12
-                               0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82
-                               .44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
-                               0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
-                               0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-                    </svg>
-                  </span>
-                  GitHub
-                </a>
+            <article class="team-card reveal">
+              <div class="member-photo"><span>BL</span></div>
+
+              <div class="team-card-body">
+                <p class="member-role">Backend Developer</p>
+                <h3>Benedict Lamoglia</h3>
+                <p class="member-desc">Builds the systems, APIs, and data layer everything runs on.</p>
+
+                <div class="member-tags">
+                  <span>PHP</span>
+                  <span>MySQL</span>
+                  <span>JavaScript</span>
+                </div>
+
+                <div class="member-links">
+                  <a class="member-btn member-btn-primary" href="#" target="_blank" rel="noopener">
+                    <span class="btn-icon">&lt;/&gt;</span> Portfolio
+                  </a>
+                  <a class="member-btn member-btn-secondary" href="#" target="_blank" rel="noopener">
+                    <span class="btn-icon">
+                      <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true">
+                        <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38
+                                 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+                                 -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+                                 .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
+                                 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12
+                                 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82
+                                 .44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
+                                 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
+                                 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                      </svg>
+                    </span>
+                    GitHub
+                  </a>
+                </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <article class="team-card reveal">
-            <div class="member-photo"><span>BL</span></div>
+            <article class="team-card reveal">
+              <div class="member-photo"><span>JA</span></div>
 
-            <div class="team-card-body">
-              <p class="member-role">Backend Developer</p>
-              <h3>Benedict Lamoglia</h3>
-              <p class="member-desc">Builds the systems, APIs, and data layer everything runs on.</p>
+              <div class="team-card-body">
+                <p class="member-role">Frontend / UI Designer</p>
+                <h3>John Leonard Anadia</h3>
+                <p class="member-desc">Shapes layout, visual language, and the details users notice.</p>
 
-              <div class="member-tags">
-                <span>PHP</span>
-                <span>MySQL</span>
-                <span>JavaScript</span>
+                <div class="member-tags">
+                  <span>UI/UX</span>
+                  <span>CSS</span>
+                  <span>Design</span>
+                </div>
+
+                <div class="member-links">
+                  <a class="member-btn member-btn-primary" href="#" target="_blank" rel="noopener">
+                    <span class="btn-icon">&lt;/&gt;</span> Portfolio
+                  </a>
+                  <a class="member-btn member-btn-secondary" href="https://github.com/johnleonardmanadia" target="_blank" rel="noopener">
+                    <span class="btn-icon">
+                      <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true">
+                        <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38
+                                 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+                                 -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+                                 .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
+                                 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12
+                                 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82
+                                 .44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
+                                 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
+                                 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                      </svg>
+                    </span>
+                    GitHub
+                  </a>
+                </div>
               </div>
+            </article>
 
-              <div class="member-links">
-                <a class="member-btn member-btn-primary" href="#" target="_blank" rel="noopener">
-                  <span class="btn-icon">&lt;/&gt;</span> Portfolio
-                </a>
-                <a class="member-btn member-btn-secondary" href="#" target="_blank" rel="noopener">
-                  <span class="btn-icon">
-                    <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true">
-                      <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38
-                               0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
-                               -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
-                               .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
-                               0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12
-                               0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82
-                               .44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
-                               0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
-                               0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-                    </svg>
-                  </span>
-                  GitHub
-                </a>
-              </div>
-            </div>
-          </article>
-
-          <article class="team-card reveal">
-            <div class="member-photo"><span>JA</span></div>
-
-            <div class="team-card-body">
-              <p class="member-role">Frontend / UI Designer</p>
-              <h3>John Leonard Anadia</h3>
-              <p class="member-desc">Shapes layout, visual language, and the details users notice.</p>
-
-              <div class="member-tags">
-                <span>UI/UX</span>
-                <span>CSS</span>
-                <span>Design</span>
-              </div>
-
-              <div class="member-links">
-                <a class="member-btn member-btn-primary" href="#" target="_blank" rel="noopener">
-                  <span class="btn-icon">&lt;/&gt;</span> Portfolio
-                </a>
-                <a class="member-btn member-btn-secondary" href="https://github.com/johnleonardmanadia" target="_blank" rel="noopener">
-                  <span class="btn-icon">
-                    <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true">
-                      <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38
-                               0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
-                               -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
-                               .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
-                               0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12
-                               0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82
-                               .44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
-                               0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
-                               0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-                    </svg>
-                  </span>
-                  GitHub
-                </a>
-              </div>
-            </div>
-          </article>
-
-        </div>
-        <button class="carousel-arrow arrow-next" type="button" data-target="teamGrid" aria-label="Next">›</button>
+          </div>
         </div>
       </div>
     </section>
