@@ -616,7 +616,22 @@ p{ margin: 0; }
 }
 
 @media (max-width: 960px){
+  .team-card{ border-radius: 20px; }
   .member-photo{ height: 240px; font-size: 54px; }
+
+  /* Reference layout stacks the two link buttons full-width, one above
+     the other, instead of side-by-side — matches better on a narrow
+     single-card view and gives each button a larger touch target. */
+  .member-links{
+    flex-direction: column;
+    gap: 12px;
+  }
+  .member-btn{
+    width: 100%;
+    padding: 15px 18px;
+    border-radius: 999px;
+    font-size: 13.5px;
+  }
 }
 
 .team-card-body{
