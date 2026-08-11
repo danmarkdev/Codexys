@@ -616,22 +616,7 @@ p{ margin: 0; }
 }
 
 @media (max-width: 960px){
-  .team-card{ border-radius: 20px; }
   .member-photo{ height: 240px; font-size: 54px; }
-
-  /* Reference layout stacks the two link buttons full-width, one above
-     the other, instead of side-by-side — matches better on a narrow
-     single-card view and gives each button a larger touch target. */
-  .member-links{
-    flex-direction: column;
-    gap: 12px;
-  }
-  .member-btn{
-    width: 100%;
-    padding: 15px 18px;
-    border-radius: 999px;
-    font-size: 13.5px;
-  }
 }
 
 .team-card-body{
@@ -726,6 +711,7 @@ p{ margin: 0; }
    shows a single centered card instead of getting stuck showing two
    half-cards. */
 @media (max-width: 960px){
+  .team-card{ border-radius: 20px; }
   .team-grid{
     display: grid;
     grid-auto-flow: column;
@@ -744,6 +730,23 @@ p{ margin: 0; }
   .team-card{
     scroll-snap-align: center;
     scroll-snap-stop: always;
+  }
+
+  /* Reference layout stacks the two link buttons full-width, one above
+     the other, instead of side-by-side. This has to sit in THIS media
+     block (after the base .member-links/.member-btn rules earlier in
+     the file) — a media query placed before a same-specificity base
+     rule loses to it in the cascade regardless of whether the query
+     matches, which was the bug last round. */
+  .member-links{
+    flex-direction: column;
+    gap: 12px;
+  }
+  .member-btn{
+    width: 100%;
+    padding: 15px 18px;
+    border-radius: 999px;
+    font-size: 13.5px;
   }
 }
 
