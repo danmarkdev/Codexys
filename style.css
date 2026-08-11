@@ -575,8 +575,15 @@ p{ margin: 0; }
    ========================================================= */
 .team-grid{
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
+  /* FIX: was repeat(2, 1fr), which made each column ~half the container
+     (~558px) — since .team-card is capped at 380px and centered inside
+     that column, it left a big empty gutter on both sides of each card,
+     stacking up into a huge gap in the middle and on the outer edges.
+     Sizing columns to the card's own max-width and centering the pair
+     as a group keeps a normal, even gap without the dead space. */
+  grid-template-columns: repeat(2, minmax(0, 380px));
+  justify-content: center;
+  gap: 32px;
   align-items: stretch;
 }
 
