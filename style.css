@@ -555,7 +555,7 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
    ========================================================= */
 .team-grid{
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 24px;
 }
 
