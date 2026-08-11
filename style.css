@@ -593,7 +593,7 @@ p{ margin: 0; }
 /* Photo banner across the top of the card (initials shown large on a gradient field) */
 .member-photo{
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 3.4;
   display: grid;
   place-items: center;
   background: var(--gradient);
@@ -611,7 +611,7 @@ p{ margin: 0; }
 }
 
 @media (max-width: 960px){
-  .member-photo{ aspect-ratio: 3 / 4; font-size: 54px; }
+  .member-photo{ aspect-ratio: 4 / 3; font-size: 54px; }
 }
 
 .team-card-body{
