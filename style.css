@@ -709,6 +709,7 @@ p{ margin: 0; }
     scrollbar-width: none;
   }
   .team-grid::-webkit-scrollbar{ display: none; }
+  .member-photo{ aspect-ratio: 3 / 4; }
   .team-card{
     flex: 0 0 calc(100% - 48px);
     scroll-snap-align: start;
@@ -875,6 +876,41 @@ a.footer-contact-item:hover{ color: var(--cyan); }
   letter-spacing: 0.08em;
   color: var(--text-faint);
   text-align: center;
+}
+
+/* =========================================================
+   CAROUSEL ARROWS (mobile swipe sections)
+   ========================================================= */
+.carousel-wrap{ position: relative; }
+.carousel-arrow{
+  display: none;
+}
+
+@media (max-width: 640px){
+  .carousel-arrow{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(15,15,24,0.78);
+    border: 1px solid var(--border-strong);
+    color: var(--text);
+    font-size: 20px;
+    line-height: 1;
+    z-index: 5;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: border-color .25s var(--ease), transform .25s var(--ease);
+  }
+  .carousel-arrow:hover{ border-color: var(--cyan); }
+  .carousel-arrow:active{ transform: translateY(-50%) scale(0.92); }
+  .arrow-prev{ left: 2px; }
+  .arrow-next{ right: 2px; }
 }
 
 /* =========================================================
