@@ -599,7 +599,13 @@ p{ margin: 0; }
    desktop and mobile instead of shifting/cropping differently per screen size. */
 .member-photo{
   width: 100%;
-  height: 240px;
+  /* FIX: was a fixed 240px height, which is a much wider/shorter box than
+     the actual photo (2048×1854 ≈ 1.1:1), forcing a heavy crop that cut
+     off the hand/phone. Using aspect-ratio instead means the box scales
+     with the card's width and shows the photo close to uncropped, on
+     any screen size. */
+  aspect-ratio: 2048 / 1854;
+  height: auto;
   flex: 0 0 auto;
   display: grid;
   place-items: center;
@@ -615,7 +621,7 @@ p{ margin: 0; }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 15%;
+  object-position: center;
 }
 
 .team-card-body{
