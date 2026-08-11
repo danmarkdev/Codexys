@@ -593,11 +593,13 @@ p{ margin: 0; }
 .team-card:hover{ border-color: var(--border-strong); transform: translateY(-4px); }
 
 /* Photo banner across the top of the card (initials shown large on a gradient field).
-   Fixed height (not aspect-ratio) so every card — real photo or initials —
-   starts from the exact same size, whatever the card's total height ends up being. */
+   FIX: height is now a single constant (240px) at every breakpoint instead of
+   220/240/220px, and object-position has a sane default (center 15%, i.e. weighted
+   toward the top of the source photo) so real photos frame the same way on
+   desktop and mobile instead of shifting/cropping differently per screen size. */
 .member-photo{
   width: 100%;
-  height: 220px;
+  height: 240px;
   flex: 0 0 auto;
   display: grid;
   place-items: center;
@@ -605,7 +607,7 @@ p{ margin: 0; }
   color: #050508;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 64px;
+  font-size: 60px;
   margin-bottom: 0;
   overflow: hidden;
 }
@@ -613,10 +615,7 @@ p{ margin: 0; }
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-@media (max-width: 960px){
-  .member-photo{ height: 240px; font-size: 54px; }
+  object-position: center 15%;
 }
 
 .team-card-body{
@@ -661,10 +660,14 @@ p{ margin: 0; }
   color: var(--cyan);
 }
 
+/* FIX: Portfolio / GitHub buttons now use the same stacked, full-width pill
+   style on EVERY screen size (this used to only kick in below 960px via a
+   media query — that override has been removed and folded into the base
+   rules below, so desktop matches mobile). */
 .member-links{
   display: flex;
-  flex-direction: row;
-  gap: 10px;
+  flex-direction: column;
+  gap: 12px;
   margin-top: auto;
 }
 
@@ -673,10 +676,10 @@ p{ margin: 0; }
   align-items: center;
   justify-content: center;
   gap: 6px;
-  flex: 1;
-  padding: 11px 10px;
-  border-radius: var(--radius-sm);
-  font-size: 12.5px;
+  width: 100%;
+  padding: 15px 18px;
+  border-radius: 999px;
+  font-size: 13.5px;
   font-weight: 600;
   transition: transform .25s var(--ease), opacity .25s var(--ease), filter .25s var(--ease);
 }
@@ -731,27 +734,6 @@ p{ margin: 0; }
     scroll-snap-align: center;
     scroll-snap-stop: always;
   }
-
-  /* Reference layout stacks the two link buttons full-width, one above
-     the other, instead of side-by-side. This has to sit in THIS media
-     block (after the base .member-links/.member-btn rules earlier in
-     the file) — a media query placed before a same-specificity base
-     rule loses to it in the cascade regardless of whether the query
-     matches, which was the bug last round. */
-  .member-links{
-    flex-direction: column;
-    gap: 12px;
-  }
-  .member-btn{
-    width: 100%;
-    padding: 15px 18px;
-    border-radius: 999px;
-    font-size: 13.5px;
-  }
-}
-
-@media (max-width: 640px){
-  .member-photo{ height: 220px; }
 }
 
 /* =========================================================
@@ -917,39 +899,13 @@ a.footer-contact-item:hover{ color: var(--cyan); }
 
 /* =========================================================
    CAROUSEL ARROWS (mobile swipe sections)
+   FIX: previously shown below 960px via a media query. Removed that
+   override — arrows now stay display:none at every screen size and
+   swipe / scroll-snap handles navigation instead.
    ========================================================= */
 .carousel-wrap{ position: relative; }
 .carousel-arrow{
   display: none;
-}
-
-@media (max-width: 960px){
-  .carousel-arrow{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    /* Fallback top value; script.js overrides this inline with the
-       exact vertical center of the photo band once it measures it. */
-    top: 95px;
-    transform: translateY(-50%);
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: rgba(15,15,24,0.78);
-    border: 1px solid var(--border-strong);
-    color: var(--text);
-    font-size: 20px;
-    line-height: 1;
-    z-index: 5;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    transition: border-color .25s var(--ease), transform .25s var(--ease);
-  }
-  .carousel-arrow:hover{ border-color: var(--cyan); }
-  .carousel-arrow:active{ transform: translateY(-50%) scale(0.92); }
-  .arrow-prev{ left: 2px; }
-  .arrow-next{ right: 2px; }
 }
 
 /* =========================================================
