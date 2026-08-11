@@ -222,7 +222,18 @@ p{ margin: 0; }
   border-top: 1px solid var(--border);
   background: var(--bg-elevated);
 }
-.mobile-menu.is-open{ display: flex; }
+.mobile-menu.is-open{
+  display: flex;
+  position: fixed;
+  top: 76px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(100vh - 76px);
+  height: calc(100dvh - 76px);
+  overflow-y: auto;
+  justify-content: center;
+}
 .mobile-menu a{
   width: 100%;
   padding: 16px 4px;
