@@ -472,12 +472,13 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
   background: var(--surface-hover);
 }
 .info-icon{
-  width: 42px; height: 42px;
+  width: 50px; height: 50px;
   display: grid; place-items: center;
-  border-radius: var(--radius-sm);
-  background: var(--gradient);
-  color: #050508;
-  margin-bottom: 16px;
+  border-radius: 14px;
+  background: rgba(124,77,255,0.12);
+  border: 1px solid rgba(124,77,255,0.35);
+  color: var(--violet);
+  margin-bottom: 18px;
 }
 
 .info-card h3{
@@ -525,13 +526,14 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
 .service-card > *{ position: relative; z-index: 1; }
 
 .service-icon{
-  width: 46px; height: 46px;
+  width: 50px; height: 50px;
   display: grid; place-items: center;
-  border-radius: var(--radius-sm);
-  background: var(--gradient);
-  color: #050508;
+  border-radius: 14px;
+  background: rgba(124,77,255,0.12);
+  border: 1px solid rgba(124,77,255,0.35);
+  color: var(--violet);
   font-family: var(--font-mono);
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 500;
   margin-bottom: 22px;
 }
@@ -553,8 +555,8 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
    ========================================================= */
 .team-grid{
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
 }
 
 .team-card{
@@ -571,7 +573,7 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
 /* Photo banner across the top of the card (initials shown large on a gradient field) */
 .member-photo{
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 4 / 3.4;
   display: grid;
   place-items: center;
   background: var(--gradient);
