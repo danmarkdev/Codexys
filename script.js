@@ -64,6 +64,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  /* ---------- Carousel arrows (About / Services / Team) ---------- */
+  document.querySelectorAll('.carousel-arrow').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.dataset.target);
+      if (!target) return;
+      const dir = btn.classList.contains('arrow-next') ? 1 : -1;
+      target.scrollBy({ left: dir * target.clientWidth, behavior: 'smooth' });
+    });
+  });
+
   /* ---------- Scroll reveal ---------- */
   const revealEls = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
