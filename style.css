@@ -37,19 +37,6 @@
   --ease: cubic-bezier(.22,.61,.36,1);
 }
 
-/* light theme override (toggled via .theme-light on <body>) */
-body.theme-light{
-  --bg:            #F7F7FA;
-  --bg-elevated:   #FFFFFF;
-  --surface:       #FFFFFF;
-  --surface-hover: #F0F1F5;
-  --border:        rgba(10,10,20,0.08);
-  --border-strong: rgba(10,10,20,0.16);
-  --text:          #101018;
-  --text-muted:    #55586A;
-  --text-faint:    #8B8E9C;
-}
-
 /* =========================================================
    RESET
    ========================================================= */
@@ -64,6 +51,21 @@ body{
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   transition: background .4s var(--ease), color .4s var(--ease);
+}
+
+/* Whole-page ambient background — one continuous glow behind every
+   section (fixed to the viewport) so there's no hard seam where the
+   hero ends and the next section begins. */
+body::before{
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(720px 720px at 10% 0%, rgba(63,197,240,0.14), transparent 62%),
+    radial-gradient(720px 720px at 92% 100%, rgba(124,77,255,0.14), transparent 62%),
+    var(--bg);
+  pointer-events: none;
 }
 img{ max-width: 100%; display: block; }
 a{ color: inherit; text-decoration: none; }
@@ -138,12 +140,9 @@ p{ margin: 0; }
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  background: rgba(5,5,8,0.7);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  background: var(--bg);
   border-bottom: 1px solid var(--border);
 }
-body.theme-light .header{ background: rgba(247,247,250,0.75); }
 
 .nav{
   display: flex;
@@ -192,18 +191,6 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
 .nav-connect:hover{ border-color: var(--cyan); transform: translateY(-1px); }
 .nav-connect span{ transition: transform .25s var(--ease); }
 .nav-connect:hover span{ transform: translate(2px,-2px); }
-
-.theme-toggle{
-  width: 38px; height: 38px;
-  display: grid; place-items: center;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  border-radius: 50%;
-  color: var(--text);
-  font-size: 15px;
-  transition: border-color .25s var(--ease), transform .3s var(--ease);
-}
-.theme-toggle:hover{ border-color: var(--violet); transform: rotate(20deg); }
 
 .hamburger{
   display: none;
