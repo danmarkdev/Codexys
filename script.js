@@ -1,7 +1,6 @@
 /* =========================================================
    CODEXYS — SCRIPT
    ========================================================= */
-
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- Footer year ---------- */
@@ -13,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('load', () => {
     setTimeout(() => {
       if (preloader) preloader.classList.add('is-hidden');
-    }, 500);
+    }, 2200);
   });
 
   /* ---------- Typed subheading ---------- */
@@ -26,11 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let phraseIndex = 0;
   let charIndex = 0;
   let deleting = false;
-
   function typeLoop() {
     if (!typedEl) return;
     const current = phrases[phraseIndex];
-
     if (!deleting) {
       charIndex++;
       typedEl.textContent = current.slice(0, charIndex);
@@ -54,33 +51,16 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- Mobile menu ---------- */
   const hamburger = document.getElementById('hamburgerBtn');
   const mobileMenu = document.getElementById('mobileMenu');
-
   if (hamburger && mobileMenu) {
     hamburger.addEventListener('click', () => {
       const isOpen = mobileMenu.classList.toggle('is-open');
       hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
-
     mobileMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mobileMenu.classList.remove('is-open');
         hamburger.setAttribute('aria-expanded', 'false');
       });
-    });
-  }
-
-  /* ---------- Theme toggle (dark default, light optional) ---------- */
-  const themeToggle = document.getElementById('themeToggle');
-  const savedTheme = localStorage.getItem('codexys-theme');
-  if (savedTheme === 'light') {
-    document.body.classList.add('theme-light');
-  }
-
-  if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('theme-light');
-      const isLight = document.body.classList.contains('theme-light');
-      localStorage.setItem('codexys-theme', isLight ? 'light' : 'dark');
     });
   }
 
@@ -94,18 +74,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }, { threshold: 0.15 });
-
   revealEls.forEach(el => observer.observe(el));
 
   /* ---------- Contact form (front-end only) ---------- */
   const form = document.getElementById('contactForm');
   const status = document.getElementById('formStatus');
-
   if (form && status) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       status.textContent = 'Sending…';
-
       setTimeout(() => {
         status.textContent = 'Thanks — your message has been sent. We\'ll get back to you soon.';
         form.reset();
