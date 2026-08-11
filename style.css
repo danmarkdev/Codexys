@@ -632,7 +632,7 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
 
 .member-links{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
   margin-top: auto;
 }
@@ -641,11 +641,12 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 11px 14px;
+  gap: 6px;
+  flex: 1;
+  padding: 11px 10px;
   border-radius: var(--radius-sm);
-  font-size: 13px;
+  font-size: 12.5px;
+}
   font-weight: 600;
   transition: transform .25s var(--ease), opacity .25s var(--ease), filter .25s var(--ease);
 }
@@ -658,12 +659,12 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
 .member-btn-primary:hover{ transform: translateY(-2px); filter: brightness(1.08); }
 
 .member-btn-secondary{
-  background: rgba(124,77,255,0.16);
-  border: 1px solid rgba(124,77,255,0.4);
-  color: var(--text);
+  background: transparent;
+  border: 1.5px solid var(--violet);
+  color: var(--violet);
 }
 .member-btn-secondary:hover{
-  background: rgba(124,77,255,0.26);
+  background: rgba(124,77,255,0.14);
   transform: translateY(-2px);
 }
 
@@ -790,12 +791,12 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
   display: grid; place-items: center;
   border: 1px solid var(--border);
   border-radius: 50%;
-  color: var(--text);
+  color: var(--cyan);
   transition: border-color .25s var(--ease), color .25s var(--ease), transform .25s var(--ease);
 }
 .footer-socials a:hover{
-  border-color: var(--violet);
-  color: var(--violet);
+  border-color: var(--cyan);
+  color: var(--cyan);
   transform: translateY(-2px);
 }
 
@@ -815,7 +816,7 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
   transition: color .25s var(--ease);
 }
 a.footer-contact-item:hover{ color: var(--cyan); }
-.footer-contact-item svg{ flex-shrink: 0; color: var(--violet); }
+.footer-contact-item svg{ flex-shrink: 0; color: var(--cyan); }
 
 .footer-bottom{
   padding-top: 22px;
