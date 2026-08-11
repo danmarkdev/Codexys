@@ -742,6 +742,20 @@ p{ margin: 0; }
     grid-auto-flow: column;
     grid-template-columns: none;
     grid-auto-columns: 100%;
+    /* FIX: the base rule above sets justify-content: center for the
+       desktop 2-column layout. Left un-overridden here, it also
+       applied to this mobile track — and since the mobile track's
+       total content (one 100%-wide column per card) is far wider than
+       the visible container, the grid centered that oversized content
+       inside the scroll box. That shifted the resting scroll position
+       away from 0, so the carousel opened on a middle card (e.g.
+       Benedict/Jedrick) instead of the first one (Danmark, Founder),
+       and made left/right swipes feel like they were bouncing inside
+       an already-offset range instead of moving through a normal
+       0 → end track. flex-start keeps the track left-aligned so the
+       carousel opens on card 1 and swipes travel the full, expected
+       range. */
+    justify-content: flex-start;
     align-items: stretch;
     overflow-x: auto;
     scroll-behavior: smooth;
