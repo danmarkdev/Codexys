@@ -86,8 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('teamGrid');
     if (!wrap || !grid) return;
 
-    // Arrows are only shown (display:flex) below 640px — skip work otherwise.
-    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+    // Arrows are only shown (display:flex) below 960px — skip work otherwise.
+    const isMobile = window.matchMedia('(max-width: 960px)').matches;
     if (!isMobile) return;
 
     // Use whichever card is currently left-most/visible in the scroller.
@@ -96,10 +96,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const wrapRect = wrap.getBoundingClientRect();
     const gridRect = grid.getBoundingClientRect();
+    const gridCenter = gridRect.left + gridRect.width / 2;
     let activeCard = cards[0];
     let bestDist = Infinity;
     cards.forEach(card => {
-      const dist = Math.abs(card.getBoundingClientRect().left - gridRect.left);
+      const cardRect = card.getBoundingClientRect();
+      const cardCenter = cardRect.left + cardRect.width / 2;
+      const dist = Math.abs(cardCenter - gridCenter);
       if (dist < bestDist) { bestDist = dist; activeCard = card; }
     });
 
