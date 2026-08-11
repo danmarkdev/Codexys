@@ -577,11 +577,13 @@ p{ margin: 0; }
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
+  align-items: stretch;
 }
 
 .team-card{
   display: flex;
   flex-direction: column;
+  height: 100%;
   overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -590,10 +592,13 @@ p{ margin: 0; }
 }
 .team-card:hover{ border-color: var(--border-strong); transform: translateY(-4px); }
 
-/* Photo banner across the top of the card (initials shown large on a gradient field) */
+/* Photo banner across the top of the card (initials shown large on a gradient field).
+   Fixed height (not aspect-ratio) so every card — real photo or initials —
+   starts from the exact same size, whatever the card's total height ends up being. */
 .member-photo{
   width: 100%;
-  aspect-ratio: 4 / 3.4;
+  height: 220px;
+  flex: 0 0 auto;
   display: grid;
   place-items: center;
   background: var(--gradient);
@@ -611,7 +616,7 @@ p{ margin: 0; }
 }
 
 @media (max-width: 960px){
-  .member-photo{ aspect-ratio: 4 / 3; font-size: 54px; }
+  .member-photo{ height: 200px; font-size: 54px; }
 }
 
 .team-card-body{
@@ -695,10 +700,19 @@ p{ margin: 0; }
 
 @media (max-width: 960px){ .team-grid{ grid-template-columns: repeat(2,1fr); } }
 
+/* On mobile the team grid becomes a horizontally-scrolling carousel.
+   It stays a CSS grid (grid-auto-flow: column) rather than flex so
+   every card is stretched to the height of the tallest card in the
+   row — this is what keeps all team-card sizes uniform, whether a
+   member has a real photo or initials, and regardless of how long
+   their description text runs. */
 @media (max-width: 640px){
   .team-grid{
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
     grid-template-columns: none;
+    grid-auto-columns: calc(100% - 48px);
+    align-items: stretch;
     overflow-x: auto;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
@@ -709,9 +723,8 @@ p{ margin: 0; }
     scrollbar-width: none;
   }
   .team-grid::-webkit-scrollbar{ display: none; }
-  .member-photo{ aspect-ratio: 3 / 4; }
+  .member-photo{ height: 190px; }
   .team-card{
-    flex: 0 0 calc(100% - 48px);
     scroll-snap-align: start;
     scroll-snap-stop: always;
   }
@@ -892,7 +905,9 @@ a.footer-contact-item:hover{ color: var(--cyan); }
     align-items: center;
     justify-content: center;
     position: absolute;
-    top: 50%;
+    /* Fallback top value; script.js overrides this inline with the
+       exact vertical center of the photo band once it measures it. */
+    top: 95px;
     transform: translateY(-50%);
     width: 38px;
     height: 38px;
