@@ -722,13 +722,14 @@ p{ margin: 0; }
     -webkit-overflow-scrolling: touch;
     gap: 0;
     margin: 0 -24px;
-    padding: 4px 24px 12px;
+    padding: 4px 0 12px;
     scrollbar-width: none;
   }
   .team-grid::-webkit-scrollbar{ display: none; }
   .team-card{
     scroll-snap-align: center;
     scroll-snap-stop: always;
+    border-radius: 0;
   }
 }
 
