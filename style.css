@@ -471,6 +471,15 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
   transform: translateY(-4px);
   background: var(--surface-hover);
 }
+.info-icon{
+  width: 42px; height: 42px;
+  display: grid; place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--gradient);
+  color: #050508;
+  margin-bottom: 16px;
+}
+
 .info-card h3{
   font-size: 16px;
   font-weight: 600;
@@ -514,38 +523,6 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
 .service-card:hover{ border-color: var(--border-strong); transform: translateY(-6px); }
 .service-card:hover::before{ opacity: 1; }
 .service-card > *{ position: relative; z-index: 1; }
-
-.service-top{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.14em;
-  color: var(--text-faint);
-  margin-bottom: 34px;
-}
-
-.service-arrow{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 1px solid var(--border-strong);
-  font-family: var(--font-body);
-  font-size: 13px;
-  color: var(--text);
-  background: var(--bg-elevated);
-  transition: background .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease), color .3s var(--ease);
-}
-.service-card:hover .service-arrow{
-  background: var(--gradient);
-  border-color: transparent;
-  color: #050508;
-  transform: translate(2px,-2px);
-}
 
 .service-icon{
   width: 46px; height: 46px;
@@ -594,15 +571,19 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
 /* Photo banner across the top of the card (initials shown large on a gradient field) */
 .member-photo{
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
   display: grid;
   place-items: center;
   background: var(--gradient);
   color: #050508;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 42px;
+  font-size: 64px;
   margin-bottom: 0;
+}
+
+@media (max-width: 960px){
+  .member-photo{ aspect-ratio: 4 / 3; font-size: 54px; }
 }
 
 .team-card-body{
