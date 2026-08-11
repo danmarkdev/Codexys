@@ -600,7 +600,7 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
   font-size: 10.5px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--violet);
+  color: var(--cyan);
   font-weight: 600;
   margin-bottom: 8px;
 }
@@ -624,10 +624,10 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
   font-family: var(--font-mono);
   font-size: 10.5px;
   padding: 5px 11px;
-  border: 1px solid rgba(124,77,255,0.35);
-  background: rgba(124,77,255,0.12);
+  border: 1px solid rgba(63,197,240,0.35);
+  background: rgba(63,197,240,0.12);
   border-radius: 999px;
-  color: var(--violet);
+  color: var(--cyan);
 }
 
 .member-links{
@@ -660,11 +660,11 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
 
 .member-btn-secondary{
   background: transparent;
-  border: 1.5px solid var(--violet);
-  color: var(--violet);
+  border: 1.5px solid var(--cyan);
+  color: var(--cyan);
 }
 .member-btn-secondary:hover{
-  background: rgba(124,77,255,0.14);
+  background: rgba(63,197,240,0.14);
   transform: translateY(-2px);
 }
 
@@ -674,21 +674,76 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
 /* =========================================================
    CONTACT
    ========================================================= */
-.contact-grid{
+.contact-layout{
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 26px;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 40px;
   align-items: start;
 }
+
+.contact-intro h2{ margin-top: 10px; margin-bottom: 14px; }
+.contact-intro .section-description{ margin-bottom: 0; max-width: 420px; }
+
+.contact-card{
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 28px;
+  background: var(--gradient-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.contact-quick{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.quick-item{
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+.quick-icon{
+  width: 42px; height: 42px;
+  margin: 0 auto 12px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: rgba(63,197,240,0.12);
+  border: 1px solid rgba(63,197,240,0.35);
+  color: var(--cyan);
+}
+.quick-item h4{
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.quick-item p{
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+.quick-item a{
+  display: inline-block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cyan);
+}
+.quick-item a:hover{ color: var(--violet); }
 
 .contact-form{
   display: flex;
   flex-direction: column;
   gap: 18px;
-  padding: 32px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+}
+.form-row{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
 }
 .contact-form label{ display: flex; flex-direction: column; gap: 8px; }
 .contact-form span{
@@ -723,35 +778,11 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
   min-height: 16px;
 }
 
-.contact-info{
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 32px;
-  background: var(--gradient-soft);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+@media (max-width: 860px){
+  .contact-layout{ grid-template-columns: 1fr; }
+  .contact-quick{ grid-template-columns: 1fr; }
+  .form-row{ grid-template-columns: 1fr; }
 }
-.support-item span{
-  display: block;
-  font-weight: 600;
-  font-size: 15px;
-  margin-bottom: 8px;
-}
-.support-item p{
-  font-size: 13.5px;
-  color: var(--text-muted);
-  margin-bottom: 10px;
-}
-.support-item a{
-  font-size: 13.5px;
-  font-weight: 500;
-  color: var(--cyan);
-}
-.support-item a:hover{ color: var(--violet); }
-
-@media (max-width: 860px){ .contact-grid{ grid-template-columns: 1fr; } }
-
 /* =========================================================
    FOOTER
    ========================================================= */
