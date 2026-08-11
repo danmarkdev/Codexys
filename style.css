@@ -483,20 +483,22 @@ p{ margin: 0; }
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     gap: 16px;
-    margin: 0 -24px;
-    /* FIX: left padding bumped from 24px to 36px so the first card
-       ("Our Mission") sits with a bit more breathing room on the left
-       instead of sitting almost flush with the screen edge. Right stays
-       at 24px. */
-    padding: 4px 24px 12px 36px;
+    /* FIX: only bleed out on the right (not the left) — this keeps the
+       row's left edge exactly where .container's own padding already
+       puts it, so the first card lines up flush with the "About
+       Codexys" heading above it, same as the reference design. The
+       right side still extends to the true screen edge so the second
+       card can peek in as a swipe hint, then padding-right restores a
+       matching 24px rest position once scrolled to the last card. */
+    margin-right: -24px;
+    padding: 4px 24px 12px 0;
     scrollbar-width: none;
   }
   .about-grid::-webkit-scrollbar{ display: none; }
   .info-card{
-    /* FIX: width recalculated for the new 36px + 24px inset (60px total)
-       so the card still sits with an even, matching gap on both sides
-       at rest. */
-    flex: 0 0 calc(100% - 60px);
+    /* FIX: fixed % width (instead of 100% - gutters) so a slice of the
+       next card is visible at rest, matching the reference peek. */
+    flex: 0 0 82%;
     scroll-snap-align: start;
     scroll-snap-stop: always;
   }
@@ -565,19 +567,19 @@ p{ margin: 0; }
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     gap: 16px;
-    margin: 0 -24px;
-    /* FIX: same left-inset fix as .about-grid — left padding bumped from
-       24px to 36px so the first card ("Website Development") isn't
-       almost flush with the screen edge. Right stays at 24px. */
-    padding: 4px 24px 12px 36px;
+    /* FIX: same left-alignment fix as .about-grid — only bleed out on
+       the right so the row's left edge stays put at .container's own
+       padding, keeping the first card ("Website Development") flush
+       with the "Our Services" heading above it. */
+    margin-right: -24px;
+    padding: 4px 24px 12px 0;
     scrollbar-width: none;
   }
   .service-grid::-webkit-scrollbar{ display: none; }
   .service-card{
-    /* FIX: width recalculated for the new 36px + 24px inset (60px total)
-       so the card still sits with an even, matching gap on both sides
-       at rest. */
-    flex: 0 0 calc(100% - 60px);
+    /* FIX: fixed % width so the next card peeks in at rest, matching
+       the reference design. */
+    flex: 0 0 82%;
     scroll-snap-align: start;
     scroll-snap-stop: always;
   }
