@@ -329,20 +329,39 @@ body.theme-light .header{ background: rgba(247,247,250,0.75); }
   max-width: 780px;
 }
 
+/*
+
 .hero-logo{
-  width: 84px; height: 84px;
+  width: 100px;
+  height: 84px;
   margin-bottom: 28px;
   filter: drop-shadow(0 0 26px rgba(124,77,255,0.35));
+  
+
 }
+
+
+
+.hero-logo img {
+
+
+  border-radius: 50%;
+}
+
+*/
+
+
 
 .eyebrow{
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 20px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--text-muted);
   margin: 0 0 14px;
 }
+
+
 
 .hero h1{
   font-size: clamp(2.4rem, 5.5vw, 4.2rem);
