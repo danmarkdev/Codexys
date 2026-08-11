@@ -80,7 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
      that band on the currently-first-visible card and moves the arrows
      to sit on its vertical center, instead of the vertical center of
      the whole (taller) card. Re-runs on load/resize since the photo
-     band's pixel height changes across breakpoints. */
+     band's pixel height changes across breakpoints.
+     Note: .carousel-arrow is currently display:none at every screen
+     size in CSS (the mobile team carousel now relies on swipe/scroll-
+     snap only), so this is effectively inert — left in place in case
+     the arrows come back. */
   function centerTeamArrows() {
     const wrap = document.getElementById('teamCarouselWrap');
     const grid = document.getElementById('teamGrid');
@@ -117,6 +121,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  /* ---------- Team carousel: force-snap to the nearest card ----------
+     Some mobile browsers — notably in-app webviews like Facebook/
+     Messenger's — don't reliably honor CSS scroll-snap-stop, so a quick
+     swipe can leave the carousel resting between two cards instead of
+     landing on one. This is a fallback: a short moment after the user
+     stops scrolling, it snaps to whichever card is nearest, regardless
+     of what native scroll-snap did or didn't do. It measures the
+     "page" width from the card's parent (the grid cell) rather than
+     the card itself, since .team-card now has its own max-width and no
+     longer fills the full cell. */
+  function snapTeamCarouselToNearestCard() {
+    const grid = document.getElementById('teamGrid');
+    if (!grid) return;
+
+    const card = grid.querySelector('.team-card');
+    if (!card || !card.parentElement) return;
+
+    const pageWidth = card.parentElement.getBoundingClientRect().width;
+    if (!pageWidth) return;
+
+    const index = Math.round(grid.scrollLeft / pageWidth);
+    grid.scrollTo({ left: index * pageWidth, behavior: 'smooth' });
+  }
+
   centerTeamArrows();
   window.addEventListener('resize', centerTeamArrows);
   window.addEventListener('orientationchange', centerTeamArrows);
@@ -124,10 +152,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const teamGridEl = document.getElementById('teamGrid');
   if (teamGridEl) {
     let scrollRaf = null;
+    let snapTimer = null;
+
     teamGridEl.addEventListener('scroll', () => {
       if (scrollRaf) cancelAnimationFrame(scrollRaf);
       scrollRaf = requestAnimationFrame(centerTeamArrows);
-    });
+
+      clearTimeout(snapTimer);
+      snapTimer = setTimeout(snapTeamCarouselToNearestCard, 120);
+    }, { passive: true });
   }
 
   // Photos loaded from disk (e.g. danmark.jpg) don't change the box size
