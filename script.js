@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ---------- Carousel arrows (About / Services / Team) ---------- */
+  /* ---------- Carousel arrows: scroll behaviour ---------- */
   document.querySelectorAll('.carousel-arrow').forEach(btn => {
     btn.addEventListener('click', () => {
       const target = document.getElementById(btn.dataset.target);
@@ -73,6 +73,64 @@ document.addEventListener('DOMContentLoaded', () => {
       target.scrollBy({ left: dir * target.clientWidth, behavior: 'smooth' });
     });
   });
+
+  /* ---------- Team carousel: center arrows on the photo, not the card ----------
+     The card's total height varies with description length, but every
+     .member-photo band is a fixed height (set in CSS). This measures
+     that band on the currently-first-visible card and moves the arrows
+     to sit on its vertical center, instead of the vertical center of
+     the whole (taller) card. Re-runs on load/resize since the photo
+     band's pixel height changes across breakpoints. */
+  function centerTeamArrows() {
+    const wrap = document.getElementById('teamCarouselWrap');
+    const grid = document.getElementById('teamGrid');
+    if (!wrap || !grid) return;
+
+    // Arrows are only shown (display:flex) below 640px — skip work otherwise.
+    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+    if (!isMobile) return;
+
+    // Use whichever card is currently left-most/visible in the scroller.
+    const cards = grid.querySelectorAll('.team-card');
+    if (!cards.length) return;
+
+    const wrapRect = wrap.getBoundingClientRect();
+    const gridRect = grid.getBoundingClientRect();
+    let activeCard = cards[0];
+    let bestDist = Infinity;
+    cards.forEach(card => {
+      const dist = Math.abs(card.getBoundingClientRect().left - gridRect.left);
+      if (dist < bestDist) { bestDist = dist; activeCard = card; }
+    });
+
+    const photo = activeCard.querySelector('.member-photo');
+    if (!photo) return;
+
+    const photoRect = photo.getBoundingClientRect();
+    const centerY = (photoRect.top - wrapRect.top) + (photoRect.height / 2);
+
+    wrap.querySelectorAll('.carousel-arrow').forEach(btn => {
+      btn.style.top = `${centerY}px`;
+    });
+  }
+
+  centerTeamArrows();
+  window.addEventListener('resize', centerTeamArrows);
+  window.addEventListener('orientationchange', centerTeamArrows);
+
+  const teamGridEl = document.getElementById('teamGrid');
+  if (teamGridEl) {
+    let scrollRaf = null;
+    teamGridEl.addEventListener('scroll', () => {
+      if (scrollRaf) cancelAnimationFrame(scrollRaf);
+      scrollRaf = requestAnimationFrame(centerTeamArrows);
+    });
+  }
+
+  // Photos loaded from disk (e.g. danmark.jpg) don't change the box size
+  // (height is fixed in CSS), but re-run once more after full page load
+  // just in case fonts/webfont metrics shift layout slightly.
+  window.addEventListener('load', centerTeamArrows);
 
   /* ---------- Scroll reveal ---------- */
   const revealEls = document.querySelectorAll('.reveal');
@@ -99,5 +157,4 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 900);
     });
   }
-
 });
