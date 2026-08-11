@@ -479,6 +479,7 @@ p{ margin: 0; }
     display: flex;
     grid-template-columns: none;
     overflow-x: auto;
+    scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     gap: 16px;
@@ -490,6 +491,7 @@ p{ margin: 0; }
   .info-card{
     flex: 0 0 calc(100% - 48px);
     scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
 }
 
@@ -552,6 +554,7 @@ p{ margin: 0; }
     display: flex;
     grid-template-columns: none;
     overflow-x: auto;
+    scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     gap: 16px;
@@ -563,6 +566,7 @@ p{ margin: 0; }
   .service-card{
     flex: 0 0 calc(100% - 48px);
     scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
 }
 
@@ -690,6 +694,7 @@ p{ margin: 0; }
     display: flex;
     grid-template-columns: none;
     overflow-x: auto;
+    scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     gap: 16px;
@@ -701,6 +706,7 @@ p{ margin: 0; }
   .team-card{
     flex: 0 0 calc(100% - 48px);
     scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
 }
 
