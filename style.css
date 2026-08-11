@@ -473,7 +473,25 @@ p{ margin: 0; }
 .info-card p{ font-size: 14px; color: var(--text-muted); }
 
 @media (max-width: 960px){ .about-grid{ grid-template-columns: repeat(2,1fr); } }
-@media (max-width: 560px){ .about-grid{ grid-template-columns: 1fr; } }
+
+@media (max-width: 640px){
+  .about-grid{
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 16px;
+    margin: 0 -24px;
+    padding: 4px 24px 12px;
+    scrollbar-width: none;
+  }
+  .about-grid::-webkit-scrollbar{ display: none; }
+  .info-card{
+    flex: 0 0 calc(100% - 48px);
+    scroll-snap-align: start;
+  }
+}
 
 /* =========================================================
    SERVICES
@@ -528,6 +546,25 @@ p{ margin: 0; }
 }
 
 @media (max-width: 960px){ .service-grid{ grid-template-columns: 1fr; } }
+
+@media (max-width: 640px){
+  .service-grid{
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 16px;
+    margin: 0 -24px;
+    padding: 4px 24px 12px;
+    scrollbar-width: none;
+  }
+  .service-grid::-webkit-scrollbar{ display: none; }
+  .service-card{
+    flex: 0 0 calc(100% - 48px);
+    scroll-snap-align: start;
+  }
+}
 
 /* =========================================================
    TEAM
