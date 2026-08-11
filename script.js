@@ -135,14 +135,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('teamGrid');
     if (!grid) return;
 
-    const card = grid.querySelector('.team-card');
-    if (!card || !card.parentElement) return;
+    const cards = grid.querySelectorAll('.team-card');
+    if (!cards.length) return;
 
-    const pageWidth = card.parentElement.getBoundingClientRect().width;
-    if (!pageWidth) return;
+    // Find whichever card's center is currently closest to the grid's
+    // visible center, then scroll just enough to line that card's
+    // center up exactly. Measuring the actual nearest card (rather than
+    // assuming every card sits a fixed "page width" apart) keeps this
+    // correct now that there's a gap between cards — a fixed-width
+    // assumption would drift a little more with every extra card.
+    const gridRect = grid.getBoundingClientRect();
+    const gridCenter = gridRect.left + gridRect.width / 2;
 
-    const index = Math.round(grid.scrollLeft / pageWidth);
-    grid.scrollTo({ left: index * pageWidth, behavior: 'smooth' });
+    let nearest = cards[0];
+    let nearestDist = Infinity;
+    cards.forEach(card => {
+      const cardRect = card.getBoundingClientRect();
+      const cardCenter = cardRect.left + cardRect.width / 2;
+      const dist = Math.abs(cardCenter - gridCenter);
+      if (dist < nearestDist) { nearestDist = dist; nearest = card; }
+    });
+
+    const nearestRect = nearest.getBoundingClientRect();
+    const nearestCenter = nearestRect.left + nearestRect.width / 2;
+    const delta = nearestCenter - gridCenter;
+
+    grid.scrollTo({ left: grid.scrollLeft + delta, behavior: 'smooth' });
   }
 
   centerTeamArrows();
