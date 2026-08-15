@@ -483,21 +483,12 @@ p{ margin: 0; }
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     gap: 16px;
-    /* FIX: only bleed out on the right (not the left) — this keeps the
-       row's left edge exactly where .container's own padding already
-       puts it, so the first card lines up flush with the "About
-       Codexys" heading above it, same as the reference design. The
-       right side still extends to the true screen edge so the second
-       card can peek in as a swipe hint, then padding-right restores a
-       matching 24px rest position once scrolled to the last card. */
     margin-right: -24px;
     padding: 4px 24px 12px 0;
     scrollbar-width: none;
   }
   .about-grid::-webkit-scrollbar{ display: none; }
   .info-card{
-    /* FIX: fixed % width (instead of 100% - gutters) so a slice of the
-       next card is visible at rest, matching the reference peek. */
     flex: 0 0 82%;
     scroll-snap-align: start;
     scroll-snap-stop: always;
@@ -567,18 +558,12 @@ p{ margin: 0; }
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     gap: 16px;
-    /* FIX: same left-alignment fix as .about-grid — only bleed out on
-       the right so the row's left edge stays put at .container's own
-       padding, keeping the first card ("Website Development") flush
-       with the "Our Services" heading above it. */
     margin-right: -24px;
     padding: 4px 24px 12px 0;
     scrollbar-width: none;
   }
   .service-grid::-webkit-scrollbar{ display: none; }
   .service-card{
-    /* FIX: fixed % width so the next card peeks in at rest, matching
-       the reference design. */
     flex: 0 0 82%;
     scroll-snap-align: start;
     scroll-snap-stop: always;
@@ -588,33 +573,34 @@ p{ margin: 0; }
 /* =========================================================
    TEAM
    ========================================================= */
+/* FIX (straight-line alignment on desktop): switched from CSS Grid
+   with `repeat(2, minmax(0, 380px))` to Flexbox with a fixed card
+   width. With Grid, each column track sizes itself independently
+   based on the intrinsic content in that column — so the column
+   holding a real <img> photo could resolve to a slightly different
+   width than the column holding plain initials text. Since the photo
+   box height is driven by `aspect-ratio`, a few pixels of column-width
+   difference meant the two photo boxes (and therefore the whole cards)
+   came out different heights, so the cards in the same row didn't line
+   up on a straight top/bottom edge. Flexbox + a fixed width (380px) on
+   every .team-card removes that variability: every card is guaranteed
+   to be exactly the same width, so the aspect-ratio photo is exactly
+   the same height, and align-items: stretch keeps both cards in a row
+   the same height regardless of description length. */
 .team-grid{
-  display: grid;
-  /* FIX: was repeat(2, 1fr), which made each column ~half the container
-     (~558px) — since .team-card is capped at 380px and centered inside
-     that column, it left a big empty gutter on both sides of each card,
-     stacking up into a huge gap in the middle and on the outer edges.
-     Sizing columns to the card's own max-width and centering the pair
-     as a group keeps a normal, even gap without the dead space. */
-  grid-template-columns: repeat(2, minmax(0, 380px));
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 32px;
   align-items: stretch;
+  gap: 32px;
 }
 
 .team-card{
   display: flex;
   flex-direction: column;
-  width: 100%;
-  /* FIX: caps how wide (and, via the photo's aspect-ratio, how tall) each
-     card can get. Without this, a card stretches to fill its full grid
-     column on desktop or the full screen width on mobile, which made the
-     photo — and the whole card — much bigger than intended. Centered with
-     margin-inline: auto inside whatever space it's given (a grid column
-     on desktop, a full-width snap "page" on mobile). */
+  flex: 0 0 380px;
+  width: 380px;
   max-width: 380px;
-  margin-inline: auto;
-  height: 100%;
   overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -623,18 +609,9 @@ p{ margin: 0; }
 }
 .team-card:hover{ border-color: var(--border-strong); transform: translateY(-4px); }
 
-/* Photo banner across the top of the card (initials shown large on a gradient field).
-   FIX: height is now a single constant (240px) at every breakpoint instead of
-   220/240/220px, and object-position has a sane default (center 15%, i.e. weighted
-   toward the top of the source photo) so real photos frame the same way on
-   desktop and mobile instead of shifting/cropping differently per screen size. */
+/* Photo banner across the top of the card (initials shown large on a gradient field). */
 .member-photo{
   width: 100%;
-  /* FIX: was a fixed 240px height, which is a much wider/shorter box than
-     the actual photo (2048×1854 ≈ 1.1:1), forcing a heavy crop that cut
-     off the hand/phone. Using aspect-ratio instead means the box scales
-     with the card's width and shows the photo close to uncropped, on
-     any screen size. */
   aspect-ratio: 2048 / 1854;
   height: auto;
   flex: 0 0 auto;
@@ -697,10 +674,6 @@ p{ margin: 0; }
   color: var(--cyan);
 }
 
-/* FIX: Portfolio / GitHub buttons now use the same stacked, full-width pill
-   style on EVERY screen size (this used to only kick in below 960px via a
-   media query — that override has been removed and folded into the base
-   rules below, so desktop matches mobile). */
 .member-links{
   display: flex;
   flex-direction: column;
@@ -740,36 +713,22 @@ p{ margin: 0; }
 
 /* Below 960px the team grid becomes a one-card-at-a-time carousel:
    exactly ONE card is visible and centered at rest, sized to the
-   normal container width (same inset as every other section on the
-   page — not edge-to-edge), with no sliver of the next card peeking
-   in. It stays a CSS grid (grid-auto-flow: column) rather than flex
-   so every card is stretched to the height of the tallest card in
-   the row — this is what keeps all team-card sizes uniform, whether
-   a member has a real photo or initials, and regardless of
-   description length. The breakpoint is 960px (not 640px like the
-   other carousels) so a resized desktop window in this range still
-   shows a single centered card instead of getting stuck showing two
-   half-cards. */
+   normal container width. This overrides the desktop flex layout
+   above with its own grid-based scroller so mobile swipe behavior is
+   unchanged from before. */
 @media (max-width: 960px){
-  .team-card{ border-radius: 20px; }
+  .team-card{
+    border-radius: 20px;
+    width: 100%;
+    max-width: 380px;
+    margin-inline: auto;
+    flex: none;
+  }
   .team-grid{
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: none;
     grid-auto-columns: 100%;
-    /* FIX: the base rule above sets justify-content: center for the
-       desktop 2-column layout. Left un-overridden here, it also
-       applied to this mobile track — and since the mobile track's
-       total content (one 100%-wide column per card) is far wider than
-       the visible container, the grid centered that oversized content
-       inside the scroll box. That shifted the resting scroll position
-       away from 0, so the carousel opened on a middle card (e.g.
-       Benedict/Jedrick) instead of the first one (Danmark, Founder),
-       and made left/right swipes feel like they were bouncing inside
-       an already-offset range instead of moving through a normal
-       0 → end track. flex-start keeps the track left-aligned so the
-       carousel opens on card 1 and swipes travel the full, expected
-       range. */
     justify-content: flex-start;
     align-items: stretch;
     overflow-x: auto;
@@ -950,9 +909,6 @@ a.footer-contact-item:hover{ color: var(--cyan); }
 
 /* =========================================================
    CAROUSEL ARROWS (mobile swipe sections)
-   FIX: previously shown below 960px via a media query. Removed that
-   override — arrows now stay display:none at every screen size and
-   swipe / scroll-snap handles navigation instead.
    ========================================================= */
 .carousel-wrap{ position: relative; }
 .carousel-arrow{
