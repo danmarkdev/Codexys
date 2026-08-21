@@ -511,23 +511,28 @@ p{ margin: 0; }
 
 @media (max-width: 960px){ .about-grid{ grid-template-columns: repeat(2,1fr); } }
 
-@media (max-width: 640px){
+@media (max-width: 768px){
   .about-grid{
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
     grid-template-columns: none;
+    grid-auto-columns: 100%;
+    justify-content: flex-start;
     overflow-x: auto;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
     gap: 16px;
-    margin-right: -24px;
-    padding: 4px 24px 12px 0;
+    padding: 4px 0 12px;
     scrollbar-width: none;
   }
   .about-grid::-webkit-scrollbar{ display: none; }
   .info-card{
-    flex: 0 0 82%;
-    scroll-snap-align: start;
+    width: 100%;
+    max-width: 380px;
+    margin-inline: auto;
+    scroll-snap-align: center;
     scroll-snap-stop: always;
   }
 }
@@ -591,23 +596,28 @@ p{ margin: 0; }
   .service-card{ flex-basis: 100%; max-width: 100%; }
 }
 
-@media (max-width: 640px){
+@media (max-width: 768px){
   .service-grid{
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
     grid-template-columns: none;
+    grid-auto-columns: 100%;
+    justify-content: flex-start;
     overflow-x: auto;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
     gap: 16px;
-    margin-right: -24px;
-    padding: 4px 24px 12px 0;
+    padding: 4px 0 12px;
     scrollbar-width: none;
   }
   .service-grid::-webkit-scrollbar{ display: none; }
   .service-card{
-    flex: 0 0 82%;
-    scroll-snap-align: start;
+    width: 100%;
+    max-width: 380px;
+    margin-inline: auto;
+    scroll-snap-align: center;
     scroll-snap-stop: always;
   }
 }
@@ -769,7 +779,7 @@ p{ margin: 0; }
    normal container width. This overrides the desktop flex layout
    above with its own grid-based scroller so mobile swipe behavior is
    unchanged from before. */
-@media (max-width: 960px){
+@media (max-width: 768px){
   .team-card{
     border-radius: 20px;
     width: 100%;
@@ -788,6 +798,7 @@ p{ margin: 0; }
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
     gap: 16px;
     padding: 4px 0 12px;
     scrollbar-width: none;
