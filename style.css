@@ -587,27 +587,21 @@ p{ margin: 0; }
    to be exactly the same width, so the aspect-ratio photo is exactly
    the same height, and align-items: stretch keeps both cards in a row
    the same height regardless of description length. */
-.team-grid{
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-items: stretch;
-  gap: 32px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  padding: 4px 4px 16px;
-  scrollbar-width: none;
+.team .container{
+  max-width: 1320px;
 }
-.team-grid::-webkit-scrollbar{ display: none; }
+
+.team-grid{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
 
 .team-card{
   display: flex;
   flex-direction: column;
-  flex: 0 0 380px;
-  width: 380px;
-  max-width: 380px;
+  width: 100%;
   overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -615,7 +609,6 @@ p{ margin: 0; }
   transition: border-color .3s var(--ease), transform .3s var(--ease);
 }
 .team-card:hover{ border-color: var(--border-strong); transform: translateY(-4px); }
-.team-card{ scroll-snap-align: start; scroll-snap-stop: always; }
 
 /* Photo banner across the top of the card (initials shown large on a gradient field). */
 .member-photo{
