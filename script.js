@@ -98,65 +98,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ---------- Horizontal swipe guard for mobile carousels ----------
-     Replaces the old CSS `overscroll-behavior-x: contain;` trick.
-     That property is unreliable in mobile in-app browsers (Messenger's
-     WebView in particular) — instead of just containing the sideways
-     swipe, it could end up locking scroll on the element entirely,
-     which made the page unable to scroll down.
-
-     This does the same job in JS instead, using touch events:
-       - On touchstart, note the starting finger position.
-       - On the first touchmove past a small threshold, decide once
-         whether this gesture is horizontal or vertical by comparing
-         how far the finger moved on each axis.
-       - Only if it's horizontal do we preventDefault() on further
-         touchmove events for this gesture — that stops the swipe from
-         "leaking" into a page-back gesture or rubber-banding the body.
-       - If it's vertical, we never call preventDefault at all, so the
-         page scrolls completely normally — this is the part the old
-         CSS approach could get wrong.
-
-     The touchmove listener must be { passive: false } so preventDefault
-     actually has an effect. */
-  function addHorizontalSwipeGuard(el) {
-    if (!el) return;
-
-    let startX = 0;
-    let startY = 0;
-    let direction = null; // 'x' | 'y' | null (undecided)
-    const THRESHOLD = 8; // px of movement before we decide the direction
-
-    el.addEventListener('touchstart', (e) => {
-      if (e.touches.length !== 1) return;
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-      direction = null;
-    }, { passive: true });
-
-    el.addEventListener('touchmove', (e) => {
-      if (e.touches.length !== 1) return;
-      const dx = e.touches[0].clientX - startX;
-      const dy = e.touches[0].clientY - startY;
-
-      if (direction === null) {
-        if (Math.abs(dx) < THRESHOLD && Math.abs(dy) < THRESHOLD) return;
-        direction = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
-      }
-
-      // Only ever intercept the horizontal gesture. Vertical drags are
-      // never touched, so the page can always scroll down normally.
-      if (direction === 'x') {
-        e.preventDefault();
-      }
-    }, { passive: false });
-
-    el.addEventListener('touchend', () => {
-      direction = null;
-    }, { passive: true });
-  }
-
-  document.querySelectorAll('.about-grid, .service-grid, #teamGrid').forEach(addHorizontalSwipeGuard);
+  /* ---------- Horizontal swipe: handled entirely by CSS ----------
+     No JS needed here anymore. `touch-action: pan-x` on
+     .about-grid / .service-grid / #teamGrid (see style.css) tells the
+     browser natively that these elements only own horizontal swipes,
+     so vertical swipes always fall through to the page. This replaced
+     an earlier JS touchmove/preventDefault guard, which fought with
+     native scroll-snap momentum and made swipes land mid-card instead
+     of snapping cleanly. */
 
   /* ---------- Team carousel: center arrows on the photo, not the card ----------
      The card's total height varies with description length, but every
