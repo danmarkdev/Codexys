@@ -522,18 +522,16 @@ p{ margin: 0; }
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
     gap: 16px;
     padding: 4px 0 12px;
     scrollbar-width: none;
-    /* touch-action: pan-x tells the browser this element only owns
-       horizontal swipes — any vertical swipe is passed straight up to
-       the page to scroll normally. This replaced both the old
-       overscroll-behavior-x trick (unreliable in mobile in-app
-       browsers) and a JS touchmove/preventDefault guard (which fought
-       with native scroll-snap momentum and caused swipes to land
-       mid-card instead of snapping). touch-action is handled natively
-       by the browser/OS, so it doesn't have either problem. */
+    /* No overscroll-behavior-x, no touch-action, no JS touch guard.
+       Plain overflow-x:auto + scroll-snap is enough: this element has
+       no vertical overflow, so a vertical drag is naturally passed
+       through to the page to scroll normally — that's standard
+       browser behavior for nested scroll containers, and it's more
+       reliable across mobile in-app browsers (Messenger's WebView
+       included) than any of the CSS/JS workarounds tried above. */
   }
   .about-grid::-webkit-scrollbar{ display: none; }
   .info-card{
@@ -625,7 +623,6 @@ p{ margin: 0; }
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
     gap: 16px;
     padding: 4px 0 12px;
     scrollbar-width: none;
@@ -829,7 +826,6 @@ p{ margin: 0; }
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
     gap: 16px;
     padding: 4px 0 12px;
     scrollbar-width: none;
