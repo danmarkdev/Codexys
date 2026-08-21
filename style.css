@@ -539,6 +539,16 @@ p{ margin: 0; }
     scroll-snap-align: center;
     scroll-snap-stop: always;
   }
+  /* Touch counts as a "hover" on most mobile browsers, so without this
+     the lift-up animation below would fire mid-swipe, making the card
+     look like it's moving on its own on top of the scroll. Disabling
+     it on mobile means the only motion during a swipe is the swipe
+     itself. */
+  .info-card:hover{
+    border-color: var(--border);
+    transform: none;
+    background: var(--surface);
+  }
 }
 
 /* =========================================================
@@ -623,6 +633,14 @@ p{ margin: 0; }
     margin-inline: auto;
     scroll-snap-align: center;
     scroll-snap-stop: always;
+  }
+  /* Disable the hover lift on mobile — see note in .info-card above. */
+  .service-card:hover{
+    border-color: var(--border);
+    transform: none;
+  }
+  .service-card:hover::before{
+    opacity: 0;
   }
 }
 
@@ -815,6 +833,11 @@ p{ margin: 0; }
   .team-card{
     scroll-snap-align: center;
     scroll-snap-stop: always;
+  }
+  /* Disable the hover lift on mobile — see note in .info-card above. */
+  .team-card:hover{
+    border-color: var(--border);
+    transform: none;
   }
 }
 
