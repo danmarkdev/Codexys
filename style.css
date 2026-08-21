@@ -522,7 +522,6 @@ p{ margin: 0; }
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
     gap: 16px;
     padding: 4px 0 12px;
     scrollbar-width: none;
@@ -607,7 +606,6 @@ p{ margin: 0; }
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
     gap: 16px;
     padding: 4px 0 12px;
     scrollbar-width: none;
@@ -802,7 +800,6 @@ p{ margin: 0; }
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
     gap: 16px;
     padding: 4px 0 12px;
     scrollbar-width: none;
