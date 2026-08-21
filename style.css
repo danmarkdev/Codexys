@@ -536,9 +536,6 @@ p{ margin: 0; }
   background: rgba(124,77,255,0.12);
   border: 1px solid rgba(124,77,255,0.35);
   color: var(--violet);
-  font-family: var(--font-mono);
-  font-size: 18px;
-  font-weight: 500;
   margin-bottom: 22px;
 }
 
