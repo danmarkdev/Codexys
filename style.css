@@ -522,14 +522,18 @@ p{ margin: 0; }
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
     gap: 16px;
     padding: 4px 0 12px;
     scrollbar-width: none;
-    /* NOTE: overscroll-behavior-x removed on purpose — it's unreliable
-       in mobile in-app browsers (e.g. Messenger's WebView) and could
-       lock scrolling entirely instead of just containing the swipe.
-       Horizontal-swipe containment is now handled in script.js via
-       touch event listeners, which never touch vertical scrolling. */
+    /* touch-action: pan-x tells the browser this element only owns
+       horizontal swipes — any vertical swipe is passed straight up to
+       the page to scroll normally. This replaced both the old
+       overscroll-behavior-x trick (unreliable in mobile in-app
+       browsers) and a JS touchmove/preventDefault guard (which fought
+       with native scroll-snap momentum and caused swipes to land
+       mid-card instead of snapping). touch-action is handled natively
+       by the browser/OS, so it doesn't have either problem. */
   }
   .about-grid::-webkit-scrollbar{ display: none; }
   .info-card{
@@ -621,6 +625,7 @@ p{ margin: 0; }
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
     gap: 16px;
     padding: 4px 0 12px;
     scrollbar-width: none;
@@ -824,6 +829,7 @@ p{ margin: 0; }
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
     gap: 16px;
     padding: 4px 0 12px;
     scrollbar-width: none;
