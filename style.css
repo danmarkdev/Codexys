@@ -711,6 +711,16 @@ p{ margin: 0; }
   transform: translateY(-2px);
 }
 
+/* Disabled state — used for a member's "View Portfolio" button when
+   their portfolio isn't ready yet (e.g. Jedrick). Greys it out and
+   blocks clicks/hover instead of linking anywhere. */
+.member-btn-disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.member-btn-disabled:hover{ transform: none; filter: none; }
+
 /* Below 960px the team grid becomes a one-card-at-a-time carousel:
    exactly ONE card is visible and centered at rest, sized to the
    normal container width. This overrides the desktop flex layout
