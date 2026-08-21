@@ -745,22 +745,12 @@ p{ margin: 0; }
 .member-btn-primary:hover{ transform: translateY(-2px); filter: brightness(1.08); }
 
 .member-btn-secondary{
-  background: transparent;
-  border: 1.5px solid var(--cyan);
-  color: var(--cyan);
-}
-.member-btn-secondary:hover{
-  background: rgba(63,197,240,0.14);
-  transform: translateY(-2px);
-}
-
-[data-theme="light"] .member-btn-secondary{
   background: var(--gradient);
-  border-color: transparent;
+  border: none;
   color: #050508;
 }
-[data-theme="light"] .member-btn-secondary:hover{
-  background: var(--gradient);
+.member-btn-secondary:hover{
+  transform: translateY(-2px);
   filter: brightness(1.08);
 }
 
