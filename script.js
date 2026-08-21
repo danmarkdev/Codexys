@@ -1,6 +1,28 @@
 /* =========================================================
    CODEXYS — SCRIPT
    ========================================================= */
+
+/* ---------- Light/Dark theme ----------
+   Runs immediately (script is deferred, so the DOM already exists) so
+   the saved theme applies as early as possible, before the rest of the
+   page's setup code below. Defaults to dark (the site's original look)
+   unless the visitor has previously toggled to light. */
+(function initTheme() {
+  const root = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('codexys-theme');
+  const theme = saved === 'light' ? 'light' : 'dark';
+  root.setAttribute('data-theme', theme);
+
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('codexys-theme', next);
+    });
+  }
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- Footer year ---------- */
