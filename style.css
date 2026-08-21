@@ -519,13 +519,17 @@ p{ margin: 0; }
     grid-auto-columns: 100%;
     justify-content: flex-start;
     overflow-x: auto;
-    overscroll-behavior-x: contain;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     gap: 16px;
     padding: 4px 0 12px;
     scrollbar-width: none;
+    /* NOTE: overscroll-behavior-x removed on purpose — it's unreliable
+       in mobile in-app browsers (e.g. Messenger's WebView) and could
+       lock scrolling entirely instead of just containing the swipe.
+       Horizontal-swipe containment is now handled in script.js via
+       touch event listeners, which never touch vertical scrolling. */
   }
   .about-grid::-webkit-scrollbar{ display: none; }
   .info-card{
@@ -604,13 +608,13 @@ p{ margin: 0; }
     grid-auto-columns: 100%;
     justify-content: flex-start;
     overflow-x: auto;
-    overscroll-behavior-x: contain;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     gap: 16px;
     padding: 4px 0 12px;
     scrollbar-width: none;
+    /* overscroll-behavior-x removed — see note in .about-grid above. */
   }
   .service-grid::-webkit-scrollbar{ display: none; }
   .service-card{
@@ -799,13 +803,13 @@ p{ margin: 0; }
     justify-content: flex-start;
     align-items: stretch;
     overflow-x: auto;
-    overscroll-behavior-x: contain;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     gap: 16px;
     padding: 4px 0 12px;
     scrollbar-width: none;
+    /* overscroll-behavior-x removed — see note in .about-grid above. */
   }
   .team-grid::-webkit-scrollbar{ display: none; }
   .team-card{
