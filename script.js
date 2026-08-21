@@ -99,13 +99,75 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ---------- Horizontal swipe: handled entirely by CSS ----------
-     No JS needed here anymore. `touch-action: pan-x` on
-     .about-grid / .service-grid / #teamGrid (see style.css) tells the
-     browser natively that these elements only own horizontal swipes,
-     so vertical swipes always fall through to the page. This replaced
-     an earlier JS touchmove/preventDefault guard, which fought with
-     native scroll-snap momentum and made swipes land mid-card instead
-     of snapping cleanly. */
+     No JS needed here anymore. .about-grid / .service-grid / #teamGrid
+     just use plain overflow-x:auto + scroll-snap in style.css — no
+     overscroll-behavior-x, no touch-action, no JS touchmove guard.
+     Since none of these elements scroll vertically, a vertical drag is
+     naturally passed through to the page by the browser's default
+     touch handling, so the page always scrolls down normally. */
+
+  /* ---------- Carousels: force-snap to the nearest card ----------
+     Some mobile browsers — notably in-app webviews like Facebook/
+     Messenger's — don't reliably honor CSS scroll-snap, so a quick
+     swipe can leave a carousel resting between two cards instead of
+     landing on one. This is a fallback: a short moment after the user
+     stops scrolling, it snaps to whichever card is nearest, regardless
+     of what native scroll-snap did or didn't do. It measures the
+     "page" width from the actual nearest card's own center rather than
+     assuming a fixed card width, since cards can have their own
+     max-width and gaps between them.
+     Applied to all three mobile carousels: About, Services, Team. */
+  function snapCarouselToNearestCard(grid, cardSelector) {
+    const cards = grid.querySelectorAll(cardSelector);
+    if (!cards.length) return;
+
+    const gridRect = grid.getBoundingClientRect();
+    const gridCenter = gridRect.left + gridRect.width / 2;
+
+    let nearest = cards[0];
+    let nearestDist = Infinity;
+    cards.forEach(card => {
+      const cardRect = card.getBoundingClientRect();
+      const cardCenter = cardRect.left + cardRect.width / 2;
+      const dist = Math.abs(cardCenter - gridCenter);
+      if (dist < nearestDist) { nearestDist = dist; nearest = card; }
+    });
+
+    const nearestRect = nearest.getBoundingClientRect();
+    const nearestCenter = nearestRect.left + nearestRect.width / 2;
+    const delta = nearestCenter - gridCenter;
+
+    // Already close enough (native scroll-snap got it right) — skip
+    // the extra animated scroll so it doesn't feel like a re-snap jitter.
+    if (Math.abs(delta) < 1) return;
+
+    grid.scrollTo({ left: grid.scrollLeft + delta, behavior: 'smooth' });
+  }
+
+  function attachSnapFallback(grid, cardSelector) {
+    if (!grid) return;
+    let snapTimer = null;
+    let touching = false;
+
+    grid.addEventListener('touchstart', () => { touching = true; }, { passive: true });
+    grid.addEventListener('touchend', () => {
+      touching = false;
+      // Finger just lifted — re-check shortly after in case the scroll
+      // is still settling from this specific touch.
+      clearTimeout(snapTimer);
+      snapTimer = setTimeout(() => snapCarouselToNearestCard(grid, cardSelector), 120);
+    }, { passive: true });
+
+    grid.addEventListener('scroll', () => {
+      if (touching) return; // don't fight an active drag
+      clearTimeout(snapTimer);
+      snapTimer = setTimeout(() => snapCarouselToNearestCard(grid, cardSelector), 120);
+    }, { passive: true });
+  }
+
+  attachSnapFallback(document.querySelector('.about-grid'), '.info-card');
+  attachSnapFallback(document.querySelector('.service-grid'), '.service-card');
+  attachSnapFallback(document.getElementById('teamGrid'), '.team-card');
 
   /* ---------- Team carousel: center arrows on the photo, not the card ----------
      The card's total height varies with description length, but every
@@ -154,63 +216,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ---------- Team carousel: force-snap to the nearest card ----------
-     Some mobile browsers — notably in-app webviews like Facebook/
-     Messenger's — don't reliably honor CSS scroll-snap-stop, so a quick
-     swipe can leave the carousel resting between two cards instead of
-     landing on one. This is a fallback: a short moment after the user
-     stops scrolling, it snaps to whichever card is nearest, regardless
-     of what native scroll-snap did or didn't do. It measures the
-     "page" width from the card's parent (the grid cell) rather than
-     the card itself, since .team-card now has its own max-width and no
-     longer fills the full cell. */
-  function snapTeamCarouselToNearestCard() {
-    const grid = document.getElementById('teamGrid');
-    if (!grid) return;
-
-    const cards = grid.querySelectorAll('.team-card');
-    if (!cards.length) return;
-
-    // Find whichever card's center is currently closest to the grid's
-    // visible center, then scroll just enough to line that card's
-    // center up exactly. Measuring the actual nearest card (rather than
-    // assuming every card sits a fixed "page width" apart) keeps this
-    // correct now that there's a gap between cards — a fixed-width
-    // assumption would drift a little more with every extra card.
-    const gridRect = grid.getBoundingClientRect();
-    const gridCenter = gridRect.left + gridRect.width / 2;
-
-    let nearest = cards[0];
-    let nearestDist = Infinity;
-    cards.forEach(card => {
-      const cardRect = card.getBoundingClientRect();
-      const cardCenter = cardRect.left + cardRect.width / 2;
-      const dist = Math.abs(cardCenter - gridCenter);
-      if (dist < nearestDist) { nearestDist = dist; nearest = card; }
-    });
-
-    const nearestRect = nearest.getBoundingClientRect();
-    const nearestCenter = nearestRect.left + nearestRect.width / 2;
-    const delta = nearestCenter - gridCenter;
-
-    grid.scrollTo({ left: grid.scrollLeft + delta, behavior: 'smooth' });
-  }
-
   centerTeamArrows();
   window.addEventListener('resize', centerTeamArrows);
   window.addEventListener('orientationchange', centerTeamArrows);
 
   const teamGridEl = document.getElementById('teamGrid');
   if (teamGridEl) {
-    let scrollRaf = null;
-    let snapTimer = null;
-
+    let arrowRaf = null;
     teamGridEl.addEventListener('scroll', () => {
-      if (scrollRaf) cancelAnimationFrame(scrollRaf);
-      scrollRaf = requestAnimationFrame(centerTeamArrows);
-
-      clearTimeout(snapTimer);
-      snapTimer = setTimeout(snapTeamCarouselToNearestCard, 120);
+      if (arrowRaf) cancelAnimationFrame(arrowRaf);
+      arrowRaf = requestAnimationFrame(centerTeamArrows);
     }, { passive: true });
   }
 
@@ -218,6 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // (height is fixed in CSS), but re-run once more after full page load
   // just in case fonts/webfont metrics shift layout slightly.
   window.addEventListener('load', centerTeamArrows);
+
 
   /* ---------- Scroll reveal ---------- */
   const revealEls = document.querySelectorAll('.reveal');
