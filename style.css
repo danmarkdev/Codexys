@@ -834,8 +834,10 @@ p{ margin: 0; }
   flex-direction: column;
   gap: 22px;
   padding: 28px;
-  background: linear-gradient(160deg, rgba(15,15,26,0.96), rgba(20,14,40,0.96));
-  border: 1px solid rgba(255,255,255,0.08);
+  background:
+    linear-gradient(160deg, rgba(63,197,240,0.32) 0%, rgba(124,77,255,0.42) 100%),
+    linear-gradient(160deg, rgba(15,15,26,0.96), rgba(20,14,40,0.96));
+  border: 1px solid rgba(124,77,255,0.35);
   border-radius: var(--radius-lg);
 }
 
