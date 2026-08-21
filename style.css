@@ -754,6 +754,16 @@ p{ margin: 0; }
   transform: translateY(-2px);
 }
 
+[data-theme="light"] .member-btn-secondary{
+  background: var(--gradient);
+  border-color: transparent;
+  color: #050508;
+}
+[data-theme="light"] .member-btn-secondary:hover{
+  background: var(--gradient);
+  filter: brightness(1.08);
+}
+
 /* Disabled state — used for a member's "View Portfolio" button when
    their portfolio isn't ready yet (e.g. Jedrick). Greys it out and
    blocks clicks/hover instead of linking anywhere. */
