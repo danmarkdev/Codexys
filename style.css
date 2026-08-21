@@ -746,11 +746,11 @@ p{ margin: 0; }
 
 .member-btn-secondary{
   background: transparent;
-  border: 1.5px solid var(--text);
-  color: var(--text);
+  border: 1.5px solid var(--cyan);
+  color: var(--cyan);
 }
 .member-btn-secondary:hover{
-  background: var(--surface-hover);
+  background: rgba(63,197,240,0.14);
   transform: translateY(-2px);
 }
 
