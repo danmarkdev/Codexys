@@ -20,8 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const phrases = [
     'Website Development',
     'UI/UX Design',
-    'Web Systems & Dashboards'
-    'Business & Portfolio Websites'
+    'Web Systems & Dashboards',
+    'Business & Portfolio Websites',
     'Capstone Systems'
   ];
   let phraseIndex = 0;
