@@ -589,11 +589,18 @@ p{ margin: 0; }
    the same height regardless of description length. */
 .team-grid{
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
   align-items: stretch;
   gap: 32px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 4px 16px;
+  scrollbar-width: none;
 }
+.team-grid::-webkit-scrollbar{ display: none; }
 
 .team-card{
   display: flex;
@@ -608,6 +615,7 @@ p{ margin: 0; }
   transition: border-color .3s var(--ease), transform .3s var(--ease);
 }
 .team-card:hover{ border-color: var(--border-strong); transform: translateY(-4px); }
+.team-card{ scroll-snap-align: start; scroll-snap-stop: always; }
 
 /* Photo banner across the top of the card (initials shown large on a gradient field). */
 .member-photo{
