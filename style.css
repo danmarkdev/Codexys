@@ -519,6 +519,7 @@ p{ margin: 0; }
     grid-auto-columns: 100%;
     justify-content: flex-start;
     overflow-x: auto;
+    overscroll-behavior-x: contain;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
@@ -603,6 +604,7 @@ p{ margin: 0; }
     grid-auto-columns: 100%;
     justify-content: flex-start;
     overflow-x: auto;
+    overscroll-behavior-x: contain;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
@@ -797,6 +799,7 @@ p{ margin: 0; }
     justify-content: flex-start;
     align-items: stretch;
     overflow-x: auto;
+    overscroll-behavior-x: contain;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
