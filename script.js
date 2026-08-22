@@ -247,17 +247,30 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.15 });
   revealEls.forEach(el => observer.observe(el));
 
-  /* ---------- Contact form (front-end only) ---------- */
+  /* ---------- Contact form (Formspree) ---------- */
   const form = document.getElementById('contactForm');
   const status = document.getElementById('formStatus');
   if (form && status) {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       status.textContent = 'Sending…';
-      setTimeout(() => {
-        status.textContent = 'Thanks — your message has been sent. We\'ll get back to you soon.';
-        form.reset();
-      }, 900);
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+          status.textContent = 'Thanks — your message has been sent. We\'ll get back to you soon.';
+          form.reset();
+        } else {
+          status.textContent = 'Something went wrong. Please try again or email us directly.';
+        }
+      } catch (error) {
+        status.textContent = 'Something went wrong. Please try again or email us directly.';
+      }
     });
   }
 });
