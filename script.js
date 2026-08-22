@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (response.ok) {
-          status.textContent = 'Thanks — your message has been sent. We\'ll get back to you soon.';
+          status.textContent = 'Thanks your message has been sent. We\'ll get back to you soon.';
           form.reset();
         } else {
           status.textContent = 'Something went wrong. Please try again or email us directly.';
