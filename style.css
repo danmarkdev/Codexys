@@ -52,13 +52,6 @@
   --text-faint:    #8A8FA0;
 }
 
-[data-theme="light"] body::before{
-  background:
-    radial-gradient(720px 720px at 10% 0%, rgba(63,197,240,0.10), transparent 62%),
-    radial-gradient(720px 720px at 92% 100%, rgba(124,77,255,0.10), transparent 62%),
-    var(--bg);
-}
-
 /* =========================================================
    RESET
    ========================================================= */
@@ -75,20 +68,6 @@ body{
   transition: background .4s var(--ease), color .4s var(--ease);
 }
 
-/* Whole-page ambient background — one continuous glow behind every
-   section (fixed to the viewport) so there's no hard seam where the
-   hero ends and the next section begins. */
-body::before{
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(720px 720px at 10% 0%, rgba(63,197,240,0.14), transparent 62%),
-    radial-gradient(720px 720px at 92% 100%, rgba(124,77,255,0.14), transparent 62%),
-    var(--bg);
-  pointer-events: none;
-}
 img{ max-width: 100%; display: block; }
 a{ color: inherit; text-decoration: none; }
 ul{ list-style: none; margin: 0; padding: 0; }
@@ -111,6 +90,58 @@ p{ margin: 0; }
   outline: 2px solid var(--cyan);
   outline-offset: 3px;
   border-radius: 4px;
+}
+
+/* =========================================================
+   ANIMATED BACKGROUND — floating glow orbs
+   One fixed layer sits behind the whole page (not per-section),
+   so there's no seam between sections and the glow drifts slowly
+   and continuously as you scroll or stay put. Reference: soft
+   blurred circular glows drifting across a near-black page —
+   built from scratch with our own cyan/violet palette, sizes,
+   positions and motion, not copied from any source.
+   ========================================================= */
+.bg-orbs{
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.bg-orbs span{
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.32;
+  will-change: transform;
+  animation-name: orbFloat;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.orb-1{ width: 460px; height: 460px; background: var(--violet); top: -140px; left: -120px;  animation-duration: 26s; }
+.orb-2{ width: 380px; height: 380px; background: var(--cyan);   top: 6%;    right: -120px;  animation-duration: 30s; animation-delay: -6s;  }
+.orb-3{ width: 340px; height: 340px; background: var(--violet); top: 38%;   left: -100px;   animation-duration: 24s; animation-delay: -11s; }
+.orb-4{ width: 420px; height: 420px; background: var(--cyan);   top: 58%;   right: 8%;      animation-duration: 28s; animation-delay: -4s;  opacity: 0.24; }
+.orb-5{ width: 300px; height: 300px; background: var(--violet); bottom: 4%; left: 18%;      animation-duration: 22s; animation-delay: -14s; opacity: 0.26; }
+.orb-6{ width: 260px; height: 260px; background: var(--cyan);   bottom: -80px; right: 30%;  animation-duration: 32s; animation-delay: -9s;  opacity: 0.22; }
+
+@keyframes orbFloat{
+  0%,100%{ transform: translate(0,0) scale(1); }
+  25%{     transform: translate(36px,-46px) scale(1.08); }
+  50%{     transform: translate(-24px,28px) scale(0.94); }
+  75%{     transform: translate(28px,36px) scale(1.05); }
+}
+
+[data-theme="light"] .bg-orbs span{ opacity: 0.16; }
+[data-theme="light"] .orb-4{ opacity: 0.13; }
+[data-theme="light"] .orb-5{ opacity: 0.14; }
+[data-theme="light"] .orb-6{ opacity: 0.12; }
+
+@media (max-width: 768px){
+  .bg-orbs span{ filter: blur(70px); }
+  .orb-1,.orb-2,.orb-3,.orb-4{ width: 280px; height: 280px; }
+  .orb-5,.orb-6{ width: 200px; height: 200px; }
 }
 
 /* =========================================================
@@ -356,17 +387,6 @@ p{ margin: 0; }
   opacity: 0.5;
 }
 
-.hero-glow{
-  position: absolute;
-  width: 560px; height: 560px;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.35;
-  pointer-events: none;
-}
-.glow-one{ background: var(--cyan); top: -180px; left: -120px; }
-.glow-two{ background: var(--violet); bottom: -220px; right: -140px; }
-
 .hero-content{
   position: relative;
   z-index: 2;
@@ -525,13 +545,6 @@ p{ margin: 0; }
     gap: 16px;
     padding: 4px 0 12px;
     scrollbar-width: none;
-    /* No overscroll-behavior-x, no touch-action, no JS touch guard.
-       Plain overflow-x:auto + scroll-snap is enough: this element has
-       no vertical overflow, so a vertical drag is naturally passed
-       through to the page to scroll normally — that's standard
-       browser behavior for nested scroll containers, and it's more
-       reliable across mobile in-app browsers (Messenger's WebView
-       included) than any of the CSS/JS workarounds tried above. */
   }
   .about-grid::-webkit-scrollbar{ display: none; }
   .info-card{
@@ -541,11 +554,6 @@ p{ margin: 0; }
     scroll-snap-align: center;
     scroll-snap-stop: always;
   }
-  /* Touch counts as a "hover" on most mobile browsers, so without this
-     the lift-up animation below would fire mid-swipe, making the card
-     look like it's moving on its own on top of the scroll. Disabling
-     it on mobile means the only motion during a swipe is the swipe
-     itself. */
   .info-card:hover{
     border-color: var(--border);
     transform: none;
@@ -626,7 +634,6 @@ p{ margin: 0; }
     gap: 16px;
     padding: 4px 0 12px;
     scrollbar-width: none;
-    /* overscroll-behavior-x removed — see note in .about-grid above. */
   }
   .service-grid::-webkit-scrollbar{ display: none; }
   .service-card{
@@ -636,7 +643,6 @@ p{ margin: 0; }
     scroll-snap-align: center;
     scroll-snap-stop: always;
   }
-  /* Disable the hover lift on mobile — see note in .info-card above. */
   .service-card:hover{
     border-color: var(--border);
     transform: none;
@@ -649,20 +655,6 @@ p{ margin: 0; }
 /* =========================================================
    TEAM
    ========================================================= */
-/* FIX (straight-line alignment on desktop): switched from CSS Grid
-   with `repeat(2, minmax(0, 380px))` to Flexbox with a fixed card
-   width. With Grid, each column track sizes itself independently
-   based on the intrinsic content in that column — so the column
-   holding a real <img> photo could resolve to a slightly different
-   width than the column holding plain initials text. Since the photo
-   box height is driven by `aspect-ratio`, a few pixels of column-width
-   difference meant the two photo boxes (and therefore the whole cards)
-   came out different heights, so the cards in the same row didn't line
-   up on a straight top/bottom edge. Flexbox + a fixed width (380px) on
-   every .team-card removes that variability: every card is guaranteed
-   to be exactly the same width, so the aspect-ratio photo is exactly
-   the same height, and align-items: stretch keeps both cards in a row
-   the same height regardless of description length. */
 .team .container{
   max-width: 1320px;
 }
@@ -686,10 +678,6 @@ p{ margin: 0; }
 }
 .team-card:hover{ border-color: var(--border-strong); transform: translateY(-4px); }
 
-/* Photo banner across the top of the card. Uses a padding-top intrinsic-ratio
-   box instead of the `aspect-ratio` property, since some mobile in-app
-   browsers (e.g. Messenger's WebView) don't size aspect-ratio boxes
-   correctly, leaving a gap at the top filled by the gradient background. */
 .member-photo{
   position: relative;
   width: 100%;
@@ -792,9 +780,6 @@ p{ margin: 0; }
   filter: brightness(1.08);
 }
 
-/* Disabled state — used for a member's "View Portfolio" button when
-   their portfolio isn't ready yet (e.g. Jedrick). Greys it out and
-   blocks clicks/hover instead of linking anywhere. */
 .member-btn-disabled{
   opacity: 0.5;
   cursor: not-allowed;
@@ -802,11 +787,6 @@ p{ margin: 0; }
 }
 .member-btn-disabled:hover{ transform: none; filter: none; }
 
-/* Below 960px the team grid becomes a one-card-at-a-time carousel:
-   exactly ONE card is visible and centered at rest, sized to the
-   normal container width. This overrides the desktop flex layout
-   above with its own grid-based scroller so mobile swipe behavior is
-   unchanged from before. */
 @media (max-width: 768px){
   .team-card{
     border-radius: 20px;
@@ -829,14 +809,12 @@ p{ margin: 0; }
     gap: 16px;
     padding: 4px 0 12px;
     scrollbar-width: none;
-    /* overscroll-behavior-x removed — see note in .about-grid above. */
   }
   .team-grid::-webkit-scrollbar{ display: none; }
   .team-card{
     scroll-snap-align: center;
     scroll-snap-stop: always;
   }
-  /* Disable the hover lift on mobile — see note in .info-card above. */
   .team-card:hover{
     border-color: var(--border);
     transform: none;
@@ -873,19 +851,50 @@ p{ margin: 0; }
   color: var(--text-muted);
 }
 
+/* Frosted-glass card — sits on top of the animated background orbs,
+   so the cyan/violet glow shows through instead of being covered by
+   a solid gradient block. Border + shadow keep the brand colors. */
 .contact-card{
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 22px;
-  padding: 28px;
-  background:
-    linear-gradient(160deg, rgba(63,197,240,0.32) 0%, rgba(124,77,255,0.42) 100%),
-    linear-gradient(160deg, rgba(15,15,26,0.96), rgba(20,14,40,0.96));
-  border: 1px solid rgba(124,77,255,0.35);
+  padding: 30px;
+  background: rgba(15,15,24,0.55);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  border: 1px solid rgba(255,255,255,0.14);
   border-radius: var(--radius-lg);
+  box-shadow:
+    0 24px 60px -24px rgba(63,197,240,0.35),
+    0 24px 60px -24px rgba(124,77,255,0.35);
+  overflow: hidden;
+}
+.contact-card::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: var(--gradient);
+  opacity: 0.5;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+[data-theme="light"] .contact-card{
+  background: rgba(255,255,255,0.55);
+  border-color: rgba(10,10,30,0.12);
+  box-shadow:
+    0 24px 60px -28px rgba(63,197,240,0.30),
+    0 24px 60px -28px rgba(124,77,255,0.30);
 }
 
 .contact-form{
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -900,33 +909,39 @@ p{ margin: 0; }
   font-size: 12.5px;
   font-family: var(--font-mono);
   letter-spacing: 0.06em;
-}
-.contact-form span{
-  color: #9AA0AE;
+  color: var(--text-muted);
 }
 .contact-form input,
 .contact-form textarea{
   width: 100%;
   padding: 12px 14px;
-  background: #0B0B12;
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(5,5,8,0.4);
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: var(--radius-sm);
-  color: #F2F3F7;
+  color: var(--text);
   font-family: var(--font-body);
   font-size: 14px;
   resize: vertical;
-  transition: border-color .25s var(--ease);
+  transition: border-color .25s var(--ease), background .25s var(--ease);
 }
 .contact-form input:focus,
-.contact-form textarea:focus{ border-color: #9AA0AE; outline: none; }
+.contact-form textarea:focus{ border-color: var(--cyan); outline: none; background: rgba(5,5,8,0.6); }
 .contact-form input::placeholder,
-.contact-form textarea::placeholder{ color: #5B5F6C; }
+.contact-form textarea::placeholder{ color: var(--text-faint); }
+
+[data-theme="light"] .contact-form input,
+[data-theme="light"] .contact-form textarea{
+  background: rgba(255,255,255,0.6);
+  border-color: rgba(10,10,30,0.14);
+}
+[data-theme="light"] .contact-form input:focus,
+[data-theme="light"] .contact-form textarea:focus{ background: rgba(255,255,255,0.85); }
 
 .contact-form .btn{ align-self: flex-start; margin-top: 4px; }
 
 .form-status{
   font-size: 13px;
-  color: #F2F3F7;
+  color: var(--text);
   min-height: 16px;
 }
 
