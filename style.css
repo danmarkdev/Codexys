@@ -1007,10 +1007,10 @@ p{ margin: 0; }
   align-items: center;
   gap: 10px;
   font-size: 14px;
-  color: var(--text-muted);
-  transition: color .25s var(--ease);
+  color: #C7CCD6;
+  cursor: default;
 }
-a.footer-contact-item:hover{ color: var(--text); }
+[data-theme="light"] .footer-contact-item{ color: #4A4F5C; }
 .footer-contact-item svg{ flex-shrink: 0; color: var(--text); }
 
 .footer-bottom{
