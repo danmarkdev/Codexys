@@ -88,211 +88,79 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ---------- Carousel arrows: scroll behaviour ---------- */
-  document.querySelectorAll('.carousel-arrow').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = document.getElementById(btn.dataset.target);
-      if (!target) return;
-      const dir = btn.classList.contains('arrow-next') ? 1 : -1;
-      target.scrollBy({ left: dir * target.clientWidth, behavior: 'smooth' });
-    });
-  });
+  /* ---------- Team carousel: click-only, arrow-driven ----------
+     REPLACES the old swipe/drag carousel entirely (and the old
+     drag-based logic for About/Services, which is gone too — those two
+     sections are now just plain vertical lists on mobile, styled in
+     CSS, no JS involved).
 
-  /* ---------- Horizontal swipe: custom drag + momentum (mobile only) ----------
-     REWRITE: the previous version relied entirely on the browser's own
-     native scroll-snap (overflow-x:auto + scroll-snap-type). That's a
-     fundamentally different mechanism from the free-following drag +
-     momentum-glide swipe used elsewhere on this developer's own
-     portfolio site, so no amount of tuning the native version could
-     make it feel the same — it needed to be replaced, not adjusted.
-
-     This tracks the pointer 1:1 while dragging (via a CSS transform,
-     not native scrollLeft), carries real velocity into a momentum
-     glide on release, then settles onto whichever card is nearest.
-     Unlike a looping marquee this is bounded — it can't be dragged
-     past the first or last card. Mobile-only: on desktop it's a
-     disabled no-op and the normal CSS grid layout applies untouched.
-     Applied to all three carousels: About, Services, Team. */
-  function initTouchCarousel(grid, cardSelector) {
+     For Team, only one member card is shown at a time on mobile, and
+     the only way to move between them is tapping the ‹ / › buttons —
+     no touch dragging, no swipe gesture, nothing that can be triggered
+     accidentally or get a card "stuck" mid-position. Each click moves
+     exactly one card width (measured from the actual rendered card,
+     not guessed from the container, so it can't drift out of
+     alignment), with a small transition for a smooth slide. */
+  function initArrowCarousel(grid, cardSelector, prevBtn, nextBtn) {
     if (!grid) return;
 
     const MOBILE_QUERY = '(max-width: 768px)';
     function isMobile() { return window.matchMedia(MOBILE_QUERY).matches; }
 
-    let pos = 0;            // current offset in px (0 = first card)
-    let pageWidth = 0;      // width of one card "page"
-    let maxPos = 0;         // pos at the last card
-    let dragging = false;
-    let moved = false;      // did this touch/drag actually move (vs. a tap)
-    let startX = 0;
-    let startPos = 0;
-    let activePointerId = null;
+    let index = 0;
+    let pageWidth = 0;
 
-    let lastMoveTime = 0;
-    let lastMovePos = 0;
-    let velocity = 0;       // px/sec, carried into momentum on release
-    const MAX_VELOCITY = 4200;
-    const FRICTION = 3.2;   // higher = stops sooner
-    let rafId = null;
-
-    function cardCount() { return grid.querySelectorAll(cardSelector).length; }
+    function cards() { return grid.querySelectorAll(cardSelector); }
 
     function measure() {
-      // FIX: pageWidth used to be grid.clientWidth (the container's full
-      // width). But on mobile the grid uses grid-auto-columns:100% PLUS
-      // a 16px gap between cards — and when a percentage column width and
-      // a gap are combined in CSS Grid, each card actually renders
-      // slightly narrower than the container. Using clientWidth as the
-      // per-card step overshoots by that gap amount on every swipe, and
-      // the error compounds card after card, until by card 3-4 you're
-      // translating past the real content into blank clipped space —
-      // that's the "content disappearing" bug. Measuring the first
-      // card's real rendered width (+ the actual gap) keeps every swipe
-      // step exactly matched to what's really on screen.
-      const cards = grid.querySelectorAll(cardSelector);
-      if (cards.length) {
-        const cardWidth = cards[0].getBoundingClientRect().width;
+      const els = cards();
+      if (els.length) {
+        const cardWidth = els[0].getBoundingClientRect().width;
         const gapValue = parseFloat(getComputedStyle(grid).columnGap || getComputedStyle(grid).gap || '0') || 0;
         pageWidth = cardWidth + gapValue;
       } else {
         pageWidth = grid.clientWidth;
       }
-      maxPos = Math.max(0, (cardCount() - 1) * pageWidth);
     }
 
-    function clampPos(v) { return Math.max(0, Math.min(maxPos, v)); }
-
     function render(withTransition) {
+      if (!isMobile()) {
+        grid.style.transition = '';
+        grid.style.transform = '';
+        return;
+      }
       grid.style.transition = withTransition
         ? 'transform .35s cubic-bezier(.22,.61,.36,1)'
         : 'none';
-      grid.style.transform = 'translateX(' + (-pos) + 'px)';
+      grid.style.transform = 'translateX(' + (-index * pageWidth) + 'px)';
     }
 
-    function resetForDesktop() {
-      grid.style.transform = '';
-      grid.style.transition = '';
-      pos = 0;
+    function updateArrowState() {
+      const max = cards().length - 1;
+      if (prevBtn) prevBtn.disabled = index <= 0;
+      if (nextBtn) nextBtn.disabled = index >= max;
     }
 
-    function currentIndex() {
-      return pageWidth > 0 ? Math.round(pos / pageWidth) : 0;
-    }
-
-    function snapToNearest() {
-      const idx = Math.max(0, Math.min(cardCount() - 1, currentIndex()));
-      pos = idx * pageWidth;
-      render(true);
-    }
-
-    function stopMomentum() {
-      if (rafId) cancelAnimationFrame(rafId);
-      rafId = null;
-    }
-
-    function momentumGlide() {
-      stopMomentum();
-      let lastT = null;
-      function tick(t) {
-        if (lastT === null) lastT = t;
-        const dt = (t - lastT) / 1000;
-        lastT = t;
-
-        pos += velocity * dt;
-        velocity *= Math.pow(1 / (1 + FRICTION), dt);
-
-        if (pos <= 0 || pos >= maxPos || Math.abs(velocity) < 60) {
-          pos = clampPos(pos);
-          snapToNearest();
-          return;
-        }
-        render(false);
-        rafId = requestAnimationFrame(tick);
-      }
-      rafId = requestAnimationFrame(tick);
-    }
-
-    function pointerDown(e) {
-      if (!isMobile()) return;
+    function goTo(i) {
+      const max = cards().length - 1;
+      index = Math.max(0, Math.min(max, i));
       measure();
-      stopMomentum();
-      dragging = true;
-      moved = false;
-      startX = e.clientX;
-      startPos = pos;
-      lastMoveTime = performance.now();
-      lastMovePos = pos;
-      velocity = 0;
-      activePointerId = e.pointerId;
-      // NOTE: no setPointerCapture here yet — same reasoning as the
-      // portfolio version: capturing on every pointerdown (even a plain
-      // tap on a link) redirects that link's click away from itself.
-      // Only capture once a real drag is confirmed, below.
+      render(true);
+      updateArrowState();
+      if (typeof grid.onCarouselMove === 'function') grid.onCarouselMove();
     }
 
-    function pointerMove(e) {
-      if (!dragging) return;
-      const dx = e.clientX - startX;
-      if (!moved && Math.abs(dx) > 10) {
-        moved = true;
-        grid.classList.add('dragging');
-        if (grid.setPointerCapture) {
-          try { grid.setPointerCapture(activePointerId); } catch (err) {}
-        }
-      }
-      if (moved) {
-        pos = clampPos(startPos - dx);
-        render(false);
-
-        const now = performance.now();
-        const dt = now - lastMoveTime;
-        if (dt > 0) {
-          const raw = (pos - lastMovePos) / dt * 1000; // px/sec
-          velocity = Math.max(-MAX_VELOCITY, Math.min(MAX_VELOCITY, raw));
-          lastMoveTime = now;
-          lastMovePos = pos;
-        }
-      }
-    }
-
-    function pointerUp() {
-      if (!dragging) return;
-      dragging = false;
-      grid.classList.remove('dragging');
-      if (moved && grid.releasePointerCapture) {
-        try { grid.releasePointerCapture(activePointerId); } catch (err) {}
-      }
-      if (!moved) return; // plain tap — let the underlying click through untouched
-
-      if (Math.abs(velocity) > 40) {
-        momentumGlide();
-      } else {
-        snapToNearest();
-      }
-    }
-
-    grid.addEventListener('pointerdown', pointerDown);
-    grid.addEventListener('pointermove', pointerMove);
-    grid.addEventListener('pointerup', pointerUp);
-    grid.addEventListener('pointercancel', pointerUp);
-    grid.addEventListener('pointerleave', () => { if (dragging) pointerUp(); });
-
-    // A drag that actually moved shouldn't also fire the link/card
-    // click underneath it once the finger lifts.
-    grid.addEventListener('click', (e) => {
-      if (moved) { e.preventDefault(); e.stopPropagation(); }
-    }, true);
+    if (prevBtn) prevBtn.addEventListener('click', () => goTo(index - 1));
+    if (nextBtn) nextBtn.addEventListener('click', () => goTo(index + 1));
 
     function handleResize() {
-      stopMomentum();
-      if (isMobile()) {
-        const idx = pageWidth > 0 ? Math.max(0, Math.min(cardCount() - 1, currentIndex())) : 0;
-        measure();
-        pos = idx * pageWidth;
-        render(false);
-      } else {
-        resetForDesktop();
+      if (!isMobile()) {
+        index = 0;
       }
+      measure();
+      render(false);
+      updateArrowState();
+      if (typeof grid.onCarouselMove === 'function') grid.onCarouselMove();
     }
 
     window.addEventListener('resize', handleResize);
@@ -302,31 +170,27 @@ document.addEventListener('DOMContentLoaded', () => {
     handleResize();
   }
 
-  initTouchCarousel(document.querySelector('.about-grid'), '.info-card');
-  initTouchCarousel(document.querySelector('.service-grid'), '.service-card');
-  initTouchCarousel(document.getElementById('teamGrid'), '.team-card');
+  const teamGrid = document.getElementById('teamGrid');
+  const teamPrevBtn = document.querySelector('#teamCarouselWrap .arrow-prev');
+  const teamNextBtn = document.querySelector('#teamCarouselWrap .arrow-next');
+  initArrowCarousel(teamGrid, '.team-card', teamPrevBtn, teamNextBtn);
 
   /* ---------- Team carousel: center arrows on the photo, not the card ----------
      The card's total height varies with description length, but every
      .member-photo band is a fixed height (set in CSS). This measures
-     that band on the currently-first-visible card and moves the arrows
-     to sit on its vertical center, instead of the vertical center of
-     the whole (taller) card. Re-runs on load/resize since the photo
-     band's pixel height changes across breakpoints.
-     Note: .carousel-arrow is currently display:none at every screen
-     size in CSS (the mobile team carousel now relies on swipe/scroll-
-     snap only), so this is effectively inert — left in place in case
-     the arrows come back. */
+     that band on the currently-visible card and moves the arrows to
+     sit on its vertical center, instead of the vertical center of the
+     whole (taller) card. Re-runs on load/resize/breakpoint change and
+     also after every arrow click (via grid.onCarouselMove, wired up
+     below), since which card is "current" changes then too. */
   function centerTeamArrows() {
     const wrap = document.getElementById('teamCarouselWrap');
     const grid = document.getElementById('teamGrid');
     if (!wrap || !grid) return;
 
-    // Arrows are only shown (display:flex) below 960px — skip work otherwise.
-    const isMobile = window.matchMedia('(max-width: 960px)').matches;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
     if (!isMobile) return;
 
-    // Use whichever card is currently left-most/visible in the scroller.
     const cards = grid.querySelectorAll('.team-card');
     if (!cards.length) return;
 
@@ -353,51 +217,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  if (teamGrid) teamGrid.onCarouselMove = centerTeamArrows;
+
   centerTeamArrows();
   window.addEventListener('resize', centerTeamArrows);
   window.addEventListener('orientationchange', centerTeamArrows);
-
-  const teamGridEl = document.getElementById('teamGrid');
-  if (teamGridEl) {
-    let arrowRaf = null;
-    teamGridEl.addEventListener('scroll', () => {
-      if (arrowRaf) cancelAnimationFrame(arrowRaf);
-      arrowRaf = requestAnimationFrame(centerTeamArrows);
-    }, { passive: true });
-  }
-
-  // Photos loaded from disk (e.g. danmark.jpg) don't change the box size
-  // (height is fixed in CSS), but re-run once more after full page load
-  // just in case fonts/webfont metrics shift layout slightly.
   window.addEventListener('load', centerTeamArrows);
 
 
   /* ---------- Scroll reveal ----------
-     FIX: cards inside the three swipeable carousels (.info-card,
-     .service-card, .team-card) used to be gated behind the same
-     scroll-triggered IntersectionObserver as everything else. That's
-     fine for elements that only ever move via normal page scroll —
-     but these cards are moved horizontally via a CSS `transform`
-     from the swipe carousel above. Only the first card in each
-     carousel starts inside the browser's viewport bounds; every card
-     after it starts off-screen to the side, so the observer often
-     never (or unreliably, especially on mobile) reports them as
-     "intersecting" even after the user swipes them into view. Net
-     result: cards 2+ could stay stuck at opacity:0 — the "disappearing
-     content" bug (service/about/team cards vanishing on swipe).
+     About and Services cards are plain, normally-flowing elements now
+     (no more carousel transform), so the standard scroll-triggered
+     fade-in works correctly for them without any special-casing.
+     Team cards are still moved horizontally via a transform for the
+     single-card mobile view, so — same reasoning as before — they're
+     shown immediately instead of waiting on scroll-into-view
+     detection, since that detection isn't reliable for elements moved
+     by JS transform inside an overflow:hidden track. */
+  const teamCardSelector = '.team-card.reveal';
 
-     Fix: these are core content, not a decorative scroll flourish, so
-     they're shown immediately instead of waiting on scroll detection.
-     The scroll-fade is kept only for section headers/intros, which
-     never get moved by the swipe carousel and so don't have this
-     problem. */
-  const carouselCardSelector = '.info-card.reveal, .service-card.reveal, .team-card.reveal';
-
-  document.querySelectorAll(carouselCardSelector).forEach(el => {
+  document.querySelectorAll(teamCardSelector).forEach(el => {
     el.classList.add('is-visible');
   });
 
-  const revealEls = document.querySelectorAll('.reveal:not(.info-card):not(.service-card):not(.team-card)');
+  const observedEls = document.querySelectorAll('.reveal:not(.team-card)');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -406,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }, { threshold: 0.15 });
-  revealEls.forEach(el => observer.observe(el));
+  observedEls.forEach(el => observer.observe(el));
 
   /* ---------- Contact form (Formspree) ---------- */
   const form = document.getElementById('contactForm');
