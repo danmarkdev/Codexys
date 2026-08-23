@@ -89,19 +89,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ---------- Team carousel: click-only, arrow-driven ----------
-     REPLACES the old swipe/drag carousel entirely (and the old
-     drag-based logic for About/Services, which is gone too — those two
-     sections are now just plain vertical lists on mobile, styled in
-     CSS, no JS involved).
-
-     For Team, only one member card is shown at a time on mobile, and
-     the only way to move between them is tapping the ‹ / › buttons —
-     no touch dragging, no swipe gesture, nothing that can be triggered
-     accidentally or get a card "stuck" mid-position. Each click moves
-     exactly one card width (measured from the actual rendered card,
-     not guessed from the container, so it can't drift out of
-     alignment), with a small transition for a smooth slide. */
-  function initArrowCarousel(grid, cardSelector, prevBtn, nextBtn) {
+     Only one member card is shown at a time on mobile, and the only
+     way to move between them is tapping the ‹ / › buttons — no touch
+     dragging, no swipe gesture. Each click moves exactly one card
+     width (measured from the actual rendered card, not guessed from
+     the container), with a small transition for a smooth slide. */
+  function initArrowCarousel(grid, cardSelector, prevBtn, nextBtn, onMove) {
     if (!grid) return;
 
     const MOBILE_QUERY = '(max-width: 768px)';
@@ -147,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
       measure();
       render(true);
       updateArrowState();
-      if (typeof grid.onCarouselMove === 'function') grid.onCarouselMove();
+      if (typeof onMove === 'function') onMove(index, isMobile());
     }
 
     if (prevBtn) prevBtn.addEventListener('click', () => goTo(index - 1));
@@ -160,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
       measure();
       render(false);
       updateArrowState();
-      if (typeof grid.onCarouselMove === 'function') grid.onCarouselMove();
+      if (typeof onMove === 'function') onMove(index, isMobile());
     }
 
     window.addEventListener('resize', handleResize);
@@ -170,60 +163,47 @@ document.addEventListener('DOMContentLoaded', () => {
     handleResize();
   }
 
+  /* ---------- Team carousel: keep arrows glued to the active photo ----------
+     PREVIOUS APPROACH (removed): calculate the arrows' pixel "top"
+     offset by measuring the active card's .member-photo with
+     getBoundingClientRect() and writing an inline style.top. That
+     math went stale easily — after scrolling, after web fonts
+     finished loading, after any layout shift — leaving the arrows
+     floating in the wrong spot, sometimes over a big blank gap above
+     the actual card.
+
+     NEW APPROACH: instead of computing coordinates, just physically
+     move the two arrow buttons so they become children of the
+     currently active card's .member-photo element. That element is
+     already `position: relative`, and the arrows already have
+     `position: absolute; top: 50%; transform: translateY(-50%)` in
+     CSS — so plain CSS centers them correctly with zero JS math,
+     and it can never drift out of sync with the visible card. */
+  const teamWrap = document.getElementById('teamCarouselWrap');
   const teamGrid = document.getElementById('teamGrid');
-  const teamPrevBtn = document.querySelector('#teamCarouselWrap .arrow-prev');
-  const teamNextBtn = document.querySelector('#teamCarouselWrap .arrow-next');
-  initArrowCarousel(teamGrid, '.team-card', teamPrevBtn, teamNextBtn);
+  const teamPrevBtn = teamWrap ? teamWrap.querySelector('.arrow-prev') : null;
+  const teamNextBtn = teamWrap ? teamWrap.querySelector('.arrow-next') : null;
 
-  /* ---------- Team carousel: center arrows on the photo, not the card ----------
-     The card's total height varies with description length, but every
-     .member-photo band is a fixed height (set in CSS). This measures
-     that band on the currently-visible card and moves the arrows to
-     sit on its vertical center, instead of the vertical center of the
-     whole (taller) card. Re-runs on load/resize/breakpoint change and
-     also after every arrow click (via grid.onCarouselMove, wired up
-     below), since which card is "current" changes then too. */
-  function centerTeamArrows() {
-    const wrap = document.getElementById('teamCarouselWrap');
-    const grid = document.getElementById('teamGrid');
-    if (!wrap || !grid) return;
+  function placeTeamArrows(index, mobile) {
+    if (!teamWrap || !teamGrid || !teamPrevBtn || !teamNextBtn) return;
 
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    if (!isMobile) return;
+    if (!mobile) {
+      // Desktop: arrows are hidden by CSS anyway, just keep them
+      // parked on the wrap so the DOM stays tidy.
+      if (teamPrevBtn.parentElement !== teamWrap) teamWrap.insertBefore(teamPrevBtn, teamGrid);
+      if (teamNextBtn.parentElement !== teamWrap) teamWrap.insertBefore(teamNextBtn, teamGrid);
+      return;
+    }
 
-    const cards = grid.querySelectorAll('.team-card');
-    if (!cards.length) return;
-
-    const wrapRect = wrap.getBoundingClientRect();
-    const gridRect = grid.getBoundingClientRect();
-    const gridCenter = gridRect.left + gridRect.width / 2;
-    let activeCard = cards[0];
-    let bestDist = Infinity;
-    cards.forEach(card => {
-      const cardRect = card.getBoundingClientRect();
-      const cardCenter = cardRect.left + cardRect.width / 2;
-      const dist = Math.abs(cardCenter - gridCenter);
-      if (dist < bestDist) { bestDist = dist; activeCard = card; }
-    });
-
-    const photo = activeCard.querySelector('.member-photo');
+    const activeCard = teamGrid.querySelectorAll('.team-card')[index];
+    const photo = activeCard ? activeCard.querySelector('.member-photo') : null;
     if (!photo) return;
 
-    const photoRect = photo.getBoundingClientRect();
-    const centerY = (photoRect.top - wrapRect.top) + (photoRect.height / 2);
-
-    wrap.querySelectorAll('.carousel-arrow').forEach(btn => {
-      btn.style.top = `${centerY}px`;
-    });
+    if (teamPrevBtn.parentElement !== photo) photo.appendChild(teamPrevBtn);
+    if (teamNextBtn.parentElement !== photo) photo.appendChild(teamNextBtn);
   }
 
-  if (teamGrid) teamGrid.onCarouselMove = centerTeamArrows;
-
-  centerTeamArrows();
-  window.addEventListener('resize', centerTeamArrows);
-  window.addEventListener('orientationchange', centerTeamArrows);
-  window.addEventListener('load', centerTeamArrows);
-
+  initArrowCarousel(teamGrid, '.team-card', teamPrevBtn, teamNextBtn, placeTeamArrows);
 
   /* ---------- Scroll reveal ----------
      About and Services cards are plain, normally-flowing elements now
