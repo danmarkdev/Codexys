@@ -110,12 +110,22 @@ document.addEventListener('DOMContentLoaded', () => {
      Some mobile browsers — notably in-app webviews like Facebook/
      Messenger's — don't reliably honor CSS scroll-snap, so a quick
      swipe can leave a carousel resting between two cards instead of
-     landing on one. This is a fallback: a short moment after the user
-     stops scrolling, it snaps to whichever card is nearest, regardless
-     of what native scroll-snap did or didn't do. It measures the
-     "page" width from the actual nearest card's own center rather than
-     assuming a fixed card width, since cards can have their own
-     max-width and gaps between them.
+     landing on one. This is a fallback: once the scroller has
+     genuinely come to a stop, it snaps to whichever card is nearest,
+     regardless of what native scroll-snap did or didn't do. It
+     measures the "page" width from the actual nearest card's own
+     center rather than assuming a fixed card width, since cards can
+     have their own max-width and gaps between them.
+
+     FIX: this used to correct on a flat 120ms timer after touchend/
+     scroll. Native momentum + scroll-snap deceleration on mobile can
+     still be running well past 120ms, so the old timer fired mid-
+     scroll, started a second competing smooth-scroll, and produced
+     the laggy/jumpy misalignment after swiping. Now it polls with
+     requestAnimationFrame and only corrects once scrollLeft has
+     actually stopped changing for several consecutive frames — so it
+     never fights an in-progress native scroll, and only ever steps in
+     once the browser is truly done (or never got it right at all).
      Applied to all three mobile carousels: About, Services, Team. */
   function snapCarouselToNearestCard(grid, cardSelector) {
     const cards = grid.querySelectorAll(cardSelector);
@@ -139,30 +149,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Already close enough (native scroll-snap got it right) — skip
     // the extra animated scroll so it doesn't feel like a re-snap jitter.
-    if (Math.abs(delta) < 1) return;
+    // Loosened from 1px to 4px so tiny rounding differences don't
+    // trigger a needless correction on top of a scroll that already
+    // landed fine.
+    if (Math.abs(delta) < 4) return;
 
     grid.scrollTo({ left: grid.scrollLeft + delta, behavior: 'smooth' });
   }
 
   function attachSnapFallback(grid, cardSelector) {
     if (!grid) return;
-    let snapTimer = null;
-    let touching = false;
 
-    grid.addEventListener('touchstart', () => { touching = true; }, { passive: true });
-    grid.addEventListener('touchend', () => {
-      touching = false;
-      // Finger just lifted — re-check shortly after in case the scroll
-      // is still settling from this specific touch.
-      clearTimeout(snapTimer);
-      snapTimer = setTimeout(() => snapCarouselToNearestCard(grid, cardSelector), 120);
-    }, { passive: true });
+    let watching = false;
+    let lastLeft = null;
+    let stillFrames = 0;
+    const STILL_FRAMES_NEEDED = 6; // ~6 frames of zero movement = actually stopped
 
-    grid.addEventListener('scroll', () => {
-      if (touching) return; // don't fight an active drag
-      clearTimeout(snapTimer);
-      snapTimer = setTimeout(() => snapCarouselToNearestCard(grid, cardSelector), 120);
-    }, { passive: true });
+    function watchUntilStopped() {
+      if (grid.scrollLeft === lastLeft) {
+        stillFrames++;
+      } else {
+        stillFrames = 0;
+        lastLeft = grid.scrollLeft;
+      }
+
+      if (stillFrames >= STILL_FRAMES_NEEDED) {
+        watching = false;
+        snapCarouselToNearestCard(grid, cardSelector);
+        return;
+      }
+      requestAnimationFrame(watchUntilStopped);
+    }
+
+    function startWatching() {
+      if (watching) return; // already polling — let it finish, don't restart
+      watching = true;
+      lastLeft = grid.scrollLeft;
+      stillFrames = 0;
+      requestAnimationFrame(watchUntilStopped);
+    }
+
+    // Covers both the touch release (momentum/snap may still be running
+    // after this fires) and any scroll not tied to touch (e.g. a
+    // trackpad or keyboard on a mobile browser).
+    grid.addEventListener('touchend', startWatching, { passive: true });
+    grid.addEventListener('scroll', startWatching, { passive: true });
   }
 
   attachSnapFallback(document.querySelector('.about-grid'), '.info-card');
