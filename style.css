@@ -758,57 +758,51 @@ p{ margin: 0; }
 .member-btn-disabled:hover{ transform: none; filter: none; }
 
 @media (max-width: 768px){
-  /* All four members are shown at once, stacked one under another —
-     same pattern already used for About/Services on mobile — instead
-     of a one-card-at-a-time slider. This is what guarantees every
-     team member is visible on mobile, not just on desktop. */
-  .team-grid{
+  /* Carousel style, like before: only ONE member card is shown at a
+     time, centered on screen, and the ‹ › arrow buttons sit as plain
+     flex siblings OUTSIDE the card — never on top of it, never
+     overlapping the photo — because they're laid out side-by-side in
+     normal flow instead of absolutely positioned over the card.
+     Switching members is done ONLY via the arrow buttons (no touch
+     swipe), by toggling which card has .is-active — no width/track
+     measuring involved, which is what makes this version reliable. */
+  .carousel-wrap{
     display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 4px 0 12px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    overflow: visible;
+  }
+
+  .carousel-arrow{
+    position: static;
+    transform: none;
+    flex: 0 0 auto;
+  }
+  .arrow-prev{ order: 1; }
+  #teamGrid{ order: 2; }
+  .arrow-next{ order: 3; }
+
+  .team-grid{
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 380px;
     width: 100%;
   }
 
   .team-card{
+    display: none;
     width: 100%;
-    max-width: 380px;
     margin-inline: auto;
-    flex: none;
     border-radius: 20px;
-    /* keeps the card from hiding under the fixed header when an
-       arrow button smooth-scrolls to it */
-    scroll-margin-top: 96px;
   }
-
+  .team-card.is-active{
+    display: flex;
+  }
   .team-card:hover{
     border-color: var(--border);
     transform: none;
-  }
-
-  /* The ‹ › buttons stay fully clickable — they just no longer slide
-     a track. Instead they smooth-scroll up/down between member cards,
-     so they still work as a quick way to jump around the (now fully
-     visible) list. .carousel-wrap becomes a small flex row: the two
-     arrow buttons sit at the top-left / top-right, and the stacked
-     card list wraps onto its own full-width row underneath. */
-  .carousel-wrap{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px 0;
-    overflow: visible;
-  }
-  .carousel-arrow{
-    position: static;
-    transform: none;
-  }
-  .arrow-prev{ order: 1; }
-  .arrow-next{ order: 2; }
-  #teamGrid{
-    order: 3;
-    flex-basis: 100%;
   }
 }
 
