@@ -94,12 +94,6 @@ p{ margin: 0; }
 
 /* =========================================================
    ANIMATED BACKGROUND — floating glow orbs
-   One fixed layer sits behind the whole page (not per-section),
-   so there's no seam between sections and the glow drifts slowly
-   and continuously as you scroll or stay put. Reference: soft
-   blurred circular glows drifting across a near-black page —
-   built from scratch with our own cyan/violet palette, sizes,
-   positions and motion, not copied from any source.
    ========================================================= */
 .bg-orbs{
   position: fixed;
@@ -539,7 +533,11 @@ p{ margin: 0; }
     grid-auto-columns: 100%;
     justify-content: flex-start;
     overflow-x: auto;
-    scroll-behavior: smooth;
+    /* MOBILE SWIPE FIX: scroll-behavior:smooth removed here — it was
+       fighting scroll-snap-type for control of the release animation
+       (the two use different easing curves), which is what caused the
+       laggy / jumpy-after-swipe feel on iOS Safari especially. Native
+       scroll-snap alone already animates the settle smoothly. */
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     gap: 16px;
@@ -628,7 +626,8 @@ p{ margin: 0; }
     grid-auto-columns: 100%;
     justify-content: flex-start;
     overflow-x: auto;
-    scroll-behavior: smooth;
+    /* MOBILE SWIPE FIX: see .about-grid comment above — same fix,
+       scroll-behavior:smooth removed so it doesn't fight scroll-snap. */
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     gap: 16px;
@@ -803,7 +802,8 @@ p{ margin: 0; }
     justify-content: flex-start;
     align-items: stretch;
     overflow-x: auto;
-    scroll-behavior: smooth;
+    /* MOBILE SWIPE FIX: see .about-grid comment above — same fix,
+       scroll-behavior:smooth removed so it doesn't fight scroll-snap. */
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     gap: 16px;
