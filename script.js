@@ -105,15 +105,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function cards() { return grid.querySelectorAll(cardSelector); }
 
+    /* IMPORTANT: measure the grid's own slot width (grid.clientWidth),
+       NOT the card element's rendered width. Each card is narrower
+       than its slot (it has side gutters reserved for the arrows via
+       max-width + margin-inline:auto in CSS), so translating by the
+       card's own width instead of the full slot width caused each
+       click to move the wrong distance — the next member ended up
+       partially or fully off-screen instead of landing centered in
+       view. The slot width is what actually matches one grid column
+       (grid-auto-columns: 100%), so that's what translateX must use. */
     function measure() {
-      const els = cards();
-      if (els.length) {
-        const cardWidth = els[0].getBoundingClientRect().width;
-        const gapValue = parseFloat(getComputedStyle(grid).columnGap || getComputedStyle(grid).gap || '0') || 0;
-        pageWidth = cardWidth + gapValue;
-      } else {
-        pageWidth = grid.clientWidth;
-      }
+      const gapValue = parseFloat(getComputedStyle(grid).columnGap || getComputedStyle(grid).gap || '0') || 0;
+      pageWidth = grid.clientWidth + gapValue;
     }
 
     function render(withTransition) {
@@ -163,47 +166,53 @@ document.addEventListener('DOMContentLoaded', () => {
     handleResize();
   }
 
-  /* ---------- Team carousel: keep arrows glued to the active photo ----------
-     PREVIOUS APPROACH (removed): calculate the arrows' pixel "top"
-     offset by measuring the active card's .member-photo with
-     getBoundingClientRect() and writing an inline style.top. That
-     math went stale easily — after scrolling, after web fonts
-     finished loading, after any layout shift — leaving the arrows
-     floating in the wrong spot, sometimes over a big blank gap above
-     the actual card.
-
-     NEW APPROACH: instead of computing coordinates, just physically
-     move the two arrow buttons so they become children of the
-     currently active card's .member-photo element. That element is
-     already `position: relative`, and the arrows already have
-     `position: absolute; top: 50%; transform: translateY(-50%)` in
-     CSS — so plain CSS centers them correctly with zero JS math,
-     and it can never drift out of sync with the visible card. */
+  /* ---------- Team carousel: keep arrows OUTSIDE the card, centered on its photo ----------
+     The arrow buttons stay where they are in the HTML (children of
+     #teamCarouselWrap, siblings of #teamGrid) — they sit in the empty
+     gutter space beside the card (see the card's max-width in CSS),
+     never on top of the photo. Their vertical position is recalculated
+     to match the currently active card's photo center, using the
+     actual rendered geometry rather than any assumption about layout,
+     so it can't drift regardless of description length, viewport size,
+     or scroll position. Recomputed after every navigation, resize,
+     image load, and once more after the slide transition finishes
+     (in case a layout shift happened mid-animation). */
   const teamWrap = document.getElementById('teamCarouselWrap');
   const teamGrid = document.getElementById('teamGrid');
   const teamPrevBtn = teamWrap ? teamWrap.querySelector('.arrow-prev') : null;
   const teamNextBtn = teamWrap ? teamWrap.querySelector('.arrow-next') : null;
 
-  function placeTeamArrows(index, mobile) {
-    if (!teamWrap || !teamGrid || !teamPrevBtn || !teamNextBtn) return;
+  let teamActiveIndex = 0;
 
-    if (!mobile) {
-      // Desktop: arrows are hidden by CSS anyway, just keep them
-      // parked on the wrap so the DOM stays tidy.
-      if (teamPrevBtn.parentElement !== teamWrap) teamWrap.insertBefore(teamPrevBtn, teamGrid);
-      if (teamNextBtn.parentElement !== teamWrap) teamWrap.insertBefore(teamNextBtn, teamGrid);
-      return;
-    }
+  function placeTeamArrows(index) {
+    teamActiveIndex = index;
+    if (!teamWrap || !teamGrid || !teamPrevBtn || !teamNextBtn) return;
+    if (!window.matchMedia('(max-width: 768px)').matches) return;
 
     const activeCard = teamGrid.querySelectorAll('.team-card')[index];
     const photo = activeCard ? activeCard.querySelector('.member-photo') : null;
     if (!photo) return;
 
-    if (teamPrevBtn.parentElement !== photo) photo.appendChild(teamPrevBtn);
-    if (teamNextBtn.parentElement !== photo) photo.appendChild(teamNextBtn);
+    const wrapRect = teamWrap.getBoundingClientRect();
+    const photoRect = photo.getBoundingClientRect();
+    const centerY = (photoRect.top - wrapRect.top) + (photoRect.height / 2);
+
+    teamPrevBtn.style.top = centerY + 'px';
+    teamNextBtn.style.top = centerY + 'px';
   }
 
   initArrowCarousel(teamGrid, '.team-card', teamPrevBtn, teamNextBtn, placeTeamArrows);
+
+  // Re-check once the slide animation finishes and once every photo
+  // has actually loaded, since either can shift the rendered geometry
+  // slightly after the initial calculation (fonts/images settling).
+  if (teamGrid) {
+    teamGrid.addEventListener('transitionend', () => placeTeamArrows(teamActiveIndex));
+    teamGrid.querySelectorAll('.member-photo img').forEach(img => {
+      if (img.complete) return;
+      img.addEventListener('load', () => placeTeamArrows(teamActiveIndex), { once: true });
+    });
+  }
 
   /* ---------- Scroll reveal ----------
      About and Services cards are plain, normally-flowing elements now
