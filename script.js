@@ -98,107 +98,195 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ---------- Horizontal swipe: handled entirely by CSS ----------
-     No JS needed here anymore. .about-grid / .service-grid / #teamGrid
-     just use plain overflow-x:auto + scroll-snap in style.css — no
-     overscroll-behavior-x, no touch-action, no JS touchmove guard.
-     Since none of these elements scroll vertically, a vertical drag is
-     naturally passed through to the page by the browser's default
-     touch handling, so the page always scrolls down normally. */
+  /* ---------- Horizontal swipe: custom drag + momentum (mobile only) ----------
+     REWRITE: the previous version relied entirely on the browser's own
+     native scroll-snap (overflow-x:auto + scroll-snap-type). That's a
+     fundamentally different mechanism from the free-following drag +
+     momentum-glide swipe used elsewhere on this developer's own
+     portfolio site, so no amount of tuning the native version could
+     make it feel the same — it needed to be replaced, not adjusted.
 
-  /* ---------- Carousels: force-snap to the nearest card ----------
-     Some mobile browsers — notably in-app webviews like Facebook/
-     Messenger's — don't reliably honor CSS scroll-snap, so a quick
-     swipe can leave a carousel resting between two cards instead of
-     landing on one. This is a fallback: once the scroller has
-     genuinely come to a stop, it snaps to whichever card is nearest,
-     regardless of what native scroll-snap did or didn't do. It
-     measures the "page" width from the actual nearest card's own
-     center rather than assuming a fixed card width, since cards can
-     have their own max-width and gaps between them.
-
-     FIX: this used to correct on a flat 120ms timer after touchend/
-     scroll. Native momentum + scroll-snap deceleration on mobile can
-     still be running well past 120ms, so the old timer fired mid-
-     scroll, started a second competing smooth-scroll, and produced
-     the laggy/jumpy misalignment after swiping. Now it polls with
-     requestAnimationFrame and only corrects once scrollLeft has
-     actually stopped changing for several consecutive frames — so it
-     never fights an in-progress native scroll, and only ever steps in
-     once the browser is truly done (or never got it right at all).
-     Applied to all three mobile carousels: About, Services, Team. */
-  function snapCarouselToNearestCard(grid, cardSelector) {
-    const cards = grid.querySelectorAll(cardSelector);
-    if (!cards.length) return;
-
-    const gridRect = grid.getBoundingClientRect();
-    const gridCenter = gridRect.left + gridRect.width / 2;
-
-    let nearest = cards[0];
-    let nearestDist = Infinity;
-    cards.forEach(card => {
-      const cardRect = card.getBoundingClientRect();
-      const cardCenter = cardRect.left + cardRect.width / 2;
-      const dist = Math.abs(cardCenter - gridCenter);
-      if (dist < nearestDist) { nearestDist = dist; nearest = card; }
-    });
-
-    const nearestRect = nearest.getBoundingClientRect();
-    const nearestCenter = nearestRect.left + nearestRect.width / 2;
-    const delta = nearestCenter - gridCenter;
-
-    // Already close enough (native scroll-snap got it right) — skip
-    // the extra animated scroll so it doesn't feel like a re-snap jitter.
-    // Loosened from 1px to 4px so tiny rounding differences don't
-    // trigger a needless correction on top of a scroll that already
-    // landed fine.
-    if (Math.abs(delta) < 4) return;
-
-    grid.scrollTo({ left: grid.scrollLeft + delta, behavior: 'smooth' });
-  }
-
-  function attachSnapFallback(grid, cardSelector) {
+     This tracks the pointer 1:1 while dragging (via a CSS transform,
+     not native scrollLeft), carries real velocity into a momentum
+     glide on release, then settles onto whichever card is nearest.
+     Unlike a looping marquee this is bounded — it can't be dragged
+     past the first or last card. Mobile-only: on desktop it's a
+     disabled no-op and the normal CSS grid layout applies untouched.
+     Applied to all three carousels: About, Services, Team. */
+  function initTouchCarousel(grid, cardSelector) {
     if (!grid) return;
 
-    let watching = false;
-    let lastLeft = null;
-    let stillFrames = 0;
-    const STILL_FRAMES_NEEDED = 6; // ~6 frames of zero movement = actually stopped
+    const MOBILE_QUERY = '(max-width: 768px)';
+    function isMobile() { return window.matchMedia(MOBILE_QUERY).matches; }
 
-    function watchUntilStopped() {
-      if (grid.scrollLeft === lastLeft) {
-        stillFrames++;
+    let pos = 0;            // current offset in px (0 = first card)
+    let pageWidth = 0;      // width of one card "page"
+    let maxPos = 0;         // pos at the last card
+    let dragging = false;
+    let moved = false;      // did this touch/drag actually move (vs. a tap)
+    let startX = 0;
+    let startPos = 0;
+    let activePointerId = null;
+
+    let lastMoveTime = 0;
+    let lastMovePos = 0;
+    let velocity = 0;       // px/sec, carried into momentum on release
+    const MAX_VELOCITY = 4200;
+    const FRICTION = 3.2;   // higher = stops sooner
+    let rafId = null;
+
+    function cardCount() { return grid.querySelectorAll(cardSelector).length; }
+
+    function measure() {
+      pageWidth = grid.clientWidth;
+      maxPos = Math.max(0, (cardCount() - 1) * pageWidth);
+    }
+
+    function clampPos(v) { return Math.max(0, Math.min(maxPos, v)); }
+
+    function render(withTransition) {
+      grid.style.transition = withTransition
+        ? 'transform .35s cubic-bezier(.22,.61,.36,1)'
+        : 'none';
+      grid.style.transform = 'translateX(' + (-pos) + 'px)';
+    }
+
+    function resetForDesktop() {
+      grid.style.transform = '';
+      grid.style.transition = '';
+      pos = 0;
+    }
+
+    function currentIndex() {
+      return pageWidth > 0 ? Math.round(pos / pageWidth) : 0;
+    }
+
+    function snapToNearest() {
+      const idx = Math.max(0, Math.min(cardCount() - 1, currentIndex()));
+      pos = idx * pageWidth;
+      render(true);
+    }
+
+    function stopMomentum() {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+
+    function momentumGlide() {
+      stopMomentum();
+      let lastT = null;
+      function tick(t) {
+        if (lastT === null) lastT = t;
+        const dt = (t - lastT) / 1000;
+        lastT = t;
+
+        pos += velocity * dt;
+        velocity *= Math.pow(1 / (1 + FRICTION), dt);
+
+        if (pos <= 0 || pos >= maxPos || Math.abs(velocity) < 60) {
+          pos = clampPos(pos);
+          snapToNearest();
+          return;
+        }
+        render(false);
+        rafId = requestAnimationFrame(tick);
+      }
+      rafId = requestAnimationFrame(tick);
+    }
+
+    function pointerDown(e) {
+      if (!isMobile()) return;
+      measure();
+      stopMomentum();
+      dragging = true;
+      moved = false;
+      startX = e.clientX;
+      startPos = pos;
+      lastMoveTime = performance.now();
+      lastMovePos = pos;
+      velocity = 0;
+      activePointerId = e.pointerId;
+      // NOTE: no setPointerCapture here yet — same reasoning as the
+      // portfolio version: capturing on every pointerdown (even a plain
+      // tap on a link) redirects that link's click away from itself.
+      // Only capture once a real drag is confirmed, below.
+    }
+
+    function pointerMove(e) {
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      if (!moved && Math.abs(dx) > 10) {
+        moved = true;
+        grid.classList.add('dragging');
+        if (grid.setPointerCapture) {
+          try { grid.setPointerCapture(activePointerId); } catch (err) {}
+        }
+      }
+      if (moved) {
+        pos = clampPos(startPos - dx);
+        render(false);
+
+        const now = performance.now();
+        const dt = now - lastMoveTime;
+        if (dt > 0) {
+          const raw = (pos - lastMovePos) / dt * 1000; // px/sec
+          velocity = Math.max(-MAX_VELOCITY, Math.min(MAX_VELOCITY, raw));
+          lastMoveTime = now;
+          lastMovePos = pos;
+        }
+      }
+    }
+
+    function pointerUp() {
+      if (!dragging) return;
+      dragging = false;
+      grid.classList.remove('dragging');
+      if (moved && grid.releasePointerCapture) {
+        try { grid.releasePointerCapture(activePointerId); } catch (err) {}
+      }
+      if (!moved) return; // plain tap — let the underlying click through untouched
+
+      if (Math.abs(velocity) > 40) {
+        momentumGlide();
       } else {
-        stillFrames = 0;
-        lastLeft = grid.scrollLeft;
+        snapToNearest();
       }
-
-      if (stillFrames >= STILL_FRAMES_NEEDED) {
-        watching = false;
-        snapCarouselToNearestCard(grid, cardSelector);
-        return;
-      }
-      requestAnimationFrame(watchUntilStopped);
     }
 
-    function startWatching() {
-      if (watching) return; // already polling — let it finish, don't restart
-      watching = true;
-      lastLeft = grid.scrollLeft;
-      stillFrames = 0;
-      requestAnimationFrame(watchUntilStopped);
+    grid.addEventListener('pointerdown', pointerDown);
+    grid.addEventListener('pointermove', pointerMove);
+    grid.addEventListener('pointerup', pointerUp);
+    grid.addEventListener('pointercancel', pointerUp);
+    grid.addEventListener('pointerleave', () => { if (dragging) pointerUp(); });
+
+    // A drag that actually moved shouldn't also fire the link/card
+    // click underneath it once the finger lifts.
+    grid.addEventListener('click', (e) => {
+      if (moved) { e.preventDefault(); e.stopPropagation(); }
+    }, true);
+
+    function handleResize() {
+      stopMomentum();
+      if (isMobile()) {
+        const idx = pageWidth > 0 ? Math.max(0, Math.min(cardCount() - 1, currentIndex())) : 0;
+        measure();
+        pos = idx * pageWidth;
+        render(false);
+      } else {
+        resetForDesktop();
+      }
     }
 
-    // Covers both the touch release (momentum/snap may still be running
-    // after this fires) and any scroll not tied to touch (e.g. a
-    // trackpad or keyboard on a mobile browser).
-    grid.addEventListener('touchend', startWatching, { passive: true });
-    grid.addEventListener('scroll', startWatching, { passive: true });
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+    window.addEventListener('load', handleResize);
+
+    handleResize();
   }
 
-  attachSnapFallback(document.querySelector('.about-grid'), '.info-card');
-  attachSnapFallback(document.querySelector('.service-grid'), '.service-card');
-  attachSnapFallback(document.getElementById('teamGrid'), '.team-card');
+  initTouchCarousel(document.querySelector('.about-grid'), '.info-card');
+  initTouchCarousel(document.querySelector('.service-grid'), '.service-card');
+  initTouchCarousel(document.getElementById('teamGrid'), '.team-card');
 
   /* ---------- Team carousel: center arrows on the photo, not the card ----------
      The card's total height varies with description length, but every
