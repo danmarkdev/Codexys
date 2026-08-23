@@ -88,21 +88,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ---------- Team: all members visible on mobile, arrows as quick nav ----------
-     Previously the team section used a one-card-at-a-time slider on
-     mobile (translateX driven by measuring the grid's own width),
-     which is why only one member ever showed up unless you happened
-     to tap the tiny arrow buttons. That approach also depended on
-     precise width math that could silently go wrong on real devices.
-
-     Now, on mobile, every team member is simply stacked in a normal
-     vertical list (see the .team-grid rule in style.css) — nothing is
-     hidden, so all four members are always visible/complete, same as
-     on desktop. The ‹ / › arrow buttons are kept fully clickable: they
-     still work, they just smooth-scroll up/down from the member
-     closest to view to the next/previous one, instead of sliding a
-     track. This is simpler and can't silently break like the old
-     width-measuring version could. */
+  /* ---------- Team: single-card carousel, arrow-click only ----------
+     On mobile, only ONE member card is shown at a time (toggled via
+     the .is-active class — see style.css), centered on screen, with
+     the ‹ / › arrow buttons sitting beside it as plain flex siblings
+     (never on top of the card, never overlapping the photo). The only
+     way to move between members is tapping those two buttons — no
+     swipe/drag gesture is wired up on purpose. This avoids the old
+     approach of sliding a track by a JS-measured pixel width (fragile
+     on real devices); toggling display via a class can't drift or
+     mis-measure. */
   const teamWrap = document.getElementById('teamCarouselWrap');
   const teamGrid = document.getElementById('teamGrid');
   const teamPrevBtn = teamWrap ? teamWrap.querySelector('.arrow-prev') : null;
@@ -112,47 +107,37 @@ document.addEventListener('DOMContentLoaded', () => {
     return teamGrid ? Array.from(teamGrid.querySelectorAll('.team-card')) : [];
   }
 
-  function isMobileTeam() {
-    return window.matchMedia('(max-width: 768px)').matches;
-  }
+  let teamIndex = 0;
 
-  function scrollToTeamCard(i) {
+  function updateTeamCarousel() {
     const cards = teamCards();
     if (!cards.length) return;
-    const index = Math.max(0, Math.min(cards.length - 1, i));
-    cards[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
-  // Finds whichever card is currently nearest the top of the viewport,
-  // so tapping an arrow always moves relative to what the visitor is
-  // actually looking at right now (not a stale stored index).
-  function currentTeamIndex() {
-    const cards = teamCards();
-    if (!cards.length) return 0;
-    let closest = 0;
-    let closestDist = Infinity;
     cards.forEach((card, i) => {
-      const dist = Math.abs(card.getBoundingClientRect().top - 100);
-      if (dist < closestDist) {
-        closestDist = dist;
-        closest = i;
-      }
+      card.classList.toggle('is-active', i === teamIndex);
     });
-    return closest;
+    if (teamPrevBtn) teamPrevBtn.disabled = teamIndex <= 0;
+    if (teamNextBtn) teamNextBtn.disabled = teamIndex >= cards.length - 1;
   }
 
   if (teamPrevBtn) {
     teamPrevBtn.addEventListener('click', () => {
-      if (!isMobileTeam()) return;
-      scrollToTeamCard(currentTeamIndex() - 1);
+      teamIndex = Math.max(0, teamIndex - 1);
+      updateTeamCarousel();
     });
   }
   if (teamNextBtn) {
     teamNextBtn.addEventListener('click', () => {
-      if (!isMobileTeam()) return;
-      scrollToTeamCard(currentTeamIndex() + 1);
+      const max = teamCards().length - 1;
+      teamIndex = Math.min(max, teamIndex + 1);
+      updateTeamCarousel();
     });
   }
+
+  // Set the initial state (first card active, prev arrow disabled).
+  // Harmless on desktop — .is-active has no effect there since every
+  // .team-card is shown regardless (see style.css, unaffected outside
+  // the mobile media query).
+  updateTeamCarousel();
 
   /* ---------- Scroll reveal ----------
      About and Services cards are plain, normally-flowing elements
