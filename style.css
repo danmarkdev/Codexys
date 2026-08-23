@@ -526,9 +526,6 @@ p{ margin: 0; }
 @media (max-width: 960px){ .about-grid{ grid-template-columns: repeat(2,1fr); } }
 
 @media (max-width: 768px){
-  /* SIMPLE VERTICAL LIST: no more swipe/drag carousel here. Cards just
-     stack top-to-bottom and scroll with the rest of the page, like any
-     normal section — matches the reference layout the client asked for. */
   .about-grid{
     display: flex;
     flex-direction: column;
@@ -606,8 +603,6 @@ p{ margin: 0; }
 }
 
 @media (max-width: 768px){
-  /* SIMPLE VERTICAL LIST: same change as About above — plain stacked
-     cards, scrolled with the page, no carousel. */
   .service-grid{
     display: flex;
     flex-direction: column;
@@ -770,11 +765,20 @@ p{ margin: 0; }
     margin-inline: auto;
     flex: none;
   }
-  /* SINGLE-CARD VIEW, ARROW NAVIGATION ONLY: one team member visible at
-     a time; moving between them happens only through the ‹ › arrow
-     buttons below (initArrowCarousel in script.js) — there's no drag
-     or swipe handling on this grid at all anymore, so there's nothing
-     that can misfire or leave a card stuck off-screen. */
+
+  /* FIX: this was referenced in script.js's comments ("...inside an
+     overflow:hidden track") but never actually declared here. Without
+     it, all 4 cards sit side by side in one very wide row (since each
+     card is grid-auto-columns:100%) with nothing clipping the ones
+     that aren't "active". That's what was causing the carousel to
+     look blank / broken and the arrows to reposition incorrectly when
+     moving past the first card. Clipping the wrapper is what makes
+     the "only one card visible at a time, slid via translateX" logic
+     in script.js actually work as intended. */
+  .carousel-wrap{
+    overflow: hidden;
+  }
+
   .team-grid{
     display: grid;
     grid-auto-flow: column;
@@ -783,6 +787,7 @@ p{ margin: 0; }
     justify-content: flex-start;
     align-items: stretch;
     overflow: hidden;
+    width: 100%;
     gap: 16px;
     padding: 4px 0 12px;
   }
@@ -822,9 +827,6 @@ p{ margin: 0; }
   color: var(--text-muted);
 }
 
-/* Frosted-glass card — sits on top of the animated background orbs,
-   so the cyan/violet glow shows through instead of being covered by
-   a solid gradient block. Border + shadow keep the brand colors. */
 .contact-card{
   position: relative;
   display: flex;
