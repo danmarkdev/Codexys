@@ -354,8 +354,32 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('load', centerTeamArrows);
 
 
-  /* ---------- Scroll reveal ---------- */
-  const revealEls = document.querySelectorAll('.reveal');
+  /* ---------- Scroll reveal ----------
+     FIX: cards inside the three swipeable carousels (.info-card,
+     .service-card, .team-card) used to be gated behind the same
+     scroll-triggered IntersectionObserver as everything else. That's
+     fine for elements that only ever move via normal page scroll —
+     but these cards are moved horizontally via a CSS `transform`
+     from the swipe carousel above. Only the first card in each
+     carousel starts inside the browser's viewport bounds; every card
+     after it starts off-screen to the side, so the observer often
+     never (or unreliably, especially on mobile) reports them as
+     "intersecting" even after the user swipes them into view. Net
+     result: cards 2+ could stay stuck at opacity:0 — the "disappearing
+     content" bug (service/about/team cards vanishing on swipe).
+
+     Fix: these are core content, not a decorative scroll flourish, so
+     they're shown immediately instead of waiting on scroll detection.
+     The scroll-fade is kept only for section headers/intros, which
+     never get moved by the swipe carousel and so don't have this
+     problem. */
+  const carouselCardSelector = '.info-card.reveal, .service-card.reveal, .team-card.reveal';
+
+  document.querySelectorAll(carouselCardSelector).forEach(el => {
+    el.classList.add('is-visible');
+  });
+
+  const revealEls = document.querySelectorAll('.reveal:not(.info-card):not(.service-card):not(.team-card)');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
