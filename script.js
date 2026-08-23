@@ -138,7 +138,25 @@ document.addEventListener('DOMContentLoaded', () => {
     function cardCount() { return grid.querySelectorAll(cardSelector).length; }
 
     function measure() {
-      pageWidth = grid.clientWidth;
+      // FIX: pageWidth used to be grid.clientWidth (the container's full
+      // width). But on mobile the grid uses grid-auto-columns:100% PLUS
+      // a 16px gap between cards — and when a percentage column width and
+      // a gap are combined in CSS Grid, each card actually renders
+      // slightly narrower than the container. Using clientWidth as the
+      // per-card step overshoots by that gap amount on every swipe, and
+      // the error compounds card after card, until by card 3-4 you're
+      // translating past the real content into blank clipped space —
+      // that's the "content disappearing" bug. Measuring the first
+      // card's real rendered width (+ the actual gap) keeps every swipe
+      // step exactly matched to what's really on screen.
+      const cards = grid.querySelectorAll(cardSelector);
+      if (cards.length) {
+        const cardWidth = cards[0].getBoundingClientRect().width;
+        const gapValue = parseFloat(getComputedStyle(grid).columnGap || getComputedStyle(grid).gap || '0') || 0;
+        pageWidth = cardWidth + gapValue;
+      } else {
+        pageWidth = grid.clientWidth;
+      }
       maxPos = Math.max(0, (cardCount() - 1) * pageWidth);
     }
 
