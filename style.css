@@ -775,8 +775,6 @@ p{ margin: 0; }
   }
 
   .carousel-arrow{
-    position: static;
-    transform: none;
     flex: 0 0 auto;
   }
   .arrow-prev{ order: 1; }
@@ -1038,6 +1036,21 @@ p{ margin: 0; }
 
 @media (max-width: 768px){
   .carousel-arrow{ display: flex; }
+
+  /* This is the LAST rule targeting .carousel-arrow in the file, so
+     it correctly wins over the unconditional position:absolute rule
+     above (that one was overriding the earlier override in the TEAM
+     section, which is why the arrows kept appearing on top of the
+     photo instead of beside it). Static position + flex "order" (set
+     in the TEAM section) is what actually keeps them outside the
+     card on mobile. */
+  .carousel-arrow{
+    position: static;
+    top: auto;
+    left: auto;
+    right: auto;
+    transform: none;
+  }
 }
 
 /* =========================================================
