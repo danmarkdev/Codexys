@@ -761,20 +761,16 @@ p{ margin: 0; }
   .team-card{
     border-radius: 20px;
     width: 100%;
-    max-width: 380px;
+    /* Reserve ~50px of empty space on each side, inside the slot, so
+       the ‹ › arrow buttons (40px circles) have room to sit BESIDE
+       the card without ever overlapping the photo. */
+    max-width: calc(100% - 100px);
     margin-inline: auto;
     flex: none;
   }
 
-  /* FIX: this was referenced in script.js's comments ("...inside an
-     overflow:hidden track") but never actually declared here. Without
-     it, all 4 cards sit side by side in one very wide row (since each
-     card is grid-auto-columns:100%) with nothing clipping the ones
-     that aren't "active". That's what was causing the carousel to
-     look blank / broken and the arrows to reposition incorrectly when
-     moving past the first card. Clipping the wrapper is what makes
-     the "only one card visible at a time, slid via translateX" logic
-     in script.js actually work as intended. */
+  /* Clip the track so only the "active" card's slot is visible;
+     everything else stays off-canvas until you navigate to it. */
   .carousel-wrap{
     overflow: hidden;
   }
