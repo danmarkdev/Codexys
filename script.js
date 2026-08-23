@@ -88,141 +88,81 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ---------- Team carousel: click-only, arrow-driven ----------
-     Only one member card is shown at a time on mobile, and the only
-     way to move between them is tapping the ‹ / › buttons — no touch
-     dragging, no swipe gesture. Each click moves exactly one card
-     width (measured from the actual rendered card, not guessed from
-     the container), with a small transition for a smooth slide. */
-  function initArrowCarousel(grid, cardSelector, prevBtn, nextBtn, onMove) {
-    if (!grid) return;
+  /* ---------- Team: all members visible on mobile, arrows as quick nav ----------
+     Previously the team section used a one-card-at-a-time slider on
+     mobile (translateX driven by measuring the grid's own width),
+     which is why only one member ever showed up unless you happened
+     to tap the tiny arrow buttons. That approach also depended on
+     precise width math that could silently go wrong on real devices.
 
-    const MOBILE_QUERY = '(max-width: 768px)';
-    function isMobile() { return window.matchMedia(MOBILE_QUERY).matches; }
-
-    let index = 0;
-    let pageWidth = 0;
-
-    function cards() { return grid.querySelectorAll(cardSelector); }
-
-    /* IMPORTANT: measure the grid's own slot width (grid.clientWidth),
-       NOT the card element's rendered width. Each card is narrower
-       than its slot (it has side gutters reserved for the arrows via
-       max-width + margin-inline:auto in CSS), so translating by the
-       card's own width instead of the full slot width caused each
-       click to move the wrong distance — the next member ended up
-       partially or fully off-screen instead of landing centered in
-       view. The slot width is what actually matches one grid column
-       (grid-auto-columns: 100%), so that's what translateX must use. */
-    function measure() {
-      const gapValue = parseFloat(getComputedStyle(grid).columnGap || getComputedStyle(grid).gap || '0') || 0;
-      pageWidth = grid.clientWidth + gapValue;
-    }
-
-    function render(withTransition) {
-      if (!isMobile()) {
-        grid.style.transition = '';
-        grid.style.transform = '';
-        return;
-      }
-      grid.style.transition = withTransition
-        ? 'transform .35s cubic-bezier(.22,.61,.36,1)'
-        : 'none';
-      grid.style.transform = 'translateX(' + (-index * pageWidth) + 'px)';
-    }
-
-    function updateArrowState() {
-      const max = cards().length - 1;
-      if (prevBtn) prevBtn.disabled = index <= 0;
-      if (nextBtn) nextBtn.disabled = index >= max;
-    }
-
-    function goTo(i) {
-      const max = cards().length - 1;
-      index = Math.max(0, Math.min(max, i));
-      measure();
-      render(true);
-      updateArrowState();
-      if (typeof onMove === 'function') onMove(index, isMobile());
-    }
-
-    if (prevBtn) prevBtn.addEventListener('click', () => goTo(index - 1));
-    if (nextBtn) nextBtn.addEventListener('click', () => goTo(index + 1));
-
-    function handleResize() {
-      if (!isMobile()) {
-        index = 0;
-      }
-      measure();
-      render(false);
-      updateArrowState();
-      if (typeof onMove === 'function') onMove(index, isMobile());
-    }
-
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', handleResize);
-    window.addEventListener('load', handleResize);
-
-    handleResize();
-  }
-
-  /* ---------- Team carousel: keep arrows OUTSIDE the card, centered on its photo ----------
-     The arrow buttons stay where they are in the HTML (children of
-     #teamCarouselWrap, siblings of #teamGrid) — they sit in the empty
-     gutter space beside the card (see the card's max-width in CSS),
-     never on top of the photo. Their vertical position is recalculated
-     to match the currently active card's photo center, using the
-     actual rendered geometry rather than any assumption about layout,
-     so it can't drift regardless of description length, viewport size,
-     or scroll position. Recomputed after every navigation, resize,
-     image load, and once more after the slide transition finishes
-     (in case a layout shift happened mid-animation). */
+     Now, on mobile, every team member is simply stacked in a normal
+     vertical list (see the .team-grid rule in style.css) — nothing is
+     hidden, so all four members are always visible/complete, same as
+     on desktop. The ‹ / › arrow buttons are kept fully clickable: they
+     still work, they just smooth-scroll up/down from the member
+     closest to view to the next/previous one, instead of sliding a
+     track. This is simpler and can't silently break like the old
+     width-measuring version could. */
   const teamWrap = document.getElementById('teamCarouselWrap');
   const teamGrid = document.getElementById('teamGrid');
   const teamPrevBtn = teamWrap ? teamWrap.querySelector('.arrow-prev') : null;
   const teamNextBtn = teamWrap ? teamWrap.querySelector('.arrow-next') : null;
 
-  let teamActiveIndex = 0;
-
-  function placeTeamArrows(index) {
-    teamActiveIndex = index;
-    if (!teamWrap || !teamGrid || !teamPrevBtn || !teamNextBtn) return;
-    if (!window.matchMedia('(max-width: 768px)').matches) return;
-
-    const activeCard = teamGrid.querySelectorAll('.team-card')[index];
-    const photo = activeCard ? activeCard.querySelector('.member-photo') : null;
-    if (!photo) return;
-
-    const wrapRect = teamWrap.getBoundingClientRect();
-    const photoRect = photo.getBoundingClientRect();
-    const centerY = (photoRect.top - wrapRect.top) + (photoRect.height / 2);
-
-    teamPrevBtn.style.top = centerY + 'px';
-    teamNextBtn.style.top = centerY + 'px';
+  function teamCards() {
+    return teamGrid ? Array.from(teamGrid.querySelectorAll('.team-card')) : [];
   }
 
-  initArrowCarousel(teamGrid, '.team-card', teamPrevBtn, teamNextBtn, placeTeamArrows);
+  function isMobileTeam() {
+    return window.matchMedia('(max-width: 768px)').matches;
+  }
 
-  // Re-check once the slide animation finishes and once every photo
-  // has actually loaded, since either can shift the rendered geometry
-  // slightly after the initial calculation (fonts/images settling).
-  if (teamGrid) {
-    teamGrid.addEventListener('transitionend', () => placeTeamArrows(teamActiveIndex));
-    teamGrid.querySelectorAll('.member-photo img').forEach(img => {
-      if (img.complete) return;
-      img.addEventListener('load', () => placeTeamArrows(teamActiveIndex), { once: true });
+  function scrollToTeamCard(i) {
+    const cards = teamCards();
+    if (!cards.length) return;
+    const index = Math.max(0, Math.min(cards.length - 1, i));
+    cards[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Finds whichever card is currently nearest the top of the viewport,
+  // so tapping an arrow always moves relative to what the visitor is
+  // actually looking at right now (not a stale stored index).
+  function currentTeamIndex() {
+    const cards = teamCards();
+    if (!cards.length) return 0;
+    let closest = 0;
+    let closestDist = Infinity;
+    cards.forEach((card, i) => {
+      const dist = Math.abs(card.getBoundingClientRect().top - 100);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closest = i;
+      }
+    });
+    return closest;
+  }
+
+  if (teamPrevBtn) {
+    teamPrevBtn.addEventListener('click', () => {
+      if (!isMobileTeam()) return;
+      scrollToTeamCard(currentTeamIndex() - 1);
+    });
+  }
+  if (teamNextBtn) {
+    teamNextBtn.addEventListener('click', () => {
+      if (!isMobileTeam()) return;
+      scrollToTeamCard(currentTeamIndex() + 1);
     });
   }
 
   /* ---------- Scroll reveal ----------
-     About and Services cards are plain, normally-flowing elements now
-     (no more carousel transform), so the standard scroll-triggered
-     fade-in works correctly for them without any special-casing.
-     Team cards are still moved horizontally via a transform for the
-     single-card mobile view, so — same reasoning as before — they're
-     shown immediately instead of waiting on scroll-into-view
-     detection, since that detection isn't reliable for elements moved
-     by JS transform inside an overflow:hidden track. */
+     About and Services cards are plain, normally-flowing elements
+     (no carousel transform), so the standard scroll-triggered fade-in
+     works correctly for them without any special-casing. Team cards
+     are also normally-flowing now (a stacked list on mobile, a static
+     grid on desktop), but they're still shown immediately instead of
+     waiting on scroll-into-view detection, just to guarantee every
+     member renders right away with no chance of a missed
+     intersection observer callback hiding one of them. */
   const teamCardSelector = '.team-card.reveal';
 
   document.querySelectorAll(teamCardSelector).forEach(el => {
