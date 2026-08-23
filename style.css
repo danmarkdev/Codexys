@@ -526,31 +526,18 @@ p{ margin: 0; }
 @media (max-width: 960px){ .about-grid{ grid-template-columns: repeat(2,1fr); } }
 
 @media (max-width: 768px){
-  /* SWIPE REWRITE: no longer a native scroll container (overflow-x:auto
-     + scroll-snap-type). script.js now drives this with a CSS transform
-     driven by pointer events — same drag/momentum mechanism as the
-     portfolio site — so this must NOT be scrollable on its own, or the
-     browser's native touch-scroll and our JS would fight each other.
-     touch-action:pan-y explicitly leaves vertical page scrolling to the
-     browser while JS owns horizontal drag. */
+  /* SIMPLE VERTICAL LIST: no more swipe/drag carousel here. Cards just
+     stack top-to-bottom and scroll with the rest of the page, like any
+     normal section — matches the reference layout the client asked for. */
   .about-grid{
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: none;
-    grid-auto-columns: 100%;
-    justify-content: flex-start;
-    overflow: hidden;
-    touch-action: pan-y;
+    display: flex;
+    flex-direction: column;
     gap: 16px;
-    padding: 4px 0 12px;
   }
-  .about-grid.dragging{ cursor: grabbing; }
-  .about-grid.dragging .info-card{ pointer-events: none; }
   .info-card{
     width: 100%;
     max-width: 380px;
     margin-inline: auto;
-    cursor: grab;
   }
   .info-card:hover{
     border-color: var(--border);
@@ -619,25 +606,17 @@ p{ margin: 0; }
 }
 
 @media (max-width: 768px){
-  /* SWIPE REWRITE: see .about-grid comment above — same change. */
+  /* SIMPLE VERTICAL LIST: same change as About above — plain stacked
+     cards, scrolled with the page, no carousel. */
   .service-grid{
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: none;
-    grid-auto-columns: 100%;
-    justify-content: flex-start;
-    overflow: hidden;
-    touch-action: pan-y;
+    display: flex;
+    flex-direction: column;
     gap: 16px;
-    padding: 4px 0 12px;
   }
-  .service-grid.dragging{ cursor: grabbing; }
-  .service-grid.dragging .service-card{ pointer-events: none; }
   .service-card{
     width: 100%;
     max-width: 380px;
     margin-inline: auto;
-    cursor: grab;
   }
   .service-card:hover{
     border-color: var(--border);
@@ -790,9 +769,12 @@ p{ margin: 0; }
     max-width: 380px;
     margin-inline: auto;
     flex: none;
-    cursor: grab;
   }
-  /* SWIPE REWRITE: see .about-grid comment above — same change. */
+  /* SINGLE-CARD VIEW, ARROW NAVIGATION ONLY: one team member visible at
+     a time; moving between them happens only through the ‹ › arrow
+     buttons below (initArrowCarousel in script.js) — there's no drag
+     or swipe handling on this grid at all anymore, so there's nothing
+     that can misfire or leave a card stuck off-screen. */
   .team-grid{
     display: grid;
     grid-auto-flow: column;
@@ -801,12 +783,9 @@ p{ margin: 0; }
     justify-content: flex-start;
     align-items: stretch;
     overflow: hidden;
-    touch-action: pan-y;
     gap: 16px;
     padding: 4px 0 12px;
   }
-  .team-grid.dragging{ cursor: grabbing; }
-  .team-grid.dragging .team-card{ pointer-events: none; }
   .team-card:hover{
     border-color: var(--border);
     transform: none;
@@ -1016,11 +995,38 @@ p{ margin: 0; }
 }
 
 /* =========================================================
-   CAROUSEL ARROWS (mobile swipe sections)
+   CAROUSEL ARROWS (Team — mobile)
    ========================================================= */
 .carousel-wrap{ position: relative; }
+
 .carousel-arrow{
   display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 20px;
+  line-height: 1;
+  transition: opacity .25s var(--ease), border-color .25s var(--ease);
+}
+.carousel-arrow:hover{ border-color: var(--text-muted); }
+.carousel-arrow:disabled{
+  opacity: 0.35;
+  pointer-events: none;
+}
+.arrow-prev{ left: 6px; }
+.arrow-next{ right: 6px; }
+
+@media (max-width: 768px){
+  .carousel-arrow{ display: flex; }
 }
 
 /* =========================================================
