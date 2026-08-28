@@ -23,6 +23,45 @@
   }
 })();
 
+/* ---------- Basic copy/paste & right-click protection ----------
+   Runs immediately (script is deferred, DOM already exists) so it's
+   active as early as possible. This only deters casual copying —
+   view-source, devtools, and browser cache access still work, there's
+   no way to fully block content copying on the web. Form fields and
+   the footer contact info (email/phone) are excluded so visitors can
+   still use the contact form and copy the email/phone number. */
+(function protectContent() {
+  const allowSelector = 'input, textarea, [contenteditable="true"], .footer-contact-item';
+
+  document.addEventListener('contextmenu', (e) => {
+    if (!e.target.closest(allowSelector)) e.preventDefault();
+  });
+
+  document.addEventListener('selectstart', (e) => {
+    if (!e.target.closest(allowSelector)) e.preventDefault();
+  });
+
+  document.addEventListener('copy', (e) => {
+    if (!e.target.closest(allowSelector)) e.preventDefault();
+  });
+
+  document.addEventListener('cut', (e) => {
+    if (!e.target.closest(allowSelector)) e.preventDefault();
+  });
+
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.tagName === 'IMG') e.preventDefault();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.target.closest(allowSelector)) return;
+    const key = e.key.toLowerCase();
+    if ((e.ctrlKey || e.metaKey) && ['c', 'x', 'u', 's'].includes(key)) {
+      e.preventDefault();
+    }
+  });
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- Footer year ---------- */
