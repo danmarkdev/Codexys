@@ -93,6 +93,33 @@ p{ margin: 0; }
 }
 
 /* =========================================================
+   COPY / PASTE PROTECTION
+   Site-wide text/image selection is switched off. Form fields and
+   the footer contact info (email/phone the visitor may want to copy)
+   are switched back to normal so they stay usable. This is paired
+   with the JS in script.js (protectContent) that blocks right-click,
+   copy/cut, and drag on the same elements — CSS alone only stops
+   drag-select, not context-menu "Copy".
+   ========================================================= */
+body{
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+input, textarea, [contenteditable],
+.footer-contact-item{
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+img{
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
+/* =========================================================
    ANIMATED BACKGROUND — floating glow orbs
    ========================================================= */
 .bg-orbs{
@@ -1001,6 +1028,15 @@ p{ margin: 0; }
   letter-spacing: 0.08em;
   color: var(--text-faint);
   text-align: center;
+}
+
+/* The © glyph renders visibly smaller than the surrounding text in
+   JetBrains Mono, so it's bumped up and nudged to sit level with the
+   rest of the line. */
+.footer-bottom .copy-symbol{
+  font-size: 1.35em;
+  line-height: 1;
+  vertical-align: -0.05em;
 }
 
 /* =========================================================
