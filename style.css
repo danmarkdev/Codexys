@@ -83,10 +83,11 @@ p{ margin: 0; }
 .container{ width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: 20px; }
 
 /* Reduced-motion: calms normal animations/transitions, but the
-   background orbs (.orb) are excluded so they keep moving on
-   phones that have "reduce motion" / battery saver turned on. */
+   background orbs (.orb), the loader ring and the preloader are
+   excluded so they keep working on phones/PCs that have
+   "reduce motion" / battery saver turned on. */
 @media (prefers-reduced-motion: reduce){
-  *:not(.orb):not(.loader-line){ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  *:not(.orb):not(.loader-line):not(.preloader){ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 :focus-visible{ outline: 2px solid var(--violet-soft); outline-offset: 3px; border-radius: 4px; }
 
@@ -98,74 +99,99 @@ input, textarea, [contenteditable], .footer-contact-item{
 img{ -webkit-user-drag: none; user-drag: none; }
 
 /* =========================================================
-   BACKGROUND — slow orbiting light balls (cyan + violet)
-   Moves on desktop AND mobile.
+   BACKGROUND — soft glowing orbs (cyan + violet) that
+   clearly drift, float and pulse across the whole screen.
+   Works on desktop AND mobile.
    ========================================================= */
 .bg-orbs{ position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
 .bg-orbs span{
   position: absolute;
-  width: 20vmin; height: 20vmin;
+  width: 42vmin; height: 42vmin;
   border-radius: 50%;
+  color: var(--cyan);
+  background: radial-gradient(circle at center, currentColor 0%, transparent 68%);
   opacity: 0.55;
   backface-visibility: hidden;
   will-change: transform;
-  animation: orbit linear infinite;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
   animation-play-state: running;
 }
-@keyframes orbit{
-  from{ transform: rotate(0deg) translateZ(0); }
-  to{ transform: rotate(360deg) translateZ(0); }
+
+/* three different drift paths (distances are in vw / vh so they
+   always cover the screen, no matter the device) */
+@keyframes driftA{
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(38vw, -22vh, 0) scale(1.25); }
+  100% { transform: translate3d(-12vw, 30vh, 0) scale(0.9); }
+}
+@keyframes driftB{
+  0%   { transform: translate3d(0, 0, 0) scale(1.1); }
+  50%  { transform: translate3d(-40vw, 18vh, 0) scale(0.85); }
+  100% { transform: translate3d(14vw, -32vh, 0) scale(1.3); }
+}
+@keyframes driftC{
+  0%   { transform: translate3d(0, 0, 0) scale(0.9); }
+  50%  { transform: translate3d(26vw, 34vh, 0) scale(1.2); }
+  100% { transform: translate3d(-34vw, -14vh, 0) scale(1); }
 }
 
-.orb-1{ top: 76%; left: 86%; color: var(--cyan);   transform-origin: 16vw -2vh;  animation-duration: 42s; animation-delay: -3s;  box-shadow: 40vmin 0 6vmin currentColor; }
-.orb-2{ top: 40%; left: 4%;  color: var(--violet); transform-origin: -19vw 21vh; animation-duration: 54s; animation-delay: -29s; box-shadow: -40vmin 0 5.5vmin currentColor; }
-.orb-3{ top: 26%; left: 20%; color: #38BDF8;       transform-origin: -22vw 3vh;  animation-duration: 48s; animation-delay: -8s;  box-shadow: 40vmin 0 5.5vmin currentColor; }
-.orb-4{ top: 52%; left: 78%; color: #A855F7;       transform-origin: -17vw -6vh; animation-duration: 28s; animation-delay: -21s; box-shadow: 40vmin 0 5.5vmin currentColor; }
-.orb-5{ top: 46%; left: 15%; color: var(--cyan);   transform-origin: 4vw 0;      animation-duration: 36s; animation-delay: -40s; box-shadow: -40vmin 0 6vmin currentColor; }
-.orb-6{ top: 78%; left: 16%; color: var(--violet); transform-origin: 18vw 4vh;   animation-duration: 32s; animation-delay: -10s; box-shadow: 40vmin 0 5.5vmin currentColor; }
+.orb-1{ top: 62%; left: 70%; color: var(--cyan);   animation-name: driftA; animation-duration: 16s; }
+.orb-2{ top: 28%; left: 4%;  color: var(--violet); animation-name: driftB; animation-duration: 20s; }
+.orb-3{ top: 8%;  left: 38%; color: #38BDF8;       animation-name: driftC; animation-duration: 18s; }
+.orb-4{ top: 50%; left: 78%; color: #A855F7;       animation-name: driftB; animation-duration: 14s; }
+.orb-5{ top: 58%; left: 14%; color: var(--cyan);   animation-name: driftC; animation-duration: 22s; }
+.orb-6{ top: 74%; left: 40%; color: var(--violet); animation-name: driftA; animation-duration: 19s; }
 
-[data-theme="light"] .bg-orbs span{ opacity: 0.16; }
+[data-theme="light"] .bg-orbs span{ opacity: 0.22; }
 
-/* Mobile: vmin is small on phones, so make the orbs bigger and a bit
-   faster so the movement is clearly visible. */
+/* Mobile: bigger orbs and a bit faster so the movement is obvious. */
 @media (max-width: 768px){
-  .bg-orbs span{ width: 34vmin; height: 34vmin; opacity: 0.45; }
-  [data-theme="light"] .bg-orbs span{ opacity: 0.2; }
-  .orb-1{ animation-duration: 30s; }
-  .orb-2{ animation-duration: 38s; }
-  .orb-3{ animation-duration: 34s; }
-  .orb-4{ animation-duration: 22s; }
-  .orb-5{ animation-duration: 26s; }
-  .orb-6{ animation-duration: 24s; }
+  .bg-orbs span{ width: 62vmin; height: 62vmin; opacity: 0.5; }
+  [data-theme="light"] .bg-orbs span{ opacity: 0.24; }
+  .orb-1{ animation-duration: 12s; }
+  .orb-2{ animation-duration: 15s; }
+  .orb-3{ animation-duration: 13s; }
+  .orb-4{ animation-duration: 10s; }
+  .orb-5{ animation-duration: 16s; }
+  .orb-6{ animation-duration: 14s; }
 }
 
 /* =========================================================
-   PRELOADER — morphing outline loader + typed line
+   PRELOADER — white spinning ring + typed line
+   Failsafe: even if JavaScript fails to run, the preloader
+   fades out by itself after ~5s (preAutoHide) so visitors
+   are never stuck on the loading screen.
    ========================================================= */
 .preloader{
   position: fixed; inset: 0; z-index: 999;
   background: #050507;
   display: flex; align-items: center; justify-content: center;
   transition: opacity .5s ease, visibility .5s ease;
+  animation: preAutoHide .5s ease 5s forwards;
 }
 .preloader.is-hidden{ opacity: 0; visibility: hidden; pointer-events: none; }
+@keyframes preAutoHide{ to{ opacity: 0; visibility: hidden; pointer-events: none; } }
+
 .preloader-box{ display: flex; flex-direction: column; align-items: center; text-align: center; }
-/* Loading icon: dual gradient ring (cyan + violet), spins in opposite directions */
+
+/* Loading icon: dual WHITE ring, spins in opposite directions */
 .loader-line{
   order: 1; display: block; position: relative;
   width: 64px; height: 64px; margin: 0 auto 28px;
   border-radius: 50%;
-  border: 3px solid rgba(255,255,255,0.10);
-  border-top-color: var(--cyan);
-  border-right-color: var(--cyan);
+  border: 3px solid rgba(255,255,255,0.12);
+  border-top-color: #FFFFFF;
+  border-right-color: #FFFFFF;
   animation: loaderSpin 1s linear infinite;
 }
 .loader-line::before{
   content: ""; position: absolute; inset: 8px;
   border-radius: 50%;
   border: 3px solid transparent;
-  border-bottom-color: var(--violet);
-  border-left-color: var(--violet);
+  border-bottom-color: rgba(255,255,255,0.65);
+  border-left-color: rgba(255,255,255,0.65);
   animation: loaderSpin .75s linear infinite reverse;
 }
 @keyframes loaderSpin{ to{ transform: rotate(360deg); } }
@@ -175,7 +201,7 @@ img{ -webkit-user-drag: none; user-drag: none; }
   overflow: hidden; white-space: nowrap;
   font-family: var(--font-mono); font-size: 1.1rem; font-weight: 600;
   letter-spacing: 0.12em; color: #fff;
-  border-right: 3px solid var(--cyan);
+  border-right: 3px solid #FFFFFF;
   animation: preTyping 2s steps(17, end) forwards, preCaret .75s step-end infinite;
 }
 @keyframes preTyping{ to{ width: calc(17 * (1ch + 0.12em)); } }
