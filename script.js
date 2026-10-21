@@ -3,10 +3,7 @@
    ========================================================= */
 
 /* ---------- Light/Dark theme ----------
-   Runs immediately (script is deferred, so the DOM already exists) so
-   the saved theme applies as early as possible, before the rest of the
-   page's setup code below. Defaults to dark (the site's original look)
-   unless the visitor has previously toggled to light. */
+   Defaults to dark unless the visitor previously toggled to light. */
 (function initTheme() {
   const root = document.documentElement;
   const toggle = document.getElementById('themeToggle');
@@ -24,12 +21,9 @@
 })();
 
 /* ---------- Basic copy/paste & right-click protection ----------
-   Runs immediately (script is deferred, DOM already exists) so it's
-   active as early as possible. This only deters casual copying —
-   view-source, devtools, and browser cache access still work, there's
-   no way to fully block content copying on the web. Form fields and
-   the footer contact info (email/phone) are excluded so visitors can
-   still use the contact form and copy the email/phone number. */
+   Only deters casual copying. Form fields and the footer contact
+   info are excluded so visitors can still use the form and copy
+   the email/phone number. */
 (function protectContent() {
   const allowSelector = 'input, textarea, [contenteditable="true"], .footer-contact-item';
 
@@ -80,10 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const typedEl = document.getElementById('typedSub');
   const phrases = [
     'Website Development',
-    'UI/UX Design',
     'Web Systems & Dashboards',
-    'Business & Portfolio Websites',
-    'Capstone Systems'
+    'AI Development'
   ];
   let phraseIndex = 0;
   let charIndex = 0;
@@ -129,14 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- Team: single-card carousel, arrow-click only ----------
      On mobile, only ONE member card is shown at a time (toggled via
-     the .is-active class — see style.css), centered on screen, with
-     the ‹ / › arrow buttons sitting beside it as plain flex siblings
-     (never on top of the card, never overlapping the photo). The only
-     way to move between members is tapping those two buttons — no
-     swipe/drag gesture is wired up on purpose. This avoids the old
-     approach of sliding a track by a JS-measured pixel width (fragile
-     on real devices); toggling display via a class can't drift or
-     mis-measure. */
+     the .is-active class — see style.css), with the ‹ / › arrow
+     buttons beside it. No swipe/drag gesture on purpose. */
   const teamWrap = document.getElementById('teamCarouselWrap');
   const teamGrid = document.getElementById('teamGrid');
   const teamPrevBtn = teamWrap ? teamWrap.querySelector('.arrow-prev') : null;
@@ -172,24 +158,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Set the initial state (first card active, prev arrow disabled).
-  // Harmless on desktop — .is-active has no effect there since every
-  // .team-card is shown regardless (see style.css, unaffected outside
-  // the mobile media query).
   updateTeamCarousel();
 
   /* ---------- Scroll reveal ----------
-     About and Services cards are plain, normally-flowing elements
-     (no carousel transform), so the standard scroll-triggered fade-in
-     works correctly for them without any special-casing. Team cards
-     are also normally-flowing now (a stacked list on mobile, a static
-     grid on desktop), but they're still shown immediately instead of
-     waiting on scroll-into-view detection, just to guarantee every
-     member renders right away with no chance of a missed
-     intersection observer callback hiding one of them. */
-  const teamCardSelector = '.team-card.reveal';
-
-  document.querySelectorAll(teamCardSelector).forEach(el => {
+     Team cards are shown immediately; everything else fades in
+     when scrolled into view. */
+  document.querySelectorAll('.team-card.reveal').forEach(el => {
     el.classList.add('is-visible');
   });
 
