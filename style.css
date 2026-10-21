@@ -137,12 +137,12 @@ img{ -webkit-user-drag: none; user-drag: none; }
   100% { transform: translate3d(-34vw, -14vh, 0) scale(1); }
 }
 
-.orb-1{ top: 62%; left: 70%; color: var(--cyan);   animation-name: driftA; animation-duration: 16s; }
-.orb-2{ top: 28%; left: 4%;  color: var(--violet); animation-name: driftB; animation-duration: 20s; }
-.orb-3{ top: 8%;  left: 38%; color: #38BDF8;       animation-name: driftC; animation-duration: 18s; }
-.orb-4{ top: 50%; left: 78%; color: #A855F7;       animation-name: driftB; animation-duration: 14s; }
-.orb-5{ top: 58%; left: 14%; color: var(--cyan);   animation-name: driftC; animation-duration: 22s; }
-.orb-6{ top: 74%; left: 40%; color: var(--violet); animation-name: driftA; animation-duration: 19s; }
+.bg-orbs .orb-1{ top: 62%; left: 70%; color: var(--cyan);   animation-name: driftA; animation-duration: 16s; }
+.bg-orbs .orb-2{ top: 28%; left: 4%;  color: var(--violet); animation-name: driftB; animation-duration: 20s; }
+.bg-orbs .orb-3{ top: 8%;  left: 38%; color: #38BDF8;       animation-name: driftC; animation-duration: 18s; }
+.bg-orbs .orb-4{ top: 50%; left: 78%; color: #A855F7;       animation-name: driftB; animation-duration: 14s; }
+.bg-orbs .orb-5{ top: 58%; left: 14%; color: var(--cyan);   animation-name: driftC; animation-duration: 22s; }
+.bg-orbs .orb-6{ top: 74%; left: 40%; color: var(--violet); animation-name: driftA; animation-duration: 19s; }
 
 [data-theme="light"] .bg-orbs span{ opacity: 0.22; }
 
@@ -150,12 +150,12 @@ img{ -webkit-user-drag: none; user-drag: none; }
 @media (max-width: 768px){
   .bg-orbs span{ width: 62vmin; height: 62vmin; opacity: 0.5; }
   [data-theme="light"] .bg-orbs span{ opacity: 0.24; }
-  .orb-1{ animation-duration: 12s; }
-  .orb-2{ animation-duration: 15s; }
-  .orb-3{ animation-duration: 13s; }
-  .orb-4{ animation-duration: 10s; }
-  .orb-5{ animation-duration: 16s; }
-  .orb-6{ animation-duration: 14s; }
+  .bg-orbs .orb-1{ animation-duration: 12s; }
+  .bg-orbs .orb-2{ animation-duration: 15s; }
+  .bg-orbs .orb-3{ animation-duration: 13s; }
+  .bg-orbs .orb-4{ animation-duration: 10s; }
+  .bg-orbs .orb-5{ animation-duration: 16s; }
+  .bg-orbs .orb-6{ animation-duration: 14s; }
 }
 
 /* =========================================================
@@ -176,25 +176,22 @@ img{ -webkit-user-drag: none; user-drag: none; }
 
 .preloader-box{ display: flex; flex-direction: column; align-items: center; text-align: center; }
 
-/* Loading icon: dual WHITE ring, spins in opposite directions */
+/* Loading icon: white rounded progress bar with segmented blocks that fill up */
 .loader-line{
   order: 1; display: block; position: relative;
-  width: 64px; height: 64px; margin: 0 auto 28px;
-  border-radius: 50%;
-  border: 3px solid rgba(255,255,255,0.12);
-  border-top-color: #FFFFFF;
-  border-right-color: #FFFFFF;
-  animation: loaderSpin 1s linear infinite;
+  width: 230px; height: 30px; margin: 0 auto 26px;
+  border-radius: 999px;
+  border: 3px solid #FFFFFF;
+  overflow: hidden;
 }
 .loader-line::before{
-  content: ""; position: absolute; inset: 8px;
-  border-radius: 50%;
-  border: 3px solid transparent;
-  border-bottom-color: rgba(255,255,255,0.65);
-  border-left-color: rgba(255,255,255,0.65);
-  animation: loaderSpin .75s linear infinite reverse;
+  content: ""; position: absolute; top: 4px; bottom: 4px; left: 5px;
+  width: 0;
+  border-radius: 3px;
+  background: repeating-linear-gradient(90deg, #FFFFFF 0, #FFFFFF 10px, transparent 10px, transparent 14px);
+  animation: loaderFill 2s steps(15, end) infinite;
 }
-@keyframes loaderSpin{ to{ transform: rotate(360deg); } }
+@keyframes loaderFill{ from{ width: 0; } to{ width: calc(100% - 10px); } }
 .preloader-box p{
   order: 2; display: block; margin: 0 auto;
   width: 0; max-width: 100%;
@@ -326,6 +323,17 @@ img{ -webkit-user-drag: none; user-drag: none; }
 }
 .about .about-intro{ text-align: center; margin-left: auto; margin-right: auto; }
 .services .section-top h2, .team .section-top h2{ color: var(--violet-soft); }
+
+/* Light mode: section titles + eyebrow pills (WHAT WE OFFER / MEET THE TEAM) are cyan */
+[data-theme="light"] .services .section-top h2,
+[data-theme="light"] .team .section-top h2{ color: var(--cyan); }
+[data-theme="light"] .services .eyebrow,
+[data-theme="light"] .team .eyebrow{
+  color: var(--cyan);
+  background: rgba(8,145,178,0.10);
+  border-color: var(--cyan);
+  font-weight: 600;
+}
 
 /* =========================================================
    HERO
