@@ -148,12 +148,16 @@ img{ -webkit-user-drag: none; user-drag: none; }
 .bg-orbs .orb-5{ top: 58%; left: 14%; color: var(--cyan);   animation-name: driftC; animation-duration: 22s; }
 .bg-orbs .orb-6{ top: 74%; left: 40%; color: var(--violet); animation-name: driftA; animation-duration: 19s; }
  
-[data-theme="light"] .bg-orbs span{ opacity: 0.22; }
+/* Light mode: orbs stay clearly visible (AxionByte look) - stronger opacity + a more solid core */
+[data-theme="light"] .bg-orbs span{
+  opacity: 0.55;
+  background: radial-gradient(circle at center, currentColor 0%, currentColor 22%, transparent 70%);
+}
  
 /* Mobile: bigger orbs and a bit faster so the movement is obvious. */
 @media (max-width: 768px){
   .bg-orbs span{ width: 62vmin; height: 62vmin; opacity: 0.5; }
-  [data-theme="light"] .bg-orbs span{ opacity: 0.24; }
+  [data-theme="light"] .bg-orbs span{ opacity: 0.55; }
   .bg-orbs .orb-1{ animation-duration: 12s; }
   .bg-orbs .orb-2{ animation-duration: 15s; }
   .bg-orbs .orb-3{ animation-duration: 13s; }
