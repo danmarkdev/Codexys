@@ -58,7 +58,7 @@
   --violet-soft:   #6D28D9;
   --cyan:          #0891B2;
   --cyan-soft:     #0E7490;
-  --cyan-title:    #0891B2;
+  --cyan-title:    #5ED8EE;  /* soft pastel cyan (light mode), like the AxionByte titles */
   --btn-solid-bg:  #111118;
   --btn-solid-fg:  #FFFFFF;
   --glow:          0 10px 24px -12px rgba(109,40,217,0.35);
@@ -331,7 +331,7 @@ img{ -webkit-user-drag: none; user-drag: none; }
 /* soft glow behind the titles in dark mode (the AxionByte look) */
 .services .section-top h2, .team .section-top h2{ text-shadow: 0 0 22px rgba(103,232,249,0.35); }
 [data-theme="light"] .services .section-top h2,
-[data-theme="light"] .team .section-top h2{ text-shadow: none; }
+[data-theme="light"] .team .section-top h2{ text-shadow: 0 0 18px rgba(34,211,238,0.30); }
 /* Eyebrow pills (WHAT WE OFFER / MEET THE TEAM) */
 .services .eyebrow, .team .eyebrow{
   color: var(--cyan);
