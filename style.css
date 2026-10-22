@@ -26,6 +26,9 @@
   --cyan-soft:     #67E8F9;
   --cyan-deep:     #0E7490;
  
+  /* light cyan used for section titles ("Our Services", "Our Team") */
+  --cyan-title:    #67E8F9;
+ 
   --tint:          rgba(139,92,246,0.14);
   --tint-border:   rgba(139,92,246,0.35);
   --btn-solid-bg:  #FFFFFF;
@@ -55,6 +58,7 @@
   --violet-soft:   #6D28D9;
   --cyan:          #0891B2;
   --cyan-soft:     #0E7490;
+  --cyan-title:    #0891B2;
   --btn-solid-bg:  #111118;
   --btn-solid-fg:  #FFFFFF;
   --glow:          0 10px 24px -12px rgba(109,40,217,0.35);
@@ -322,8 +326,9 @@ img{ -webkit-user-drag: none; user-drag: none; }
   margin-left: auto; margin-right: auto; text-align: center;
 }
 .about .about-intro{ text-align: center; margin-left: auto; margin-right: auto; }
-/* Section titles + eyebrow pills (WHAT WE OFFER / MEET THE TEAM): cyan in dark AND light mode */
-.services .section-top h2, .team .section-top h2{ color: var(--cyan); }
+/* Section titles ("Our Services", "Our Team"): LIGHT cyan (uses --cyan-title) */
+.services .section-top h2, .team .section-top h2{ color: var(--cyan-title); }
+/* Eyebrow pills (WHAT WE OFFER / MEET THE TEAM) */
 .services .eyebrow, .team .eyebrow{
   color: var(--cyan);
   background: rgba(34,211,238,0.10);
@@ -457,23 +462,17 @@ img{ -webkit-user-drag: none; user-drag: none; }
 [data-theme="light"] .team-card{ background: rgba(255,255,255,0.92); box-shadow: 0 10px 28px -14px rgba(20,20,60,0.25); }
 .team-card:hover{ transform: translateY(-5px); box-shadow: var(--glow); }
  
+/* The photo box keeps exactly the same size as before.
+   The picture now FILLS the whole box (object-fit: cover), so there is
+   no extra empty space / blurred bars on the sides anymore.
+   The focus point comes from the inline style in index.html
+   (object-position: center 20%), which keeps faces in view. */
 .member-photo{ position: relative; width: 100%; height: 0; padding-top: 90.53%; flex: 0 0 auto; overflow: hidden; background: var(--surface); border-bottom: 1px solid var(--border); }
-/* Photos are never cropped: the full picture is shown (object-fit: contain)
-   on top of a soft blurred copy of itself, so the box size stays exactly the same. */
-.member-photo::before{
-  content: ""; position: absolute; inset: -24px;
-  background-size: cover; background-position: center;
-  filter: blur(18px); opacity: 0.6;
-}
-.team-card:nth-child(1) .member-photo::before{ background-image: url("Developers/danmark.jpg"); }
-.team-card:nth-child(2) .member-photo::before{ background-image: url("Developers/jedrick.png"); }
-.team-card:nth-child(3) .member-photo::before{ background-image: url("Developers/benedict.jpg"); }
-.team-card:nth-child(4) .member-photo::before{ background-image: url("Developers/John Leonard.png"); }
 .member-photo img{
   position: absolute; inset: 0; z-index: 1;
   width: 100%; height: 100%;
-  object-fit: contain;
-  object-position: center !important; /* overrides the inline style in index.html */
+  object-fit: cover;
+  object-position: center 20%;
 }
  
 .team-card-body{ padding: 24px 22px 22px; display: flex; flex-direction: column; flex: 1; }
@@ -643,4 +642,3 @@ img{ -webkit-user-drag: none; user-drag: none; }
    ========================================================= */
 .reveal{ opacity: 0; transform: translateY(22px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
 .reveal.is-visible{ opacity: 1; transform: translateY(0); }
- 
