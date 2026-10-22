@@ -27,7 +27,7 @@
   --cyan-deep:     #0E7490;
  
   /* light cyan used for section titles ("Our Services", "Our Team") */
-  --cyan-title:    #67E8F9;
+  --cyan-title:    #A5F3FC;  /* soft pastel cyan (dark mode), like the AxionByte titles */
  
   --tint:          rgba(139,92,246,0.14);
   --tint-border:   rgba(139,92,246,0.35);
@@ -328,6 +328,10 @@ img{ -webkit-user-drag: none; user-drag: none; }
 .about .about-intro{ text-align: center; margin-left: auto; margin-right: auto; }
 /* Section titles ("Our Services", "Our Team"): LIGHT cyan (uses --cyan-title) */
 .services .section-top h2, .team .section-top h2{ color: var(--cyan-title); }
+/* soft glow behind the titles in dark mode (the AxionByte look) */
+.services .section-top h2, .team .section-top h2{ text-shadow: 0 0 22px rgba(103,232,249,0.35); }
+[data-theme="light"] .services .section-top h2,
+[data-theme="light"] .team .section-top h2{ text-shadow: none; }
 /* Eyebrow pills (WHAT WE OFFER / MEET THE TEAM) */
 .services .eyebrow, .team .eyebrow{
   color: var(--cyan);
