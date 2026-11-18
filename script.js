@@ -1,4 +1,3 @@
-/* Light & Dark Theme */
 (function initTheme() {
   const root = document.documentElement;
   const toggle = document.getElementById('themeToggle');
@@ -18,7 +17,6 @@
   }
 })();
 
-/* loading screen */
 (function initPreloader() {
   const MIN_TIME = 2200;
   const MAX_TIME = 4000;
@@ -43,11 +41,9 @@
     window.addEventListener('load', hideAfterMinTime);
   }
 
-  // Safety net
   setTimeout(hidePreloader, MAX_TIME);
 })();
 
-/* Copy Paste Protection */
 (function protectContent() {
   const allowSelector = 'input, textarea, [contenteditable="true"], .footer-contact-item';
 
@@ -82,11 +78,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  /* Footer Year */
   const yearEl = document.querySelector('[data-current-year]');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  /* Typed Subheading */
   const typedEl = document.getElementById('typedSub');
   const phrases = [
     'Website Development',
@@ -119,7 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   typeLoop();
 
-  /* Mobile Menu */
   const hamburger = document.getElementById('hamburgerBtn');
   const mobileMenu = document.getElementById('mobileMenu');
   if (hamburger && mobileMenu) {
@@ -135,7 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* Team Single Cards Carousel  */
   const teamWrap = document.getElementById('teamCarouselWrap');
   const teamGrid = document.getElementById('teamGrid');
   const teamPrevBtn = teamWrap ? teamWrap.querySelector('.arrow-prev') : null;
@@ -173,7 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updateTeamCarousel();
 
-  /* Scroll Reveal in Team Cards */
   document.querySelectorAll('.team-card.reveal').forEach(el => {
     el.classList.add('is-visible');
   });
@@ -193,7 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
     observedEls.forEach(el => el.classList.add('is-visible'));
   }
 
-  /* Contact Forms (Formspree) */
   const form = document.getElementById('contactForm');
   const status = document.getElementById('formStatus');
   if (form && status) {
